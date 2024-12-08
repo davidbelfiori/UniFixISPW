@@ -5,14 +5,14 @@ public class User {
     private String nome;
     private String cogmome;
     private String email;
-    private String passwprd;
+    private String password;
     private String ruolo;
 
-    public User(String nome, String cogmome, String email, String passwprd, String ruolo) {
+    public User(String nome, String cogmome, String email, String password, String ruolo) {
        setNome(nome);
        setCogmome(cogmome);
        setEmail(email);
-       setPasswprd(passwprd);
+       setPassword(password);
        setRuolo(ruolo);
     }
 
@@ -40,12 +40,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswprd() {
-        return passwprd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswprd(String passwprd) {
-        this.passwprd = passwprd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRuolo() {
