@@ -2,38 +2,49 @@ package org.uniroma2.ing.ispw.unifix.cli;
 
 import org.uniroma2.ing.ispw.unifix.utils.Printer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+
 
 public class startHomeViewCLI {
 
+    boolean quit;
+    BufferedReader br;
+
+    public startHomeViewCLI() {
+        quit=false;
+        br = new BufferedReader(new InputStreamReader(System.in));
+    }
+
     public void start() throws IOException {
-        Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            Printer.print("1. Registrazione");
-            Printer.print("2. Login");
-            Printer.print("3. Esci");
+        while (!quit) {
+            Printer.print("\t1) Login");
+            Printer.print("\t2) Register");
+            Printer.print("\t3) Quit");
 
-            int scelta = scanner.nextInt();
-            scanner.nextLine();
-            if(scelta == 1){
-                registrazioneCli rc=new registrazioneCli();
-                rc.registrazione();
-                System.exit(0);
+                String action= br.readLine();
 
-            } else if (scelta == 2) {
-                loginCli loginCli=new loginCli();
-                loginCli.start();
-                System.exit(0);
+                switch (action) {
+                    case "1":
+                        loginCli loginCli = new loginCli();
+                        loginCli.LoginCli();
+                        break;
+                    case "2":
+                        registrazioneCli rc = new registrazioneCli();
+                        rc.registrazione();
+                        break;
+                    case "3":
+                        Printer.print("addios");
+                        quit=true;
+                        break;
+                    default:
+                        Printer.print("scelta non valida");
+                        break;
+                }
 
-            } else if (scelta == 3) {
-                Printer.print("addios");
-                System.exit(0);
 
-            }else {
-                Printer.print("scelta non valida");
-            }
         }
     }
 

@@ -1,6 +1,7 @@
 package org.uniroma2.ing.ispw.unifix.controllerApplicativo;
 
 import javafx.scene.control.TextField;
+import org.uniroma2.ing.ispw.unifix.bean.LoginBean;
 import org.uniroma2.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.uniroma2.ing.ispw.unifix.dao.DaoFactory;
 import org.uniroma2.ing.ispw.unifix.dao.UserDao;
@@ -98,5 +99,19 @@ public class loginController {
             return true;
         }
         return false;
+    }
+
+    public String validate(LoginBean loginBean) {
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+
+        if(userDao.exists(loginBean.getEmail())){
+            User user =userDao.load(loginBean.getEmail());
+            if(user != null || user.getPassword().equals(loginBean.getPassword())){
+                currentUser=user;
+                return user.getRuolo();
+            }
+        }
+
+        return "";
     }
 }
