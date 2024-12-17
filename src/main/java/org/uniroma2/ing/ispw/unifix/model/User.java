@@ -3,17 +3,21 @@ package org.uniroma2.ing.ispw.unifix.model;
 public class User {
 
     private String nome;
-    private String cogmome;
+    private String cognome;
     private String email;
     private String password;
     private String ruolo;
 
-    public User(String nome, String cogmome, String email, String password, String ruolo) {
-       setNome(nome);
-       setCogmome(cogmome);
-       setEmail(email);
-       setPassword(password);
-       setRuolo(ruolo);
+    public User(String email) {
+        this.email = email;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
     }
 
     public String getNome() {
@@ -22,14 +26,6 @@ public class User {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getCogmome() {
-        return cogmome;
-    }
-
-    public void setCogmome(String cogmome) {
-        this.cogmome = cogmome;
     }
 
     public String getEmail() {

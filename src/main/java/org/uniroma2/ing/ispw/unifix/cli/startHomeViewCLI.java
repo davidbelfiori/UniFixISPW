@@ -2,11 +2,12 @@ package org.uniroma2.ing.ispw.unifix.cli;
 
 import org.uniroma2.ing.ispw.unifix.utils.Printer;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class startHomeViewCLI {
 
-    public void start() {
+    public void start() throws IOException {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -17,11 +18,13 @@ public class startHomeViewCLI {
             int scelta = scanner.nextInt();
             scanner.nextLine();
             if(scelta == 1){
-                Printer.print("hai scelto la registrazione");
+                registrazioneCli rc=new registrazioneCli();
+                rc.registrazione();
                 System.exit(0);
 
             } else if (scelta == 2) {
-                Printer.print("hai scelto il login");
+                loginCli loginCli=new loginCli();
+                loginCli.start();
                 System.exit(0);
 
             } else if (scelta == 3) {
