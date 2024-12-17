@@ -11,6 +11,6 @@ module org.uniroma2.ing.ispw.unifix {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens org.uniroma2.ing.ispw.unifix to javafx.fxml;
-    exports org.uniroma2.ing.ispw.unifix;
+    opens org.ing.ispw.unifix to javafx.fxml;
+    exports org.ing.ispw.unifix;
 }
