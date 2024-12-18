@@ -1,4 +1,4 @@
-module org.uniroma2.ing.ispw.unifix {
+module org.uniroma.ing.ispw.unifix {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -13,4 +13,7 @@ module org.uniroma2.ing.ispw.unifix {
 
     opens org.ing.ispw.unifix to javafx.fxml;
     exports org.ing.ispw.unifix;
+
+    exports org.ing.ispw.unifix.controllergrafico;
+    opens org.ing.ispw.unifix.controllergrafico to javafx.fxml;
 }

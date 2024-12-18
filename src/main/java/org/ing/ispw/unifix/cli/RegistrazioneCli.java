@@ -1,7 +1,7 @@
 package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
-import org.ing.ispw.unifix.controllerApplicativo.LoginController;
+import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.utils.Printer;
 
 

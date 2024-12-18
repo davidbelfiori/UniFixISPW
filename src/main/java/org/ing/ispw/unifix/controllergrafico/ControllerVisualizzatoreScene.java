@@ -1,4 +1,4 @@
-package org.ing.ispw.unifix.controllerGrafico;
+package org.ing.ispw.unifix.controllergrafico;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

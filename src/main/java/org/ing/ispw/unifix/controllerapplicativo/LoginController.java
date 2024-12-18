@@ -1,4 +1,4 @@
-package org.ing.ispw.unifix.controllerApplicativo;
+package org.ing.ispw.unifix.controllerapplicativo;
 
 
 import org.ing.ispw.unifix.bean.LoginBean;

@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.cli;
 
-import org.ing.ispw.unifix.controllerApplicativo.DocenteController;
+import org.ing.ispw.unifix.controllerapplicativo.DocenteController;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;

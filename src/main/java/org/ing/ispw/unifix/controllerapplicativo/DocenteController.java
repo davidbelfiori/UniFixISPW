@@ -1,4 +1,4 @@
-package org.ing.ispw.unifix.controllerApplicativo;
+package org.ing.ispw.unifix.controllerapplicativo;
 
 public class DocenteController {
 

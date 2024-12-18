@@ -34,7 +34,7 @@ public class Driver extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
+        Parent root = new FXMLLoader(this.getClass().getResource("LoginGUI.fxml")).load();
 
         primaryStage.setTitle("UniFix");
         primaryStage.setScene(new Scene(root));
@@ -42,6 +42,8 @@ public class Driver extends Application {
         primaryStage.show();
 
     }
+
+
 
 
 
