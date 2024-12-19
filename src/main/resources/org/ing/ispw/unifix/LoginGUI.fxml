@@ -41,7 +41,7 @@
             <Font name="Segoe UI Semilight" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="handleToRegistrazione" onMouseClicked="#handleToRegistrazione" layoutX="668.0" layoutY="491.0"  text="Registazione" textFill="#17274b" underline="true">
+      <Label fx:id="handleToRegistrazione" layoutX="668.0" layoutY="491.0" text="Registazione" textFill="#17274b" underline="true">
          <font>
             <Font name="Segoe UI Semilight" size="14.0" />
          </font>

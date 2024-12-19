@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.cli;
 
-import org.ing.ispw.unifix.controllerapplicativo.DocenteController;
+import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
@@ -9,13 +9,13 @@ import java.io.InputStreamReader;
 
 public class TecnicoHomeCli {
 
-    Boolean quit;
-    BufferedReader br;
-    DocenteController dc;
+   private Boolean quit;
+   private final BufferedReader br;
+   private TecnicoController tc;
     public TecnicoHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        dc = DocenteController.getInstance();
+        tc = TecnicoController.getInstance();
     }
 
     public void tecnicoHome() throws IOException {
@@ -35,6 +35,8 @@ public class TecnicoHomeCli {
                 case "5":
                     quit=true;
                     break;
+
+                default: return;
             }
         }
 

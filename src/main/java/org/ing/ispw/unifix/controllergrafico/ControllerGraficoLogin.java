@@ -40,12 +40,5 @@ public class ControllerGraficoLogin {
     }
 
 
-//    public void validateLogin(MouseEvent mouseEvent) {
-//
-//
-//
-//
-//    }
-
 
 }

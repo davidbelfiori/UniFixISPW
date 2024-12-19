@@ -18,8 +18,10 @@ public class ControllerGraficoRegistrazione {
 
 
     public void validateRegistrazione(MouseEvent mouseEvent) {
+        // da implementare
     }
 
     public void handleGoToLogin(MouseEvent mouseEvent) {
+        // da implementare
     }
 }

@@ -29,7 +29,7 @@ public class StartHomeViewCLI {
                 switch (action) {
                     case "1":
                         LoginCli loginCli = new LoginCli();
-                        loginCli.LoginCli();
+                        loginCli.loginCliHome();
                         break;
                     case "2":
                         RegistrazioneCli rc = new RegistrazioneCli();

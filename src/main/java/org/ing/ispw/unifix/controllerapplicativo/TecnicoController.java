@@ -1,5 +1,7 @@
 package org.ing.ispw.unifix.controllerapplicativo;
 
+
+
 public class TecnicoController {
 
     private static TecnicoController instance;
@@ -13,5 +15,7 @@ public class TecnicoController {
 
     private TecnicoController() {
     }
+
+
 
 }
