@@ -3,6 +3,7 @@ package org.ing.ispw.unifix.controllerapplicativo;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -58,4 +59,17 @@ public class SysAdminController {
         }
     }
 
-}
+    public void visualizzaAule() {
+        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
+        List<Aula> aule = aulaDao.getAllAule();
+
+        for (Aula aula : aule) {
+            Printer.print("Edificio: " + aula.getEdificio());
+            Printer.print("ID Aula: " + aula.getIdAula());
+            Printer.print("Piano: " + aula.getPiano());
+            Printer.print("Oggetti: " + String.join(", ", aula.getOggetti()));
+            Printer.print("-------------------------");
+        }
+    }
+    }
+

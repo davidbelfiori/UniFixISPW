@@ -52,6 +52,8 @@ public class Aula {
         this.idAula = idAula;
     }
 
+
+
     @Override
     public String toString() {
         return "Aula{" +

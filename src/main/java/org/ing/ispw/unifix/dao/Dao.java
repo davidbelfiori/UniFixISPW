@@ -1,5 +1,7 @@
 package org.ing.ispw.unifix.dao;
 
+import java.util.List;
+
 public interface Dao <K,E>{
 
     E create(K id);
@@ -7,5 +9,6 @@ public interface Dao <K,E>{
     void store(E entity);
     void delete(K id); // id è la chiave dell'hash map , na nostra pk
     boolean exists(K id);
+    List<E>  loadAll();
 
 }

@@ -24,6 +24,7 @@ public class SysAdminHomeCli {
 
             Printer.print("Bentornato in unifix admin di sistema");
             Printer.print("\t1) Inserisci aule");
+            Printer.print("\t2) Visualizza aule inserite");
             Printer.print("\t2) Log off");
             Printer.print("\t3) Quit");
             Printer.print(": ");
@@ -33,6 +34,9 @@ public class SysAdminHomeCli {
             switch(action) {
                 case "1":
                     sc.inserisciAule("src/main/resources/utvAule.csv");
+                    break;
+                case "2":
+                    sc.visualizzaAule();
                     break;
                 case "3":
                     quit=true;

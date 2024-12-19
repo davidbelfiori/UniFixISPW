@@ -2,7 +2,9 @@ package org.ing.ispw.unifix.dao.memory;
 
 import org.ing.ispw.unifix.dao.Dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class InMemoryDao<K, V> implements Dao<K, V> {
@@ -21,6 +23,10 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V> {
     @Override
     public boolean exists(K id) {
         return memory.containsKey(id);
+    }
+
+    public List<V> loadAll(){
+        return new ArrayList<>(memory.values());
     }
 
     @Override
