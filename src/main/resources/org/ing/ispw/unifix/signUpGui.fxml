@@ -65,7 +65,7 @@
          <Font name="Segoe UI Semilight" size="21.0" />
       </font>
    </Button>
-   <Label  layoutX="222.0" layoutY="626.0" onMouseClicked="#handleGoToLogin" text="Hai gia un account?Accedi!" underline="true">
+   <Label layoutX="222.0" layoutY="626.0" onMouseClicked="#handleGoToLogin" text="Hai gia un account?Accedi!" underline="true">
       <font>
          <Font name="Segoe UI Semilight" size="18.0" />
       </font>

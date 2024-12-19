@@ -5,6 +5,9 @@ import org.ing.ispw.unifix.bean.LoginBean;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.model.Docente;
+import org.ing.ispw.unifix.model.Sysadmin;
+import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 
 
@@ -89,29 +92,72 @@ public class LoginController {
 
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         if(!userDao.exists(rb.getEmail())){
-            User user = userDao.create(rb.getEmail());
-            user.setNome(extractNome(rb.getEmail()));
-            user.setCognome(extractCognome(rb.getEmail()));
-            user.setEmail(rb.getEmail());
-            user.setPassword(rb.getPassword());
-            user.setRuolo(extractRuolo(rb.getEmail()));
-            userDao.store(user);
-            return true;
+            String ruolo = extractRuolo(rb.getEmail());
+
+            switch (ruolo) {
+                case "Docente" -> {
+                    Docente docente = new Docente(rb.getEmail());
+                    docente.setNome(extractNome(rb.getEmail()));
+                    docente.setCognome(extractCognome(rb.getEmail()));
+                    docente.setEmail(rb.getEmail());
+                    docente.setPassword(rb.getPassword());
+                    docente.setRuolo(extractRuolo(rb.getEmail()));
+                    userDao.store(docente);
+                    return true;
+                }
+                case "Tecnico" -> {
+                    Tecnico tec = new Tecnico(rb.getEmail());
+                    tec.setNome(extractNome(rb.getEmail()));
+                    tec.setCognome(extractCognome(rb.getEmail()));
+                    tec.setEmail(rb.getEmail());
+                    tec.setPassword(rb.getPassword());
+                    tec.setRuolo(extractRuolo(rb.getEmail()));
+                    tec.setNumeroSegnalazioni(0);
+                    userDao.store(tec);
+                    return true;
+                }
+                case "Amministratore di Sistema" -> {
+                    Sysadmin sysadmin=new Sysadmin(rb.getEmail());
+                    sysadmin.setNome(extractNome(rb.getEmail()));
+                    sysadmin.setCognome(extractCognome(rb.getEmail()));
+                    sysadmin.setEmail(rb.getEmail());
+                    sysadmin.setPassword(rb.getPassword());
+                    sysadmin.setRuolo(extractRuolo(rb.getEmail()));
+                    userDao.store(sysadmin);
+                    return true;
+                }
+                default -> {
+                    return false;
+                }
+            }
+
         }
         return false;
     }
 
-    public String validate(LoginBean loginBean) {
+    public int validate(LoginBean loginBean) {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
 
         if(userDao.exists(loginBean.getEmail())){
             User user =userDao.load(loginBean.getEmail());
             if(user != null || user.getPassword().equals(loginBean.getPassword())){
                 currentUser=user;
-                return user.getRuolo();
+                switch (user) {
+                    case Docente docente -> {
+                        return 1;
+                    }
+                    case Tecnico tecnico -> {
+                        return 2;
+                    }
+                    case Sysadmin sysadmin -> {
+                        return 3;
+                    }
+                    default -> { return 0;
+                    }
+                }
             }
         }
 
-        return "";
+        return 0;
     }
 }

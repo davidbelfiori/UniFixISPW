@@ -10,6 +10,7 @@ module org.uniroma.ing.ispw.unifix {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens org.ing.ispw.unifix to javafx.fxml;
     exports org.ing.ispw.unifix;

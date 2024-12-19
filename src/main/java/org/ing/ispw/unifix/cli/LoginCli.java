@@ -46,20 +46,21 @@ public class LoginCli {
                     password = br.readLine();
                     break;
                 case "3":
-                    String val=lc.validate(new LoginBean(email,password));
+                    int val=lc.validate(new LoginBean(email,password));
                    switch (val) {
-                        case "Docente":
+                        case 1:
                             DocenteHomeCli docenteView = new DocenteHomeCli();
                             docenteView.docenteHome();
                             break;
-                        case "Tecnico":
+                        case 2:
                             TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
                             tecnicoView.tecnicoHome();
                             break;
 
-                       case "Amministratore di Sistema":
-                           Printer.print("amministratore di sistema");
-                        default:
+                       case 3:
+                           SysAdminHomeCli adminView= new SysAdminHomeCli();
+                           adminView.adminHome();
+                           default:
                             // Handle other cases or errors
                             break;
                     }
