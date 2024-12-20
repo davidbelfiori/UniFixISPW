@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.utils.Printer;
 
 
@@ -56,15 +57,17 @@ public class RegistrazioneCli {
                     break;
                 case "4":
 
-                    if (password.equals(confirmPassword)){
-                    if (lc.register(new RegistrazioneBean(email,password))){
-                        Printer.print("Registration Successful");
-                        return;
-                    }else{ Printer.print("Registration unsuccessful");}
-                    }else {
-                        Printer.print("Passwords doesn't match");
-                        return;
-                    }
+                        try {
+                            if (lc.register(new RegistrazioneBean(email,password))&& password.equals(confirmPassword)){
+                                Printer.print("Registration Successful");
+                                return;
+                            }else{ Printer.print("Registration unsuccessful");}
+                        }catch (IllegalArgumentException | RuoloNonTrovatoException e){
+                            Printer.error("Errore"+e.getMessage());
+                            email="";
+                            password="";
+                            confirmPassword="";
+                        }
                     break;
                 case "5":
                     return;

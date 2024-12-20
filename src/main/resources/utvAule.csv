@@ -3,7 +3,15 @@ Ingegneria,1,0,Proiettore;Impianto Audio;Banchi;Sedie
 Ingegneria,2,0,Proiettore;Impianto Audio;Banchi;Sedie
 Ingegneria,3,1,Proiettore;Impianto Audio;Banchi;Sedie
 Ingegneria,4,0,Proiettore;Impianto Audio;Banchi;Sedie;Prese
-Ingegneria,A1,-1,"Proiettore Dx, Proiettore Sx;Impianto Audio;Banchi;Sedie"
-Ingegneria,A2,-1,"Proiettore Dx, Proiettore Sx;Impianto Audio;Banchi;Sedie"
-Ingegneria,A3,-1,"Proiettore Dx, Proiettore Sx;Impianto Audio;Banchi;Sedie"
-Ingegneria,A4,-1,"Proiettore Dx, Proiettore Sx;Impianto Audio;Banchi;Sedie"
+Ingegneria,A1,-1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,A2,-1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,A3,-1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,A4,-1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,B1,0,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,B2,0,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,B3,0,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,B4,0,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,C1,1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,C2,1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,Disegno 1,1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie
+Ingegneria,Disegno 2,1,Proiettore Dx; Proiettore Sx;Impianto Audio;Banchi;Sedie

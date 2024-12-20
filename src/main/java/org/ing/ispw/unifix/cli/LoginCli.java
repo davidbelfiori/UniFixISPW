@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.bean.LoginBean;
 
@@ -28,7 +29,7 @@ public class LoginCli {
         while(!quit) {
 
             Printer.print("******** Login ***********");
-            Printer.print("\t1) Enter Username [" + email + "]");
+            Printer.print("\t1) Enter Email [" + email + "]");
             Printer.print("\t2) Enter Password [" + password + "]");
             Printer.print("\t3) Login");
             Printer.print("\t4) Back");
@@ -36,7 +37,7 @@ public class LoginCli {
 
             switch(action) {
                 case "1":
-                    Printer.print("Enter Username");
+                    Printer.print("Enter Email");
                     Printer.print("\t: ");
                     email = br.readLine();
                     break;
@@ -47,20 +48,29 @@ public class LoginCli {
                     break;
                 case "3":
                     int val=lc.validate(new LoginBean(email,password));
-                   switch (val) {
-                        case 1:
-                            DocenteHomeCli docenteView = new DocenteHomeCli();
-                            docenteView.docenteHome();
-                            break;
-                        case 2:
-                            TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
-                            tecnicoView.tecnicoHome();
-                            break;
+                    try {
+                        switch (val) {
+                            case 1:
+                                DocenteHomeCli docenteView = new DocenteHomeCli();
+                                docenteView.docenteHome();
+                                break;
+                            case 2:
+                                TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
+                                tecnicoView.tecnicoHome();
+                                break;
 
-                       case 3:
-                           SysAdminHomeCli adminView= new SysAdminHomeCli();
-                           adminView.adminHome();
+                            case 3:
+                                SysAdminHomeCli adminView= new SysAdminHomeCli();
+                                adminView.adminHome();
+                                break;
+                            default: Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
+                        }
+                    }catch (UtenteNonTrovatoException e){
+                        Printer.error("Errore"+e.getMessage());
+                        email="";
+                        password="";
                     }
+                    break;
                 case "4":
                     return;
                 default:

@@ -2,11 +2,15 @@ package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
 
+import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 public class SysAdminHomeCli {
 
@@ -14,19 +18,19 @@ public class SysAdminHomeCli {
     private final BufferedReader br;
     private SysAdminController sc;
     public SysAdminHomeCli() {
-        quit = false;
+        quit = FALSE;
         br = new BufferedReader(new InputStreamReader(System.in));
         sc = SysAdminController.getInstance();
     }
 
     public void adminHome() throws IOException {
-        while(!quit) {
+        while(Boolean.FALSE.equals(quit)) {
 
             Printer.print("Bentornato in unifix admin di sistema");
             Printer.print("\t1) Inserisci aule");
             Printer.print("\t2) Visualizza aule inserite");
-            Printer.print("\t2) Log off");
-            Printer.print("\t3) Quit");
+            Printer.print("\t3) Log off");
+            Printer.print("\t4) Quit");
             Printer.print(": ");
 
             String action = br.readLine();
@@ -36,16 +40,22 @@ public class SysAdminHomeCli {
                     sc.inserisciAule("src/main/resources/utvAule.csv");
                     break;
                 case "2":
-                    sc.visualizzaAule();
+                    try {
+                        sc.visualizzaAule();
+                    } catch (AuleNonTrovateException e) {
+                        Printer.error("Errore"+e.getMessage());
+                    }
                     break;
                 case "3":
-                    quit=true;
+                    return;
+                case "4":
+                    quit=TRUE;
                     break;
-
                 default:
                     return;
             }
         }
+        System.exit(0);
 
 
     }

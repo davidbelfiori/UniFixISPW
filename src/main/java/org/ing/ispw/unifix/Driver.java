@@ -60,7 +60,7 @@ public class Driver extends Application {
             // Inizializza la CLI
             StartHomeViewCLI cli = new StartHomeViewCLI();
             cli.start();
-            //TODO: non funziona la visualizzazione della pagina
+            
         } else if (interfaceType.equalsIgnoreCase("GUI")) {
            launch(args);
         }

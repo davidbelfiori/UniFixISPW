@@ -5,6 +5,8 @@ import org.ing.ispw.unifix.bean.LoginBean;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
+import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Sysadmin;
 import org.ing.ispw.unifix.model.Tecnico;
@@ -44,7 +46,7 @@ public class LoginController {
         return capitalize(nameParts[0]);
     }
 
-    private String extractCognome(String email) {
+    private String extractCognome(String email) throws IllegalArgumentException{
         String localPart = getLocalPart(email);
         String[] nameParts = localPart.split("\\.");
         if (nameParts.length != 2) {
@@ -54,13 +56,13 @@ public class LoginController {
     }
 
     // Estrae il ruolo in base al dominio dell'email
-    private String extractRuolo(String email) {
+    private String extractRuolo(String email) throws  RuoloNonTrovatoException{
         String dominio = getDomainPart(email);
         return switch (dominio) {
             case "uniroma2.eu" -> "Docente";
             case "tec.uniroma2.eu" -> "Tecnico";
             case "sys.uniroma2.eu" -> "Amministratore di Sistema";
-            default -> throw new IllegalArgumentException("Dominio non riconosciuto");
+            default -> throw new RuoloNonTrovatoException("Dominio non riconosciuto");
         };
     }
 
@@ -88,54 +90,57 @@ public class LoginController {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public  boolean register(RegistrazioneBean rb){
+    public  boolean register(RegistrazioneBean rb) throws IllegalArgumentException,RuoloNonTrovatoException{
 
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         if(!userDao.exists(rb.getEmail())){
-            String ruolo = extractRuolo(rb.getEmail());
 
-            switch (ruolo) {
-                case "Docente" -> {
-                    Docente docente = new Docente(rb.getEmail());
-                    docente.setNome(extractNome(rb.getEmail()));
-                    docente.setCognome(extractCognome(rb.getEmail()));
-                    docente.setEmail(rb.getEmail());
-                    docente.setPassword(rb.getPassword());
-                    docente.setRuolo(extractRuolo(rb.getEmail()));
-                    userDao.store(docente);
-                    return true;
+                String ruolo = extractRuolo(rb.getEmail());
+
+                switch (ruolo) {
+                    case "Docente" -> {
+                        Docente docente = new Docente(rb.getEmail());
+                        docente.setNome(extractNome(rb.getEmail()));
+                        docente.setCognome(extractCognome(rb.getEmail()));
+                        docente.setEmail(rb.getEmail());
+                        docente.setPassword(rb.getPassword());
+                        docente.setRuolo(extractRuolo(rb.getEmail()));
+                        userDao.store(docente);
+                        return true;
+                    }
+                    case "Tecnico" -> {
+                        Tecnico tec = new Tecnico(rb.getEmail());
+                        tec.setNome(extractNome(rb.getEmail()));
+                        tec.setCognome(extractCognome(rb.getEmail()));
+                        tec.setEmail(rb.getEmail());
+                        tec.setPassword(rb.getPassword());
+                        tec.setRuolo(extractRuolo(rb.getEmail()));
+                        tec.setNumeroSegnalazioni(0);
+                        userDao.store(tec);
+                        return true;
+                    }
+                    case "Amministratore di Sistema" -> {
+                        Sysadmin sysadmin=new Sysadmin(rb.getEmail());
+                        sysadmin.setNome(extractNome(rb.getEmail()));
+                        sysadmin.setCognome(extractCognome(rb.getEmail()));
+                        sysadmin.setEmail(rb.getEmail());
+                        sysadmin.setPassword(rb.getPassword());
+                        sysadmin.setRuolo(extractRuolo(rb.getEmail()));
+                        userDao.store(sysadmin);
+                        return true;
+                    }
+                    default -> {
+                        return false;
+                    }
                 }
-                case "Tecnico" -> {
-                    Tecnico tec = new Tecnico(rb.getEmail());
-                    tec.setNome(extractNome(rb.getEmail()));
-                    tec.setCognome(extractCognome(rb.getEmail()));
-                    tec.setEmail(rb.getEmail());
-                    tec.setPassword(rb.getPassword());
-                    tec.setRuolo(extractRuolo(rb.getEmail()));
-                    tec.setNumeroSegnalazioni(0);
-                    userDao.store(tec);
-                    return true;
-                }
-                case "Amministratore di Sistema" -> {
-                    Sysadmin sysadmin=new Sysadmin(rb.getEmail());
-                    sysadmin.setNome(extractNome(rb.getEmail()));
-                    sysadmin.setCognome(extractCognome(rb.getEmail()));
-                    sysadmin.setEmail(rb.getEmail());
-                    sysadmin.setPassword(rb.getPassword());
-                    sysadmin.setRuolo(extractRuolo(rb.getEmail()));
-                    userDao.store(sysadmin);
-                    return true;
-                }
-                default -> {
-                    return false;
-                }
-            }
+
+
 
         }
         return false;
     }
 
-    public int validate(LoginBean loginBean) {
+    public int validate(LoginBean loginBean) throws UtenteNonTrovatoException{
         UserDao userDao = DaoFactory.getInstance().getUserDao();
 
         if(userDao.exists(loginBean.getEmail())){
@@ -156,6 +161,8 @@ public class LoginController {
                     }
                 }
             }
+        }else {
+            throw new UtenteNonTrovatoException("L'utente inserito non esiste");
         }
 
         return 0;

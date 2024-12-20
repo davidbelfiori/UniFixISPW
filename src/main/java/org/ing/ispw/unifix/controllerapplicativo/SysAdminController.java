@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.controllerapplicativo;
 
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
+import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -59,16 +60,19 @@ public class SysAdminController {
         }
     }
 
-    public void visualizzaAule() {
+    public void visualizzaAule() throws AuleNonTrovateException{
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();
-
-        for (Aula aula : aule) {
-            Printer.print("Edificio: " + aula.getEdificio());
-            Printer.print("ID Aula: " + aula.getIdAula());
-            Printer.print("Piano: " + aula.getPiano());
-            Printer.print("Oggetti: " + String.join(", ", aula.getOggetti()));
-            Printer.print("-------------------------");
+        if (!aule.isEmpty()) {
+            for (Aula aula : aule) {
+                Printer.print("Edificio: " + aula.getEdificio());
+                Printer.print("ID Aula: " + aula.getIdAula());
+                Printer.print("Piano: " + aula.getPiano());
+                Printer.print("Oggetti: " + String.join(", ", aula.getOggetti()));
+                Printer.print("-------------------------");
+            }
+        }else {
+            throw new AuleNonTrovateException("Non sono state trovate aule");
         }
     }
     }
