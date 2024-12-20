@@ -29,6 +29,7 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V> {
         return new ArrayList<>(memory.values());
     }
 
+
     @Override
     public V load(K id) {
         return memory.get(id);

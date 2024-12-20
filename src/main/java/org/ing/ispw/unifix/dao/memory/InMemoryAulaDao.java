@@ -30,4 +30,12 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
     public List<Aula> getAllAule(){
         return  new ArrayList<>(loadAll());
     }
+
+
+    public List<String> getAllEdifici() {
+        List<String> edifici = new ArrayList<>();
+        for (Aula aula : getAllAule())
+            edifici.add(aula.getEdificio());
+        return edifici;
+    }
 }

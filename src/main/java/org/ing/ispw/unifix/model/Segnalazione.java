@@ -1,22 +1,47 @@
 package org.ing.ispw.unifix.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Segnalazione {
 
-    private int idSegnalzione;
+    private String idSegnalzione;
     private Date dataCreazione;
     private String oggettoGuasto;
-    private User user;
-    private enum Stato{APERTA,INLAVORAZIONE,CHIUSA}
+    private Docente docente;
+    private String  Stato;
     private String descrizone;
     private String aula;
+    private String edifico;
+    private Tecnico tecnico;
 
-    public int getIdSegnalzione() {
+
+    public Segnalazione(String idSegnalazione) {
+        this.idSegnalzione=idSegnalazione;
+    }
+
+
+    public String getStato() {
+        return Stato;
+    }
+
+    public void setStato(String stato) {
+        Stato = stato;
+    }
+
+    public String getEdifico() {
+        return edifico;
+    }
+
+    public void setEdifico(String edifico) {
+        this.edifico = edifico;
+    }
+
+    public String getIdSegnalzione() {
         return idSegnalzione;
     }
 
-    public void setIdSegnalzione(int idSegnalzione) {
+    public void setIdSegnalzione(String idSegnalzione) {
         this.idSegnalzione = idSegnalzione;
     }
 
@@ -36,12 +61,20 @@ public class Segnalazione {
         this.oggettoGuasto = oggettoGuasto;
     }
 
-    public User getUser() {
-        return user;
+    public Docente getDocente() {
+        return docente;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDocente(Docente docente) {
+        this.docente = docente;
+    }
+
+    public Tecnico getTecnico() {
+        return tecnico;
+    }
+
+    public void setTecnico(Tecnico tecnico) {
+        this.tecnico = tecnico;
     }
 
     public String getDescrizone() {
