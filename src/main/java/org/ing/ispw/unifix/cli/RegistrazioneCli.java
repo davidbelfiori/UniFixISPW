@@ -80,7 +80,4 @@ public class RegistrazioneCli {
 
     }
 
-    public void displayError(String message) {
-        System.err.println("Errore: " + message);
-    }
 }
