@@ -9,27 +9,46 @@ import java.util.List;
 public class SegnalazioneBean {
 
     private int idSegnalzione;
-    private Date dataCreazione;
+    private long dataCreazione;
     private String oggettoGuasto;
     private User user;
-    private String Stato;
+    private String stato;
     private String descrizone;
     private String aula;
-    private List<Aula> aule;
-    private List<String> edifici;
+    private String edificio;
 
-    public SegnalazioneBean(int idSegnalzione, Date dataCreazione, String oggettoGuasto, User user, String stato, String descrizone, String aula) {
+
+    private List<Aula> aule;
+    private List<String> edificiUnici;
+
+    public SegnalazioneBean(long dataCreazione, String aula, String edificio, String oggettoGuasto,String descrizone) {
+        this.dataCreazione = dataCreazione;
+        this.aula = aula;
+        this.edificio = edificio;
+        this.oggettoGuasto = oggettoGuasto;
+        this.descrizone=descrizone;
+    }
+
+    public SegnalazioneBean(int idSegnalzione, long dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
         this.idSegnalzione = idSegnalzione;
         this.dataCreazione = dataCreazione;
         this.oggettoGuasto = oggettoGuasto;
         this.user = user;
-        Stato = stato;
+        this.stato = statoSegnalazione;
         this.descrizone = descrizone;
         this.aula = aula;
     }
 
-    public SegnalazioneBean() {
+
+    public String getEdificio() {
+        return edificio;
     }
+
+    public void setEdificio(String edificio) {
+        this.edificio = edificio;
+    }
+
+
 
     public List<Aula> getAule() {
         return aule;
@@ -56,11 +75,11 @@ public class SegnalazioneBean {
     }
 
     public String getStato() {
-        return Stato;
+        return stato;
     }
 
-    public void setStato(String stato) {
-        Stato = stato;
+    public void setStato(String statoSegnalazione) {
+        stato = statoSegnalazione;
     }
 
     public User getUser() {
@@ -79,11 +98,11 @@ public class SegnalazioneBean {
         this.oggettoGuasto = oggettoGuasto;
     }
 
-    public Date getDataCreazione() {
+    public long getDataCreazione() {
         return dataCreazione;
     }
 
-    public void setDataCreazione(Date dataCreazione) {
+    public void setDataCreazione(long dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 
@@ -96,11 +115,11 @@ public class SegnalazioneBean {
     }
 
 
-    public List<String> getEdifici() {
-        return edifici;
+    public List<String> getEdificiUnici() {
+        return edificiUnici;
     }
 
-    public void setEdifici(List<String> edifici) {
-        this.edifici = edifici;
+    public void setEdificiUnici(List<String> edifici) {
+        this.edificiUnici = edifici;
     }
 }
