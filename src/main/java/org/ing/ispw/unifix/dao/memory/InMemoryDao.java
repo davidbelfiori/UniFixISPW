@@ -41,5 +41,14 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V> {
         store(key, entity);
     }
 
+    @Override
+    public void update(V entity) {
+        K key = getKey(entity); // Recupera la chiave dell'entità
+        if (!memory.containsKey(key)) {
+            throw new IllegalArgumentException("Impossibile aggiornare: entità con ID " + key + " non trovata.");
+        }
+        memory.put(key, entity); // Aggiorna l'entità esistente
+    }
+
     protected abstract K getKey(V value);
 }

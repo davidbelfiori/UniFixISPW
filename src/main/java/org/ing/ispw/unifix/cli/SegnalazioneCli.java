@@ -36,10 +36,10 @@ public class SegnalazioneCli {
 
             Printer.print("*******Form per l'invio di una segnalazione******");
             Printer.print("\t1) Visualizza gli edifici");
-            Printer.print("\t2) Edificio Selezionato ["+edificioSelezionato+"]");
+            Printer.print("\t2) Edificio Selezionato: ["+edificioSelezionato+"]");
             Printer.print("\t3) Visualizza aule di ["+edificioSelezionato+"]");
             Printer.print("\t4) Aula selezionata ["+aulaSelezionata+"]");
-            Printer.print("\t5) Visualizza oggetti presenti in ["+aulaSelezionata+"]");
+            Printer.print("\t5) Visualizza oggetti presenti nell'aula:["+aulaSelezionata+"]");
             Printer.print("\t6) Oggetto Selezionato ["+oggettoSelezionato+"]");
             Printer.print("\t7)Inserisci una descrizione del problema (obbligatorio)");
             Printer.print("\t8) Invia Segnalazione");

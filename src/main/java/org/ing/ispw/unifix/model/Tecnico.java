@@ -14,4 +14,15 @@ public class Tecnico extends User{
     public void setNumeroSegnalazioni(int numeroSegnalazioni) {
         this.numeroSegnalazioni = numeroSegnalazioni;
     }
+
+    public void incrementaSegnalazioni() {
+        this.numeroSegnalazioni++;
+    }
+
+    // Method to decrement the number of reports
+    public void decrementaSegnalazioni() {
+        if (this.numeroSegnalazioni > 0) {
+            this.numeroSegnalazioni--;
+        }
+    }
 }

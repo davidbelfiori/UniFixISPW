@@ -10,5 +10,5 @@ public interface Dao <K,E>{
     void delete(K id); // id è la chiave dell'hash map , na nostra pk
     boolean exists(K id);
     List<E>  loadAll();
-
+    void update(E entity);
 }

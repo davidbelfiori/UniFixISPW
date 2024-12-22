@@ -4,9 +4,11 @@ import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
+import org.ing.ispw.unifix.model.Tecnico;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,7 +62,14 @@ public class InviaSegnalazioneController {
 
     }
 
-
+    public Tecnico getTecnicoConMenoSegnalazioni(){
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        List<Tecnico> tecnici = userDao.getAllTecnici();
+        //prendi quello con meno segnalazioni
+        return tecnici.stream()
+                .min((t1, t2) -> Integer.compare(t1.getNumeroSegnalazioni(), t2.getNumeroSegnalazioni()))
+                .orElse(null);
+    }
 
     public  boolean creaSegnalazione(SegnalazioneBean sb){
         SegnalazioneDao segnalazioneDao=DaoFactory.getInstance().getSegnalazioneDao();
@@ -76,7 +85,7 @@ public class InviaSegnalazioneController {
         segnalazione.setEdifico(sb.getEdificio());
         segnalazione.setDocente(docenteSegnalatore);
         segnalazione.setOggettoGuasto(sb.getOggettoGuasto());
-        segnalazione.setTecnico(null); // per ora è null ma va implementata la logica in cui viene preso quello con meno segnalazioni
+        segnalazione.setTecnico(getTecnicoConMenoSegnalazioni()); // per ora è null ma va implementata la logica in cui viene preso quello con meno segnalazioni
         segnalazione.setStato("APERTA");
         segnalazione.setIdSegnalzione(chiave);
         segnalazione.setDescrizone(sb.getDescrizone());
