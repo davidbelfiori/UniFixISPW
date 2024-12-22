@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class ControllerVisualizzatoreScene {
@@ -22,7 +23,7 @@ public class ControllerVisualizzatoreScene {
     }
 
 
-    public void visualizzaScenaPrincipale(String stringaScena) throws Exception {
+    public void visualizzaScenaPrincipale(String stringaScena) throws  IOException {
         //this method load the main view
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(stringaScena));
         Scene scene = new Scene(fxmlLoader.load());

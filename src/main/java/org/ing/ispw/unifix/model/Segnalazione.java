@@ -8,7 +8,7 @@ public class Segnalazione {
     private Long dataCreazione;
     private String oggettoGuasto;
     private Docente docente;
-    private String  Stato;
+    private String  stato;
     private String descrizone;
     private String aula;
     private String edifico;
@@ -21,11 +21,11 @@ public class Segnalazione {
 
 
     public String getStato() {
-        return Stato;
+        return stato;
     }
 
     public void setStato(String stato) {
-        Stato = stato;
+        this.stato = stato;
     }
 
     public String getEdifico() {
@@ -99,7 +99,7 @@ public class Segnalazione {
                 ", dataCreazione=" + dataCreazione +
                 ", oggettoGuasto='" + oggettoGuasto + '\'' +
                 ", docente=" + docente.getNome() + " " + docente.getCognome() +
-                ", Stato='" + Stato + '\'' +
+                ", stato='" + stato + '\'' +
                 ", descrizone='" + descrizone + '\'' +
                 ", aula='" + aula + '\'' +
                 ", edifico='" + edifico + '\'' +

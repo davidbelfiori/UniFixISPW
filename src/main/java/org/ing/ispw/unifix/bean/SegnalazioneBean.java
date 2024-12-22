@@ -3,7 +3,7 @@ package org.ing.ispw.unifix.bean;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.User;
 
-import java.util.Date;
+
 import java.util.List;
 
 public class SegnalazioneBean {
