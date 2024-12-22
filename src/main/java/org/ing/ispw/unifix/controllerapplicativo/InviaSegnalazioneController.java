@@ -65,10 +65,14 @@ public class InviaSegnalazioneController {
     public Tecnico getTecnicoConMenoSegnalazioni(){
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         List<Tecnico> tecnici = userDao.getAllTecnici();
-        //prendi quello con meno segnalazioni
-        return tecnici.stream()
+        //prendi quello con meno segnalazioni e aggiorna il numero di segnalazioni
+
+        Tecnico tecnicoSelto= tecnici.stream()
                 .min((t1, t2) -> Integer.compare(t1.getNumeroSegnalazioni(), t2.getNumeroSegnalazioni()))
                 .orElse(null);
+        tecnicoSelto.incrementaSegnalazioni();
+        userDao.update(tecnicoSelto);
+        return tecnicoSelto;
     }
 
     public  boolean creaSegnalazione(SegnalazioneBean sb){

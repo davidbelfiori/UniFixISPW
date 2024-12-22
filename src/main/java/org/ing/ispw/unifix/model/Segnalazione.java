@@ -92,4 +92,18 @@ public class Segnalazione {
         this.aula = aula;
     }
 
+    @Override
+    public String toString() {
+        return "Segnalazione{" +
+                "idSegnalzione='" + idSegnalzione + '\'' +
+                ", dataCreazione=" + dataCreazione +
+                ", oggettoGuasto='" + oggettoGuasto + '\'' +
+                ", docente=" + docente.getNome() + " " + docente.getCognome() +
+                ", Stato='" + Stato + '\'' +
+                ", descrizone='" + descrizone + '\'' +
+                ", aula='" + aula + '\'' +
+                ", edifico='" + edifico + '\'' +
+                ", tecnico=" + tecnico.getNome() + " " + tecnico.getCognome() +
+                '}';
+    }
 }

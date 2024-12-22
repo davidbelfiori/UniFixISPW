@@ -4,6 +4,8 @@ import org.ing.ispw.unifix.dao.SegnalazioneDao;
 
 import org.ing.ispw.unifix.model.Segnalazione;
 
+import java.util.List;
+
 public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> implements SegnalazioneDao {
 
     private static InMemorySegnalazioneDao instance;
@@ -24,6 +26,8 @@ public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> i
         return new Segnalazione(idSegnalazione);
    }
 
-
+   public List<Segnalazione> getAllSegnalazioni(){
+        return loadAll();
+   }
 
 }
