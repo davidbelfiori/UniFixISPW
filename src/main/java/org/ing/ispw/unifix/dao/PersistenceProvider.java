@@ -5,7 +5,6 @@ import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 public enum PersistenceProvider {
 
     IN_MEMORY("in memory",InMemoryDaoFactory .class);
-
     private final String name;
     private final Class<? extends DaoFactory> daoFactoryClass;
 

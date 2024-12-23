@@ -55,8 +55,7 @@ public class SysAdminController {
 
             }
         }catch (IOException e){
-            e.printStackTrace();
-
+           Printer.error(e.getMessage());
         }
     }
 

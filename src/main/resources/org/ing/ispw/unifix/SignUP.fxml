@@ -10,15 +10,13 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ing.ispw.unifix.controllergrafico.ControllerGraficoRegistrazione">
-   <ImageView fitHeight="217.0" fitWidth="273.0" layoutX="38.0" layoutY="-37.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@../../../photo/UniFix_transparent-.png" />
-      </image>
+   <ImageView fitHeight="217.0" fitWidth="273.0" layoutX="38.0" layoutY="-37.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../../../../photo/UniFix_transparent-.png"/>
    </ImageView>
-   <ImageView fitHeight="673.0" fitWidth="670.0" layoutX="530.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@../../../../photo/singUpImm.jpg" />
-      </image>
+   <ImageView fitHeight="673.0" fitWidth="670.0" layoutX="530.0" layoutY="61.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../../../../photo/singUpImm.jpg"/>
    </ImageView>
    <Label layoutX="169.0" layoutY="160.0" text="Benvenuto">
       <font>

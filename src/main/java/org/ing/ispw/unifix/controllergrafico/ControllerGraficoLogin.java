@@ -2,43 +2,70 @@ package org.ing.ispw.unifix.controllergrafico;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+import org.ing.ispw.unifix.bean.LoginBean;
+import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.utils.PopUp;
+import org.ing.ispw.unifix.utils.Printer;
+import org.mariadb.jdbc.Driver;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 public class ControllerGraficoLogin {
+    private final ControllerVisualizzatoreScene controllerVisualizzatoreScene=ControllerVisualizzatoreScene.getInstance(null);
+
 
     @FXML
-    private Label handleToRegistrazione;
+    private Label registrazioneLabel;
+
 
     @FXML
     private TextField emailField;
 
     @FXML
     private PasswordField passwordField;
+    PopUp popUp = new PopUp();
+    private LoginController lc;
+    public ControllerGraficoLogin() {
+        lc= LoginController.getInstance();
+    }
 
-
-    public void handleToRegistrazione(MouseEvent mouseEvent){
+    public void handleToRegistrazione(javafx.scene.input.MouseEvent mouseEvent){
         try {
-            // Carica la scena di registrazione
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("signUpGui.fxml"));
-            Parent root = loader.load();
-
-            // Ottieni la finestra corrente e imposta la nuova scena
-            Stage stage = (Stage) ((javafx.scene.Node) mouseEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
+           FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/SignUP.fxml"));
+            ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+        } catch (Exception e) {
+            Printer.error(e.getMessage());
         }
 
     }
 
 
-
+    public void validateLogin(MouseEvent mouseEvent) {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        int val=lc.validate(new LoginBean(email,password));
+        try {
+            switch (val) {
+                case 1:
+                    popUp.showSuccessPopup("Successo", "Login effettuato con successo ciao docente"+lc.getCurrentUser().getNome()+" "+lc.getCurrentUser().getCognome());
+                    break;
+                case 2:
+                    FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeTecnico.fxml"));
+                    ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+                    break;
+                case 3:
+                    popUp.showSuccessPopup("Successo", "Login effettuato con successo ciao amministratore"+lc.getCurrentUser().getNome()+" "+lc.getCurrentUser().getCognome());
+                    break;
+            }
+        } catch (Exception e) {
+            Printer.error(e.getMessage());
+        }
+    }
 }

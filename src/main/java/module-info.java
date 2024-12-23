@@ -1,5 +1,5 @@
-module org.uniroma.ing.ispw.unifix {
-    requires javafx.controls;
+module org.ing.ispw.unifix {
+    requires javafx.graphics;
     requires javafx.fxml;
     requires javafx.web;
 
@@ -10,12 +10,26 @@ module org.uniroma.ing.ispw.unifix {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.sql;
-    requires org.checkerframework.checker.qual;
+    requires java.desktop;
+    requires javafx.controls;
+    requires org.mariadb.jdbc;
 
     opens org.ing.ispw.unifix to javafx.fxml;
-    exports org.ing.ispw.unifix;
-
-    exports org.ing.ispw.unifix.controllergrafico;
     opens org.ing.ispw.unifix.controllergrafico to javafx.fxml;
+
+    exports org.ing.ispw.unifix;
+    exports org.ing.ispw.unifix.controllergrafico;
+    exports org.ing.ispw.unifix.dao;
+    exports org.ing.ispw.unifix.model;
+    exports org.ing.ispw.unifix.utils;
+    exports org.ing.ispw.unifix.cli;
+    exports org.ing.ispw.unifix.exception;
+    exports org.ing.ispw.unifix.controllerapplicativo;
+
+
+
+
+
+
+
 }
