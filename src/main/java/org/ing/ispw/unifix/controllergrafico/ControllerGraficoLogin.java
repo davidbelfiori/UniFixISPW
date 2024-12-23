@@ -11,11 +11,7 @@ import org.ing.ispw.unifix.bean.LoginBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
-import org.mariadb.jdbc.Driver;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 public class ControllerGraficoLogin {
     private final ControllerVisualizzatoreScene controllerVisualizzatoreScene=ControllerVisualizzatoreScene.getInstance(null);
@@ -54,7 +50,8 @@ public class ControllerGraficoLogin {
         try {
             switch (val) {
                 case 1:
-                    popUp.showSuccessPopup("Successo", "Login effettuato con successo ciao docente"+lc.getCurrentUser().getNome()+" "+lc.getCurrentUser().getCognome());
+                    FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
+                    ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderr.load());
                     break;
                 case 2:
                     FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeTecnico.fxml"));
