@@ -11,7 +11,7 @@ import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 
-import java.net.URL;
+
 
 public class ControllerGraficoRegistrazione {
     @FXML

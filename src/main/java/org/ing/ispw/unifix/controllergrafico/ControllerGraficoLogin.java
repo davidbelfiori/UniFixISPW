@@ -14,7 +14,6 @@ import org.ing.ispw.unifix.utils.Printer;
 
 
 public class ControllerGraficoLogin {
-    private final ControllerVisualizzatoreScene controllerVisualizzatoreScene=ControllerVisualizzatoreScene.getInstance(null);
 
 
     @FXML

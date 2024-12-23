@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ControllerGraficoHomeDocente {
     @FXML
-    private Label Welcome;
+    private Label welcome;
     private LoginController lc;
     PopUp popUp = new PopUp();
     private DocenteController dc;
@@ -25,7 +25,7 @@ public class ControllerGraficoHomeDocente {
     }
 
     public void initialize() {
-        Welcome.setText("Ciao Docente" +lc.getCurrentUser().getCognome() +lc.getCurrentUser().getNome());
+        welcome.setText("Ciao Docente" +lc.getCurrentUser().getCognome() +lc.getCurrentUser().getNome());
     }
 
 

@@ -13,7 +13,7 @@
             <Image url="@../../../../photo/UniFix_transparent-.png" />
          </image>
       </ImageView>
-      <Label fx:id="Welcome" layoutX="157.0" layoutY="133.0" prefHeight="58.0" prefWidth="671.0">
+      <Label fx:id="welcome" layoutX="157.0" layoutY="133.0" prefHeight="58.0" prefWidth="671.0">
          <font>
             <Font name="Segoe UI" size="29.0" />
          </font>

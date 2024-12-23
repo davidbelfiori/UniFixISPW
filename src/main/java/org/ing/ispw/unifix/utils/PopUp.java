@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 
 public class PopUp {
     public PopUp() {
+        //perchè lo devo usa e basta
     }
 
     public void showErrorPopup(String title, String header, String content) {
