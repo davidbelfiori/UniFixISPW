@@ -9,8 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.LoginBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
+
+import java.io.IOException;
 
 
 public class ControllerGraficoLogin {
@@ -45,8 +48,8 @@ public class ControllerGraficoLogin {
     public void validateLogin(MouseEvent mouseEvent) {
         String email = emailField.getText();
         String password = passwordField.getText();
-        int val=lc.validate(new LoginBean(email,password));
         try {
+            int val=lc.validate(new LoginBean(email,password));
             switch (val) {
                 case 1:
                     FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
@@ -59,9 +62,11 @@ public class ControllerGraficoLogin {
                 case 3:
                     popUp.showSuccessPopup("Successo", "Login effettuato con successo ciao amministratore"+lc.getCurrentUser().getNome()+" "+lc.getCurrentUser().getCognome());
                     break;
+                default:
+                    break;
             }
-        } catch (Exception e) {
-            Printer.error(e.getMessage());
+        }catch (UtenteNonTrovatoException| IOException e){
+            popUp.showErrorPopup("Errore","Si è verificato un errore",e.getMessage());
         }
     }
 }
