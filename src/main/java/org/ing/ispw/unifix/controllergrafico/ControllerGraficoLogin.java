@@ -66,7 +66,7 @@ public class ControllerGraficoLogin {
                     break;
             }
         }catch (UtenteNonTrovatoException| IOException e){
-            popUp.showErrorPopup("Errore","Si è verificato un errore",e.getMessage());
+           e.printStackTrace();
         }
     }
 }

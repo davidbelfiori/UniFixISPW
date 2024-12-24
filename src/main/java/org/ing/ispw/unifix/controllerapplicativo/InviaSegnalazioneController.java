@@ -5,6 +5,8 @@ import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
+import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
@@ -62,9 +64,10 @@ public class InviaSegnalazioneController {
 
     }
 
-    public Tecnico getTecnicoConMenoSegnalazioni(){
+    public Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         List<Tecnico> tecnici = userDao.getAllTecnici();
+        if (tecnici.isEmpty()) throw new NonCiSonoTecniciException("Non ci sono tecnici disponibili");
         //prendi quello con meno segnalazioni e aggiorna il numero di segnalazioni
 
         Tecnico tecnicoSelto= tecnici.stream()
@@ -75,13 +78,13 @@ public class InviaSegnalazioneController {
         return tecnicoSelto;
     }
 
-    public  boolean creaSegnalazione(SegnalazioneBean sb){
+    public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException {
         SegnalazioneDao segnalazioneDao=DaoFactory.getInstance().getSegnalazioneDao();
         Docente docenteSegnalatore =(Docente) LoginController.getInstance().getCurrentUser();
 
         String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
 
-        if (segnalazioneDao.exists(chiave)) return  false;
+        if (segnalazioneDao.exists(chiave)) throw new SegnalazioneGiaEsistenteException("Segnalazione già esistente");
 
         Segnalazione segnalazione=segnalazioneDao.create(chiave);
         segnalazione.setAula(sb.getAula());

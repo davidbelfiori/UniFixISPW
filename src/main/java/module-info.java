@@ -13,6 +13,7 @@ module org.ing.ispw.unifix {
     requires java.desktop;
     requires javafx.controls;
     requires org.mariadb.jdbc;
+    requires annotations;
 
     opens org.ing.ispw.unifix to javafx.fxml;
     opens org.ing.ispw.unifix.controllergrafico to javafx.fxml;

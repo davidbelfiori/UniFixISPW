@@ -3,10 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -32,16 +34,21 @@
             <Image url="@../../../../photo/logout.png" />
          </image>
       </ImageView>
-      <AnchorPane layoutX="53.0" layoutY="198.0" prefHeight="540.0" prefWidth="788.0" style="-fx-background-color: #17274B; -fx-background-radius: 60;">
+      <AnchorPane layoutX="50.0" layoutY="198.0" prefHeight="540.0" prefWidth="788.0" style="-fx-background-color: #17274B; -fx-background-radius: 60;">
          <children>
             <Label fx:id="testoSegnalazioni" layoutX="42.0" layoutY="39.0" prefHeight="58.0" prefWidth="522.0">
                <font>
                   <Font name="Segoe UI" size="29.0" />
                </font>
             </Label>
+            <ScrollPane hbarPolicy="NEVER" layoutX="42.0" layoutY="134.0" prefHeight="369.0" prefWidth="710.0" style="-fx-background-color: #17274B; -fx-background: #17274B; -fx-background-radius: 60;">
+               <content>
+                  <VBox fx:id="segnalazioniContainer" spacing="10"/>
+               </content>
+            </ScrollPane>
          </children>
 
-      </AnchorPane>
+            </AnchorPane>
       <AnchorPane layoutX="868.0" layoutY="198.0" prefHeight="540.0" prefWidth="281.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 60;">
          <children>
             <Text layoutX="54.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nuova Segnalaione">
@@ -89,5 +96,6 @@
             <Font name="Segoe UI" size="32.0" />
          </font>
       </Label>
+      <VBox layoutX="421.0" layoutY="53.0" prefHeight="108.0" prefWidth="530.0" />
    </children>
 </AnchorPane>
