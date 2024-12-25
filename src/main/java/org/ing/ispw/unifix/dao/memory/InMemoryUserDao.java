@@ -5,8 +5,6 @@ import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDao {
 
     private static InMemoryUserDao instance;
@@ -29,8 +27,7 @@ public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDa
     public List<Tecnico> getAllTecnici() {
         return loadAll().stream()
                 .filter(Tecnico.class::isInstance)
-                .map(Tecnico.class::cast)
-                .collect(Collectors.toList());
+                .map(Tecnico.class::cast).toList();
     }
 
 

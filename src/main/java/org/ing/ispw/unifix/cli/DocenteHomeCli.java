@@ -1,6 +1,5 @@
 package org.ing.ispw.unifix.cli;
 
-import org.ing.ispw.unifix.controllerapplicativo.DocenteController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniDocenteController;
 import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
@@ -14,14 +13,12 @@ import java.util.List;
 
 public class DocenteHomeCli {
 
-    Boolean quit;
-    BufferedReader br;
-    DocenteController dc;
-    VisualizzaSegnalazioniDocenteController vsdc;
+    private boolean quit;
+    private BufferedReader br;
+    private VisualizzaSegnalazioniDocenteController vsdc;
     public DocenteHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        dc = DocenteController.getInstance();
         vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
     }
 

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class InviaSegnalazioneController {
 
@@ -54,8 +53,7 @@ public class InviaSegnalazioneController {
         List<Aula> aule = aulaDao.getAllAule();
 
         return aule.stream()
-                .filter(aula -> aula.getEdificio().equals(edificio))
-                .collect(Collectors.toList());
+                .filter(aula -> aula.getEdificio().equals(edificio)).toList();
     }
 
     public Aula getOggettiAula(String idAula){

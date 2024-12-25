@@ -10,7 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
-import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
@@ -32,12 +31,10 @@ public class ControllerGraficoHomeTecnico {
     private Label welcome;
     private LoginController lc;
     PopUp popUp = new PopUp();
-    private TecnicoController tc;
     private final VisualizzaSegnalazioniTecnicoController vstc;
-    public ControllerGraficoHomeTecnico() {
 
+    public ControllerGraficoHomeTecnico() {
         lc = LoginController.getInstance();
-        tc = TecnicoController.getInstance();
         vstc = VisualizzaSegnalazioniTecnicoController.getInstance();
     }
 

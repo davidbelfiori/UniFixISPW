@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdmin;
-import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.utils.PopUp;
 
 import java.io.IOException;
@@ -30,11 +29,11 @@ public class ControllerGraficoHomeAdmin {
         segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
     }
 
-    private LoginController lc;
+
     PopUp popUp = new PopUp();
     private GestisciSegnalazioniAdmin gs;
     public ControllerGraficoHomeAdmin() {
-        lc = LoginController.getInstance();
+
         gs = GestisciSegnalazioniAdmin.getInstance();
     }
 

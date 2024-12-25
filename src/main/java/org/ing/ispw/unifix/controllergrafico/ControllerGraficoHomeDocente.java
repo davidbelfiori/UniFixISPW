@@ -43,13 +43,12 @@ public class ControllerGraficoHomeDocente {
     private Label welcome;
     private LoginController lc;
     PopUp popUp = new PopUp();
-    private DocenteController dc;
+
     InviaSegnalazioneController sc;
     SysAdminController sysAdminController;
     VisualizzaSegnalazioniDocenteController vsdc;
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
-        dc = DocenteController.getInstance();
         sc=InviaSegnalazioneController.getInstance();
         sysAdminController = SysAdminController.getInstance();
         vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
