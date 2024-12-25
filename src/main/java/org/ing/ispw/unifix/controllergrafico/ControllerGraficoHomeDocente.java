@@ -5,9 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class ControllerGraficoHomeDocente {
 
@@ -79,7 +78,8 @@ public class ControllerGraficoHomeDocente {
         List<Segnalazione> segnalazioniDocente = null;
         try {
             segnalazioniDocente = vsdc.visualizzaSegnalazioniDocente();
-
+            testoSegnalazioni.setText("Le tue segnalazioni inviate:");
+            testoSegnalazioni.setStyle("-fx-text-fill: white;");
             segnalazioniContainer.getChildren().clear();
             for (Segnalazione segnalazione : segnalazioniDocente) {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
@@ -94,7 +94,9 @@ public class ControllerGraficoHomeDocente {
 
     private HBox creaBoxSegnalazione(Segnalazione segnalazione) {
         HBox hbox = new HBox(10);
-        hbox.setSpacing(10);
+        hbox.setSpacing(15);
+        hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
 
         hbox.setPrefHeight(108);
         hbox.setPrefWidth(700);
@@ -109,23 +111,20 @@ public class ControllerGraficoHomeDocente {
         VBox dettagli = getVBox(segnalazione);
 
         // Aggiungi tutto all'HBox
+        dettagli.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         hbox.getChildren().add(dettagli);
         return hbox;
     }
-
     @NotNull
     private static VBox getVBox(Segnalazione segnalazione) {
-        Label aulaLabel = new Label("Aula: " + segnalazione.getAula());
-        aulaLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
-
-        Label oggettoLabel = new Label("Oggetto: " + segnalazione.getOggettoGuasto());
-        oggettoLabel.setStyle("-fx-text-fill: #000000;");
-
-        Label statoLabel = new Label("Stato: " + segnalazione.getStato());
-        statoLabel.setStyle("-fx-text-fill: #000000;");
+        Label testoLabel = new Label("Edificio: " + segnalazione.getEdifico() +
+                "    Aula: " + segnalazione.getAula() +
+                "    Oggetto: " + segnalazione.getOggettoGuasto() +
+                "    Stato: " + segnalazione.getStato());
+        testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font: Segoe UI");
 
         // Layout per i dettagli della segnalazione
-        VBox dettagli = new VBox(aulaLabel, oggettoLabel, statoLabel);
+        VBox dettagli = new VBox(testoLabel);
         dettagli.setSpacing(5);
         return dettagli;
     }
@@ -158,15 +157,33 @@ public class ControllerGraficoHomeDocente {
         String descrizione = descrizioneTextArea.getText();
 
         if (edificio == null || aula == null || oggetto == null || descrizione.isEmpty()) {
-            popUp.showErrorPopup("Errore", "Compilare tutti i campi", "Riprova");
-        } else {
-            try {
+            popUp.showErrorPopup("Si è verificato errore", "Compilare tutti i campi", "Riprova");
+            return;
+        }
+
+        // Mostra il popup di conferma
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma Segnalazione");
+        alert.setHeaderText("Sei sicuro di voler inviare questa segnalazione?");
+        alert.setContentText("Edificio: " + edificio + "\n" +
+                "Aula: " + aula + "\n" +
+                "Oggetto: " + oggetto + "\n" +
+                "Descrizione: " + descrizione);
+
+        ButtonType buttonConferma = new ButtonType("Conferma");
+        ButtonType buttonAnnulla = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonConferma, buttonAnnulla);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonConferma){
+        try {
                 sc.creaSegnalazione(new SegnalazioneBean(System.currentTimeMillis(), aula, edificio, oggetto, descrizione));
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();
             }catch (NonCiSonoTecniciException | SegnalazioneGiaEsistenteException e) {
                 popUp.showErrorPopup("Errore", e.getMessage(), "Riprova");
             }
+        }else {
+            popUp.showErrorPopup("Errore", "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
         }
     }
 

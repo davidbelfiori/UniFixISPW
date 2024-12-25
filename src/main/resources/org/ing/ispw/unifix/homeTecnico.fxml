@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ing.ispw.unifix.controllergrafico.ControllerGraficoHomeTecnico">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #D9D9D9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ing.ispw.unifix.controllergrafico.ControllerGraficoHomeTecnico">
    <children>
       <ImageView fitHeight="217.0" fitWidth="273.0" layoutX="48.0" layoutY="-27.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -28,5 +30,29 @@
             <Image url="@../../../../photo/logout.png" />
          </image>
       </ImageView>
+      <Label fx:id="welcome1" layoutX="266.0" layoutY="127.0" prefHeight="58.0" prefWidth="697.0">
+         <font>
+            <Font name="Segoe UI" size="32.0" />
+         </font>
+      </Label>
+      <AnchorPane layoutX="59.0" layoutY="208.0" prefHeight="540.0" prefWidth="788.0" style="-fx-background-color: #17274B; -fx-background-radius: 60;">
+         <children>
+            <Label fx:id="testoSegnalazioniTecnico" layoutX="42.0" layoutY="39.0" prefHeight="58.0" prefWidth="522.0">
+               <font>
+                  <Font name="Segoe UI" size="29.0" />
+               </font>
+            </Label>
+            <ScrollPane hbarPolicy="NEVER" layoutX="42.0" layoutY="134.0" prefHeight="370.0" prefWidth="1034.0" style="-fx-background-color: #17274B; -fx-background: #17274B; -fx-background-radius: 60;">
+               <content>
+                  <VBox fx:id="segnalazioniContainer" spacing="10" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <Label layoutX="97.0" layoutY="127.0" prefHeight="58.0" prefWidth="173.0" text="Bentornato ">
+         <font>
+            <Font name="Segoe UI" size="32.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

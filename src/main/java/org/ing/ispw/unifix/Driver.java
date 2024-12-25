@@ -21,6 +21,7 @@ public class Driver extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         FXMLLoader fxmlLoader=new FXMLLoader(Driver.class.getResource("login.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);

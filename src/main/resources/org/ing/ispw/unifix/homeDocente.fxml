@@ -19,7 +19,7 @@
             <Image url="@../../../../photo/UniFix_transparent-.png" />
          </image>
       </ImageView>
-      <Label fx:id="welcome" layoutX="268.0" layoutY="117.0" prefHeight="58.0" prefWidth="351.0">
+      <Label fx:id="welcome" layoutX="256.0" layoutY="117.0" prefHeight="58.0" prefWidth="351.0">
          <font>
             <Font name="Segoe UI" size="32.0" />
          </font>
@@ -41,9 +41,9 @@
                   <Font name="Segoe UI" size="29.0" />
                </font>
             </Label>
-            <ScrollPane hbarPolicy="NEVER" layoutX="42.0" layoutY="134.0" prefHeight="369.0" prefWidth="710.0" style="-fx-background-color: #17274B; -fx-background: #17274B; -fx-background-radius: 60;">
+            <ScrollPane hbarPolicy="NEVER" layoutX="42.0" layoutY="134.0" prefHeight="370.0" prefWidth="745.0" style="-fx-background-color: #17274B; -fx-background: #17274B; -fx-background-radius: 60;">
                <content>
-                  <VBox fx:id="segnalazioniContainer" spacing="10"/>
+                  <VBox fx:id="segnalazioniContainer" spacing="10" />
                </content>
             </ScrollPane>
          </children>
@@ -74,7 +74,7 @@
                   <Font name="Segoe UI" size="17.0" />
                </font>
             </Text>
-            <TextArea fx:id="descrizioneTextArea" layoutX="30.0" layoutY="349.0" prefHeight="101.0" prefWidth="218.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 20;">
+            <TextArea fx:id="descrizioneTextArea" layoutX="30.0" layoutY="349.0" prefHeight="101.0" prefWidth="218.0" style="-fx-background-color: #D9D9D9;">
                <font>
                   <Font name="Segoe UI" size="12.0" />
                </font>
@@ -96,6 +96,5 @@
             <Font name="Segoe UI" size="32.0" />
          </font>
       </Label>
-      <VBox layoutX="421.0" layoutY="53.0" prefHeight="108.0" prefWidth="530.0" />
    </children>
 </AnchorPane>

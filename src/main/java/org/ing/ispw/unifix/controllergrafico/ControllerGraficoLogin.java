@@ -60,7 +60,8 @@ public class ControllerGraficoLogin {
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
                     break;
                 case 3:
-                    popUp.showSuccessPopup("Successo", "Login effettuato con successo ciao amministratore"+lc.getCurrentUser().getNome()+" "+lc.getCurrentUser().getCognome());
+                    FXMLLoader fxmlLoaderrr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeAdmin.fxml"));
+                    ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
                     break;
                 default:
                     break;
