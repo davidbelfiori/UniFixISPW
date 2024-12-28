@@ -22,7 +22,6 @@ public class ControllerGraficoLogin {
     @FXML
     private Label registrazioneLabel;
 
-
     @FXML
     private TextField emailField;
 

@@ -30,4 +30,8 @@ public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> i
         return loadAll();
    }
 
+   public Segnalazione getSegnalazione(String idSegnalazione){
+        return load(idSegnalazione);
+   }
+
 }

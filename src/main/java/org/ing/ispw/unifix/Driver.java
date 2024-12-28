@@ -51,6 +51,8 @@ public class Driver extends Application {
        Printer.print("Benvenuto in UniFix!");
        setPersistenceProvider("in memory");
 
+
+
         Printer.print("Scegli l'interfaccia: CLI o GUI");
         String interfaceType = scanner.nextLine();
 

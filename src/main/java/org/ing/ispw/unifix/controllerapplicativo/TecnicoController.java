@@ -2,6 +2,10 @@ package org.ing.ispw.unifix.controllerapplicativo;
 
 
 import org.ing.ispw.unifix.bean.InfoTecnicoBean;
+import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.dao.DaoFactory;
+import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 
 public class TecnicoController {
@@ -16,6 +20,7 @@ public class TecnicoController {
     }
 
     private TecnicoController() {
+
     }
 
     public InfoTecnicoBean getTecnicoInformation(){
@@ -25,5 +30,17 @@ public class TecnicoController {
 
     }
 
+    public Segnalazione getSegnalazione(String idSegnalazione) {
+        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
+        return segnalazioneDao.getSegnalazione(idSegnalazione);
+    }
+
+
+    public void updateSegnalazione(SegnalazioneBean segnalazioneBean) {
+        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
+        Segnalazione segnalazione= segnalazioneDao.load(segnalazioneBean.getIdSegnalzione());
+        segnalazione.setStato(segnalazioneBean.getStato());
+        segnalazioneDao.update(segnalazione);
+    }
 
 }

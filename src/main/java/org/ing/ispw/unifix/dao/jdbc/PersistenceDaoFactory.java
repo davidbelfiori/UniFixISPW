@@ -1,24 +1,23 @@
-package org.ing.ispw.unifix.dao.memory;
+package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 
-public class InMemoryDaoFactory extends DaoFactory {
+public class PersistenceDaoFactory extends DaoFactory {
 
     public UserDao getUserDao() {
-        return InMemoryUserDao.getInstance();
+        return JdbcUserDao.getInstance();
     }
 
     @Override
     public AulaDao getAulaDao() {
-        return InMemoryAulaDao.getInstance();
+        return JdbcAulaDao.getInstance();
     }
 
     @Override
     public SegnalazioneDao getSegnalazioneDao() {
-        return InMemorySegnalazioneDao.getInstance();
+        return JdbcSegnalazioneDao.getInstance();
     }
-
 }

@@ -1,10 +1,13 @@
 package org.ing.ispw.unifix.dao;
 
+import org.ing.ispw.unifix.dao.jdbc.PersistenceDaoFactory;
 import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 
 public enum PersistenceProvider {
 
-    IN_MEMORY("in memory",InMemoryDaoFactory .class);
+    IN_MEMORY("in memory",InMemoryDaoFactory .class),
+    PERSITENCE("persistence",PersistenceDaoFactory .class);
+
     private final String name;
     private final Class<? extends DaoFactory> daoFactoryClass;
 

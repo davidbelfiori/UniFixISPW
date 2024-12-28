@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SegnalazioneBean {
 
-    private int idSegnalzione;
+    private String idSegnalzione;
     private long dataCreazione;
     private String oggettoGuasto;
     private User user;
@@ -29,7 +29,12 @@ public class SegnalazioneBean {
         this.descrizone=descrizone;
     }
 
-    public SegnalazioneBean(int idSegnalzione, long dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
+    public SegnalazioneBean(String idSegnalzione, String stato) {
+        this.idSegnalzione = idSegnalzione;
+        this.stato = stato;
+    }
+
+    public SegnalazioneBean(String idSegnalzione, long dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
         this.idSegnalzione = idSegnalzione;
         this.dataCreazione = dataCreazione;
         this.oggettoGuasto = oggettoGuasto;
@@ -106,11 +111,11 @@ public class SegnalazioneBean {
         this.dataCreazione = dataCreazione;
     }
 
-    public int getIdSegnalzione() {
+    public String getIdSegnalzione() {
         return idSegnalzione;
     }
 
-    public void setIdSegnalzione(int idSegnalzione) {
+    public void setIdSegnalzione(String idSegnalzione) {
         this.idSegnalzione = idSegnalzione;
     }
 
