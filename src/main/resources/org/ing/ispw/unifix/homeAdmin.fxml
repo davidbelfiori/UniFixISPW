@@ -9,9 +9,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ing.ispw.unifix.controllergrafico.ControllerGraficoHomeAdmin">
    <children>
       <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="1082.0" layoutY="53.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../photo/logout.png" />
-         </image>
+         <Image url="@../../../../photo/logout.png" />
       </ImageView>
       <AnchorPane layoutX="-2.0" prefHeight="800.0" prefWidth="406.0" style="-fx-background-color: #D9D9D9;">
          <children>
@@ -108,5 +106,24 @@
             <Font name="Segoe UI Light" size="22.0" />
          </font>
       </Label>
+      <AnchorPane fx:id="InserisciAule" layoutX="458.0" layoutY="565.0" prefHeight="108.0" prefWidth="676.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10;">
+         <children>
+            <Label layoutX="135.0" layoutY="45.0" prefHeight="24.0" prefWidth="126.0" text="Inserisci aule">
+               <font>
+                  <Font name="Segoe UI Bold" size="20.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="44.0" fitWidth="34.0" layoutX="587.0" layoutY="32.0" onMouseClicked="#ChooseFile" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../photo/upload.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="260.0" layoutY="45.0" prefHeight="24.0" prefWidth="137.0" text="(FileType: CSV)">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

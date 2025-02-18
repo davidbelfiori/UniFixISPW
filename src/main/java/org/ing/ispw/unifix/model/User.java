@@ -12,6 +12,9 @@ public class User {
         this.email = email;
     }
 
+    public User(String email, String password, String nome, String cognome, String ruolo) {
+    }
+
     public String getCognome() {
         return cognome;
     }

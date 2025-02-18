@@ -95,12 +95,12 @@ public class ControllerGraficoHomeTecnico {
 
             alert.showAndWait().ifPresent(response -> {
               if (response == lavorazioneButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "In lavorazione"));
+                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "IN LAVORAZIONE"));
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
               } else{
                   //bug quando selezioni in lavorazione la chiude sempre
-                  tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "Chiusa"));
+                  tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "CHIUSA"));
                   segnalazioniContainer.getChildren().clear();
                   mostraSegnalazioniTecnico();
               }

@@ -50,6 +50,7 @@ public class Driver extends Application {
         Scanner scanner = new Scanner(System.in);
        Printer.print("Benvenuto in UniFix!");
        setPersistenceProvider("in memory");
+        //setPersistenceProvider("persistence");
 
 
 

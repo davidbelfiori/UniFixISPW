@@ -50,6 +50,9 @@ public class ControllerGraficoLogin {
         try {
             int val=lc.validate(new LoginBean(email,password));
             switch (val) {
+                case 0:
+                    popUp.showErrorPopup("Errore", "", "Utente non trovato");
+                    break;
                 case 1:
                     FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderr.load());
@@ -67,6 +70,7 @@ public class ControllerGraficoLogin {
             }
         }catch (UtenteNonTrovatoException| IOException e){
             popUp.showErrorPopup("Errore","", e.getMessage());
+            Printer.error(e.getMessage());
         }
     }
 }

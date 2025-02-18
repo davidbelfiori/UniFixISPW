@@ -147,14 +147,14 @@ public class LoginController {
             User user =userDao.load(loginBean.getEmail());
             if(user != null || user.getPassword().equals(loginBean.getPassword())){
                 currentUser=user;
-                switch (user) {
-                    case Docente docente -> {
+                switch (user.getRuolo()) {
+                    case "Docente" -> {
                         return 1;
                     }
-                    case Tecnico tecnico -> {
+                    case "Tecnico" -> {
                         return 2;
                     }
-                    case Sysadmin sysadmin -> {
+                    case "Amministratore di Sistema" -> {
                         return 3;
                     }
                     default -> { return 0;
