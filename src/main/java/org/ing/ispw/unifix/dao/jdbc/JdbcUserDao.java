@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 
 public class JdbcUserDao  implements UserDao {
 
@@ -79,6 +78,8 @@ public class JdbcUserDao  implements UserDao {
                 Printer.print( "Utente registrato con successo"+entity.getEmail());
             } catch (SQLException e) {
                 Printer.error("Errore durante la registrazione dell'utente"+e.getMessage());
+            }finally {
+                connection.close();
             }
         }catch (Exception e){
             throw new RuntimeException(e);
@@ -87,7 +88,13 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public void delete(String id) {
-
+        String query = "DELETE FROM user WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            Printer.error( "Errore durante l'eliminazione dell'utente"+e.getMessage());
+        }
     }
 
     @Override
@@ -95,7 +102,6 @@ public class JdbcUserDao  implements UserDao {
         String query = "SELECT COUNT(*) FROM user WHERE  email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, identifier);
-            stmt.setString(2, identifier);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next() && rs.getInt(1) > 0;
             }
@@ -112,7 +118,7 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public void update(User entity) {
-
+        //da fare se necessario
     }
 
     @Override

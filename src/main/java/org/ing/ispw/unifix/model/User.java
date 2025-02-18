@@ -13,6 +13,11 @@ public class User {
     }
 
     public User(String email, String password, String nome, String cognome, String ruolo) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.ruolo = ruolo;
     }
 
     public String getCognome() {

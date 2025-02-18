@@ -50,7 +50,7 @@ public class SysAdminController {
             }
             return true;
         } catch (IOException e) {
-            System.out.println("Errore nella lettura del file: " + e.getMessage());
+            Printer.error("Errore nella lettura del file: " + e.getMessage());
             return false;
         }
     }

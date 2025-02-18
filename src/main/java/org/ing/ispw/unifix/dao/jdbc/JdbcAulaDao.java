@@ -84,7 +84,7 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public void delete(String id) {
-
+        //da fare
     }
 
     @Override
@@ -107,7 +107,7 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public void update(Aula entity) {
-
+        //da fare
     }
 
     @Override
