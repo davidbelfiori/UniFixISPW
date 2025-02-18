@@ -13,6 +13,13 @@ public class Aula {
         this.idAula=idAula;
     }
 
+    public Aula(String idAula, int piano, String edificio, List<String> oggetti) {
+        this.idAula = idAula;
+        this.piano = piano;
+        this.edificio = edificio;
+        this.oggetti = oggetti;
+    }
+
     public List<String> getOggettiById(String idAula) {
         if (this.idAula.equals(idAula)) {
             return this.oggetti;

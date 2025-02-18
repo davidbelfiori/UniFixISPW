@@ -26,36 +26,75 @@ public class SysAdminController {
     private SysAdminController() {
     }
 
-    public void inserisciAule(String filePath){
 
-        AulaDao aulaDao= DaoFactory.getInstance().getAulaDao();
+    public static boolean validateCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            boolean firstLine = true;
-
-            while ((line = br.readLine()) != null) {
-                // Salta la prima riga (header)
-                if (firstLine) {
-                    firstLine = false;
-                    continue;
-                }
-                String[] fields = line.split(",");
-
-                // Parsing dei campi
-                String edificio = fields[0].trim();
-                String idAula = fields[1].trim();
-                int piano = Integer.parseInt(fields[2].trim());
-                List<String> oggetti = Arrays.asList(fields[3].trim().split(";"));
-
-                Aula aula =aulaDao.create(idAula);
-                aula.setEdificio(edificio);
-                aula.setPiano(piano);
-                aula.setOggetti(oggetti);
-                aulaDao.store(aula);
-
+            String header = br.readLine();
+            if (header == null || !header.equals("Edificio,IdAula,Piano,Oggetti")) {
+                return false;
             }
-        }catch (IOException e){
-           Printer.error(e.getMessage());
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length != 4) {
+                    return false;
+                }
+                try {
+                    Integer.parseInt(fields[2].trim());
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                if (!fields[3].contains(";") && !fields[3].trim().isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("Errore nella lettura del file: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void inserisciAule(String filePath) throws IllegalArgumentException {
+
+        if (!validateCSV(filePath)) {
+            Printer.error("Il file non è valido");
+            throw new IllegalArgumentException("Il file non è valido");
+        }else {
+            AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                boolean firstLine = true;
+
+                while ((line = br.readLine()) != null) {
+                    // Salta la prima riga (header)
+                    if (firstLine) {
+                        firstLine = false;
+                        continue;
+                    }
+                    String[] fields = line.split(",");
+
+                    // Parsing dei campi
+                    String edificio = fields[0].trim();
+                    String idAula = fields[1].trim();
+                    int piano = Integer.parseInt(fields[2].trim());
+                    List<String> oggetti = Arrays.asList(fields[3].trim().split(";"));
+
+                    //controlla se l'aula esiste già
+                    if (aulaDao.exists(idAula)) {
+                        Printer.error("Aula " + idAula + " già esistente");
+                    }else {
+                        Aula aula = aulaDao.create(idAula);
+                        aula.setEdificio(edificio);
+                        aula.setPiano(piano);
+                        aula.setOggetti(oggetti);
+                        aulaDao.store(aula);
+                    }
+
+                }
+            } catch (IOException e) {
+                Printer.error(e.getMessage());
+            }
         }
     }
 
