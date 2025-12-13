@@ -106,14 +106,14 @@
             <Font name="Segoe UI Light" size="22.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="InserisciAule" layoutX="458.0" layoutY="565.0" prefHeight="108.0" prefWidth="676.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10;">
+      <AnchorPane fx:id="inserisciAule" layoutX="458.0" layoutY="565.0" prefHeight="108.0" prefWidth="676.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10;">
          <children>
             <Label layoutX="135.0" layoutY="45.0" prefHeight="24.0" prefWidth="126.0" text="Inserisci aule">
                <font>
                   <Font name="Segoe UI Bold" size="20.0" />
                </font>
             </Label>
-            <ImageView fitHeight="44.0" fitWidth="34.0" layoutX="587.0" layoutY="32.0" onMouseClicked="#ChooseFile" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="44.0" fitWidth="34.0" layoutX="587.0" layoutY="32.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../photo/upload.png" />
                </image>

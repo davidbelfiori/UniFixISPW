@@ -19,10 +19,13 @@ import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
+import org.ing.ispw.unifix.utils.observer.Observer;
+
 import java.util.List;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -30,8 +33,9 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class ControllerGraficoHomeAdmin {
-    public AnchorPane InserisciAule;
+public class ControllerGraficoHomeAdmin implements Observer {
+    @FXML
+    private AnchorPane inserisciAule;
     @FXML
     private Label auleGestiteLabel;
     @FXML
@@ -43,10 +47,7 @@ public class ControllerGraficoHomeAdmin {
     private Label segnalazioRisolteLabel;
 
     public void initialize() {
-        edificiGestitiLabel.setText(getEdificiGestiti());
-        auleGestiteLabel.setText(getAuleGestite());
-        segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
-        segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
+        updateLabels();
     }
 
 
@@ -55,6 +56,7 @@ public class ControllerGraficoHomeAdmin {
     private SysAdminController sac;
     public ControllerGraficoHomeAdmin() {
         sac = SysAdminController.getInstance();
+        sac.attach(this);
         gs = GestisciSegnalazioniAdmin.getInstance();
     }
 
@@ -76,11 +78,12 @@ public class ControllerGraficoHomeAdmin {
 
     @FXML
     protected void logout(MouseEvent event) throws IOException {
+        sac.detach(this);
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("login.fxml"));
         ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
     }
 
-    public  void ChooseFile(MouseEvent mouseEvent) {
+    public  void chooseFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleziona un file CSV");
         fileChooser.setFileFilter(new FileNameExtensionFilter("File CSV", "csv"));
@@ -89,9 +92,17 @@ public class ControllerGraficoHomeAdmin {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             if (selectedFile.getName().toLowerCase().endsWith(".csv")) {
-                sac.inserisciAule(selectedFile.getAbsolutePath());
+                try {
+                    if (sac.inserisciAule(selectedFile.getAbsolutePath())) {
+                        popUp.showSuccessPopup(Answer.SUCCESSO.toString(), "Aule inserite correttamente");
+                    } else {
+                        popUp.showErrorPopup(Answer.ERRORE.toString(), "Nessuna nuova aula inserita", "Le aule potrebbero essere già presenti");
+                    }
+                } catch (IllegalArgumentException e){
+                    popUp.showErrorPopup(Answer.ERRORE.toString(), "File non valido", e.getMessage());
+                }
             }else {
-                popUp.showErrorPopup("Errore", "", "Il file selezionato non è un file CSV");
+                popUp.showErrorPopup(Answer.ERRORE.toString(), "", "Il file selezionato non è un file CSV");
             }
 
         }
@@ -99,7 +110,7 @@ public class ControllerGraficoHomeAdmin {
 
     }
 
-    public void aulePopUp(MouseEvent mouseEvent) {
+    public void aulePopUp() {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();
         Platform.runLater(() -> {
@@ -143,5 +154,17 @@ public class ControllerGraficoHomeAdmin {
             stage.show();
         });
 
+    }
+
+    @Override
+    public void update() {
+        Platform.runLater(this::updateLabels);
+    }
+
+    private void updateLabels() {
+        edificiGestitiLabel.setText(getEdificiGestiti());
+        auleGestiteLabel.setText(getAuleGestite());
+        segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
+        segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
     }
 }

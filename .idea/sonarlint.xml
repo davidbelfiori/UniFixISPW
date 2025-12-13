@@ -3,6 +3,6 @@
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
     <option name="projectKey" value="davidbelfiori_UniFixISPW" />
-    <option name="serverId" value="gg" />
+    <option name="serverId" value="conn" />
   </component>
 </project>

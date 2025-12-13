@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.exception.SignUpException;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 import org.ing.ispw.unifix.utils.Printer;
+import org.ing.ispw.unifix.utils.UserType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,7 +52,7 @@ public class JdbcUserDao  implements UserDao {
                     user.setPassword(rs.getString("password"));
                     user.setNome(rs.getString("nome"));
                     user.setCognome(rs.getString("cognome"));
-                    user.setRuolo(rs.getString("ruolo"));
+                    user.setRuolo(UserType.valueOf(rs.getString("ruolo")));
                     return user;
                 }
             }
@@ -73,7 +74,7 @@ public class JdbcUserDao  implements UserDao {
                 stmt.setString(2, entity.getPassword());
                 stmt.setString(3, entity.getNome());
                 stmt.setString(4, entity.getCognome());
-                stmt.setString(5, entity.getRuolo());
+                stmt.setString(5, entity.getRuolo().toString());
                 stmt.executeUpdate();
                 Printer.print( "Utente registrato con successo"+entity.getEmail());
             } catch (SQLException e) {

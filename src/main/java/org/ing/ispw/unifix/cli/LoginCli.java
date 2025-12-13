@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.bean.LoginBean;
+import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,19 +48,19 @@ public class LoginCli {
                     password = br.readLine();
                     break;
                 case "3":
-                    int val=lc.validate(new LoginBean(email,password));
+                    UserType ruolo=lc.validate(new LoginBean(email,password));
                     try {
-                        switch (val) {
-                            case 1:
+                        switch (ruolo) {
+                            case DOCENTE:
                                 DocenteHomeCli docenteView = new DocenteHomeCli();
                                 docenteView.docenteHome();
                                 break;
-                            case 2:
+                            case TECNICO:
                                 TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
                                 tecnicoView.tecnicoHome();
                                 break;
 
-                            case 3:
+                            case SYSADMIN:
                                 SysAdminHomeCli adminView= new SysAdminHomeCli();
                                 adminView.adminHome();
                                 break;

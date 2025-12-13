@@ -1,18 +1,20 @@
 package org.ing.ispw.unifix.model;
 
+import org.ing.ispw.unifix.utils.UserType;
+
 public class User {
 
     private String nome;
     private String cognome;
     private String email;
     private String password;
-    private String ruolo;
+    private UserType ruolo;
 
     public User(String email) {
         this.email = email;
     }
 
-    public User(String email, String password, String nome, String cognome, String ruolo) {
+    public User(String email, String password, String nome, String cognome, UserType ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -52,11 +54,11 @@ public class User {
         this.password = password;
     }
 
-    public String getRuolo() {
+    public UserType getRuolo() {
         return ruolo;
     }
 
-    public void setRuolo(String ruolo) {
+    public void setRuolo(UserType ruolo) {
         this.ruolo = ruolo;
     }
 }

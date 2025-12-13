@@ -30,7 +30,7 @@ public class ControllerGraficoRegistrazione {
         lc = LoginController.getInstance();
     }
 
-    public void validateRegistrazione(MouseEvent mouseEvent) {
+    public void validateRegistrazione() {
 
         String email = emailField.getText();
         String password = passwordField.getText();

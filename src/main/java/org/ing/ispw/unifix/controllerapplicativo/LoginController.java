@@ -11,7 +11,7 @@ import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Sysadmin;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
-
+import org.ing.ispw.unifix.utils.UserType;
 
 
 public class LoginController {
@@ -56,12 +56,12 @@ public class LoginController {
     }
 
     // Estrae il ruolo in base al dominio dell'email
-    private String extractRuolo(String email) throws  RuoloNonTrovatoException{
+    private UserType extractRuolo(String email) throws  RuoloNonTrovatoException{
         String dominio = getDomainPart(email);
         return switch (dominio) {
-            case "uniroma2.eu" -> "Docente";
-            case "tec.uniroma2.eu" -> "Tecnico";
-            case "sys.uniroma2.eu" -> "Amministratore di Sistema";
+            case "uniroma2.eu" -> UserType.DOCENTE;
+            case "tec.uniroma2.eu" -> UserType.TECNICO;
+            case "sys.uniroma2.eu" -> UserType.SYSADMIN;
             default -> throw new RuoloNonTrovatoException("Dominio non riconosciuto");
         };
     }
@@ -95,10 +95,10 @@ public class LoginController {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         if(!userDao.exists(rb.getEmail())){
 
-                String ruolo = extractRuolo(rb.getEmail());
+                UserType ruolo = extractRuolo(rb.getEmail());
 
                 switch (ruolo) {
-                    case "Docente" -> {
+                    case DOCENTE -> {
                         Docente docente = new Docente(rb.getEmail());
                         docente.setNome(extractNome(rb.getEmail()));
                         docente.setCognome(extractCognome(rb.getEmail()));
@@ -108,7 +108,7 @@ public class LoginController {
                         userDao.store(docente);
                         return true;
                     }
-                    case "Tecnico" -> {
+                    case TECNICO -> {
                         Tecnico tec = new Tecnico(rb.getEmail());
                         tec.setNome(extractNome(rb.getEmail()));
                         tec.setCognome(extractCognome(rb.getEmail()));
@@ -119,7 +119,7 @@ public class LoginController {
                         userDao.store(tec);
                         return true;
                     }
-                    case "Amministratore di Sistema" -> {
+                    case SYSADMIN -> {
                         Sysadmin sysadmin=new Sysadmin(rb.getEmail());
                         sysadmin.setNome(extractNome(rb.getEmail()));
                         sysadmin.setCognome(extractCognome(rb.getEmail()));
@@ -140,31 +140,19 @@ public class LoginController {
         return false;
     }
 
-    public int validate(LoginBean loginBean) throws UtenteNonTrovatoException{
+    public UserType validate(LoginBean loginBean) throws UtenteNonTrovatoException{
         UserDao userDao = DaoFactory.getInstance().getUserDao();
 
         if(userDao.exists(loginBean.getEmail())){
             User user =userDao.load(loginBean.getEmail());
-            if(user != null || user.getPassword().equals(loginBean.getPassword())){
+            if(user != null && user.getPassword().equals(loginBean.getPassword())){
                 currentUser=user;
-                switch (user.getRuolo()) {
-                    case "Docente" -> {
-                        return 1;
-                    }
-                    case "Tecnico" -> {
-                        return 2;
-                    }
-                    case "Amministratore di Sistema" -> {
-                        return 3;
-                    }
-                    default -> { return 0;
-                    }
-                }
+                return user.getRuolo();
             }
         }else {
             throw new UtenteNonTrovatoException("L'utente inserito non esiste");
         }
 
-        return 0;
+        return UserType.UNKNOWN;
     }
 }

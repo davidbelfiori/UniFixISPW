@@ -5,16 +5,21 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Printer;
+import org.ing.ispw.unifix.utils.observer.Observer;
+import org.ing.ispw.unifix.utils.observer.Subject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SysAdminController {
 
     private static SysAdminController instance;
+    private final Subject subject = new Subject();
 
     public static SysAdminController getInstance() {
         if(instance == null) {
@@ -24,6 +29,14 @@ public class SysAdminController {
     }
 
     private SysAdminController() {
+    }
+
+    public void attach(Observer observer) {
+        subject.attach(observer);
+    }
+
+    public void detach(Observer observer) {
+        subject.detach(observer);
     }
 
 
@@ -55,8 +68,8 @@ public class SysAdminController {
         }
     }
 
-    public void inserisciAule(String filePath) throws IllegalArgumentException {
-
+    public boolean inserisciAule(String filePath) throws IllegalArgumentException {
+        boolean auleInserite = false;
         if (!validateCSV(filePath)) {
             Printer.error("Il file non è valido");
             throw new IllegalArgumentException("Il file non è valido");
@@ -89,12 +102,19 @@ public class SysAdminController {
                         aula.setPiano(piano);
                         aula.setOggetti(oggetti);
                         aulaDao.store(aula);
+                        auleInserite = true;
                     }
 
                 }
             } catch (IOException e) {
                 Printer.error(e.getMessage());
+                return false; // Ritorna false in caso di errore di I/O
             }
+
+            if(auleInserite){
+                subject.notifyObservers();
+            }
+            return auleInserite;
         }
     }
 
@@ -113,5 +133,11 @@ public class SysAdminController {
             throw new AuleNonTrovateException("Non sono state trovate aule");
         }
     }
-    }
 
+    public Map<String, Long> getStatisticheAule() {
+        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
+        List<Aula> aule = aulaDao.getAllAule();
+        return aule.stream()
+                .collect(Collectors.groupingBy(Aula::getEdificio, Collectors.counting()));
+    }
+}

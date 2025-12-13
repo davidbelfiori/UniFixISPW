@@ -149,7 +149,7 @@ public class ControllerGraficoHomeDocente {
         ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
     }
 
-    public void inviaSegnalazione(MouseEvent mouseEvent) {
+    public void inviaSegnalazione() {
         String edificio = edificioComboBox.getValue();
         String aula = aulaComboBox.getValue();
         String oggetto = oggettoComboBox.getValue();

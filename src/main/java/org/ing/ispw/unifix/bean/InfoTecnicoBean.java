@@ -1,14 +1,16 @@
 package org.ing.ispw.unifix.bean;
 
+import org.ing.ispw.unifix.utils.UserType;
+
 public class InfoTecnicoBean {
     private String nome;
     private String cognome;
     private String email;
     private String password;
-    private String ruolo;
+    private UserType ruolo;
     private int numeroSegnalazioni;
 
-    public InfoTecnicoBean(String nome, String cognome, String email, String password, String ruolo, int numeroSegnalazioni) {
+    public InfoTecnicoBean(String nome, String cognome, String email, String password, UserType ruolo, int numeroSegnalazioni) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -33,7 +35,7 @@ public class InfoTecnicoBean {
         return password;
     }
 
-    public String getRuolo() {
+    public UserType getRuolo() {
         return ruolo;
     }
 

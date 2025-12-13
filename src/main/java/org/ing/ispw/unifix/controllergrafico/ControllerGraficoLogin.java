@@ -12,6 +12,7 @@ import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
+import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.IOException;
 
@@ -48,20 +49,20 @@ public class ControllerGraficoLogin {
         String email = emailField.getText();
         String password = passwordField.getText();
         try {
-            int val=lc.validate(new LoginBean(email,password));
-            switch (val) {
-                case 0:
+            UserType ruolo=lc.validate(new LoginBean(email,password));
+            switch (ruolo) {
+                case UNKNOWN:
                     popUp.showErrorPopup("Errore", "", "Utente non trovato");
                     break;
-                case 1:
+                case DOCENTE:
                     FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderr.load());
                     break;
-                case 2:
+                case TECNICO:
                     FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeTecnico.fxml"));
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
                     break;
-                case 3:
+                case SYSADMIN:
                     FXMLLoader fxmlLoaderrr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeAdmin.fxml"));
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
                     break;
