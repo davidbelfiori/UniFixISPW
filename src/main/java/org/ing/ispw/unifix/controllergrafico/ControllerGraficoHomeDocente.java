@@ -9,7 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 import org.ing.ispw.unifix.Driver;
+import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.*;
 import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
@@ -47,11 +50,14 @@ public class ControllerGraficoHomeDocente {
     InviaSegnalazioneController sc;
     SysAdminController sysAdminController;
     VisualizzaSegnalazioniDocenteController vsdc;
+    DocenteController docenteController;
+
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
         sc=InviaSegnalazioneController.getInstance();
         sysAdminController = SysAdminController.getInstance();
         vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
+        docenteController = DocenteController.getInstance();
     }
 
     public void initialize() {
@@ -183,6 +189,58 @@ public class ControllerGraficoHomeDocente {
             popUp.showErrorPopup("Errore", "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
         }
     }
+
+    @FXML
+    void mostraInfoDocente(MouseEvent event) {
+        // 1. Recupera i dati dal controller applicativo
+        InfoDocenteBean info = docenteController.getDocenteInformation();
+
+        if (info == null) return;
+
+        // 2. Crea il layout della Card
+        VBox card = new VBox(10); // 10px di spazio verticale tra gli elementi
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(250);
+
+        // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #cccccc;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 8px;" +
+                        "-fx-background-radius: 8px;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+        );
+
+        // 3. Popola la card con i dati
+        Label lblNome = new Label(info.getNome() + " " + info.getCognome());
+        lblNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+
+        Label lblEmail = new Label(info.getEmail());
+        lblEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+
+        Label lblRuolo = new Label("Ruolo: Docente");
+        lblRuolo.setStyle("-fx-text-fill: #0056b3; -fx-font-weight: bold;");
+
+        // Aggiungi tutto al contenitore
+        card.getChildren().addAll(lblNome, lblEmail, new Separator(), lblRuolo);
+
+        // 4. Crea il Popup e mostralo
+        Popup popup = new Popup();
+        popup.getContent().add(card);
+        popup.setAutoHide(true); // Si chiude se clicchi fuori
+
+        // Posiziona il popup sotto l'icona cliccata
+        Node source = (Node) event.getSource();
+        Window stage = source.getScene().getWindow();
+
+        // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
+        double anchorX = event.getScreenX() - 200;
+        double anchorY = event.getScreenY() + 20;
+
+        popup.show(stage, anchorX, anchorY);
+    }
+
 
 
 }
