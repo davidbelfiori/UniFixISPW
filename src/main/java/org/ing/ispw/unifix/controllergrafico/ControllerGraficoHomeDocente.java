@@ -52,7 +52,6 @@ public class ControllerGraficoHomeDocente {
         sc=InviaSegnalazioneController.getInstance();
         sysAdminController = SysAdminController.getInstance();
         vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
-        //sysAdminController.inserisciAule("src/main/resources/utvAule.csv");
     }
 
     public void initialize() {

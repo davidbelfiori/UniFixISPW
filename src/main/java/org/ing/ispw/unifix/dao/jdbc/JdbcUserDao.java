@@ -68,19 +68,17 @@ public class JdbcUserDao  implements UserDao {
             if (existsEmail(entity.getEmail())) {
                 throw new SignUpException("Email già registrata");
             }
-            try {
-                PreparedStatement stmt = connection.prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)");
+            try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)")) {
                 stmt.setString(1, entity.getEmail());
                 stmt.setString(2, entity.getPassword());
                 stmt.setString(3, entity.getNome());
                 stmt.setString(4, entity.getCognome());
                 stmt.setString(5, entity.getRuolo().toString());
                 stmt.executeUpdate();
-                Printer.print( "Utente registrato con successo"+entity.getEmail());
+                Printer.print("Utente registrato con successo" + entity.getEmail());
             } catch (SQLException e) {
-                Printer.error("Errore durante la registrazione dell'utente"+e.getMessage());
-            }finally {
-                connection.close();
+                Printer.error("Errore durante la registrazione dell'utente" + e.getMessage());
+
             }
         }catch (Exception e){
             throw new RuntimeException(e);

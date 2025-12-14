@@ -38,4 +38,5 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
             edifici.add(aula.getEdificio());
         return edifici;
     }
+
 }

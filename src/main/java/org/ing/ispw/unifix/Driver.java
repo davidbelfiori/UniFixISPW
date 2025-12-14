@@ -76,10 +76,12 @@ public class Driver extends Application {
         alert.setTitle("uscita");
         alert.setContentText("vuoi davvero uscire ? ");
         alert.setHeaderText("stai uscendo ");
-        if(alert.showAndWait().get()== ButtonType.OK){
+
+        // The result of showAndWait() is an Optional<ButtonType>.
+        // We should check if a value is present before calling get().
+        if (alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent()) {
             //usciamo dall'applicazione
             stage.close();
         }
     }
-
 }
