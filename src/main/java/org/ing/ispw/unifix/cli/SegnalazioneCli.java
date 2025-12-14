@@ -13,105 +13,182 @@ import java.util.List;
 
 public class SegnalazioneCli {
 
-    boolean quit;
-    BufferedReader br;
-    InviaSegnalazioneController sc;
+    private final BufferedReader br;
+    private final InviaSegnalazioneController sc;
+
+    // Stato del form
+    private String edificioSelezionato = "";
+    private String aulaSelezionata = "";
+    private String oggettoSelezionato = "";
+    private String descrizioneGuasto = "";
+    private List<String> edificiUniciCache = new ArrayList<>();
+    private List<String> oggettiAulaCache = new ArrayList<>();
 
     public SegnalazioneCli() {
-        quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        sc= InviaSegnalazioneController.getInstance();
-
+        sc = InviaSegnalazioneController.getInstance();
     }
 
     public void segnalazioneView() throws IOException {
-        String edificioSelezionato="";
-        String aulaSelezionata="";
-        String oggettoSelezionato="";
-        String descrizioneGuasto="";
-        List<String> edificiUnici = new ArrayList<>();
-        List<Aula> auleEdificioSelezionato;
-        List <String> oggettiAula = new ArrayList<>();
+        boolean quit = false;
         while (!quit) {
-
-            Printer.print("*******Form per l'invio di una segnalazione******");
-            Printer.print("\t1) Visualizza gli edifici");
-            Printer.print("\t2) Edificio Selezionato: ["+edificioSelezionato+"]");
-            Printer.print("\t3) Visualizza aule di ["+edificioSelezionato+"]");
-            Printer.print("\t4) Aula selezionata ["+aulaSelezionata+"]");
-            Printer.print("\t5) Visualizza oggetti presenti nell'aula:["+aulaSelezionata+"]");
-            Printer.print("\t6) Oggetto Selezionato ["+oggettoSelezionato+"]");
-            Printer.print("\t7)Inserisci una descrizione del problema (obbligatorio)");
-            Printer.print("\t8) Invia Segnalazione");
-            Printer.print("\t9)Back");
-            Printer.print(": ");
-
+            stampaMenu();
             String action = br.readLine();
 
             switch (action) {
+                case null:
+                    Printer.print("Input non valido.");
+                    break;
                 case "1":
-                    edificiUnici = sc.getEdifici();
-                    for (String edifico : edificiUnici){
-                        Printer.print("Edificio: "+edifico);
-                    }
+                    visualizzaEdifici();
                     break;
                 case "2":
-                    Printer.print("Edificio:");
-                    edificioSelezionato = br.readLine();
-                    if (!edificiUnici.contains(edificioSelezionato)){
-                        Printer.error("devi prima visualizzare gli edifici o l'edificio immesso non è esistente");
-                        edificioSelezionato="";
-                    }
+                    selezionaEdificio();
                     break;
                 case "3":
-                    auleEdificioSelezionato = sc.getAuleByEdificio(edificioSelezionato);
-                    for (Aula a: auleEdificioSelezionato){
-                        Printer.print("Edificio"+ a.getEdificio());
-                        Printer.print("Aula:"+a.getIdAula());
-                        Printer.print("Piano"+a.getPiano());
-                    }
+                    visualizzaAule();
                     break;
                 case "4":
-                    Printer.print("Aula:");
-                    aulaSelezionata = br.readLine();
+                    selezionaAula();
                     break;
                 case "5":
-                    Aula oggetti = sc.getOggettiAula(aulaSelezionata);
-                    oggettiAula=  oggetti.getOggetti();
-                    Printer.print("Nell'aula "+aulaSelezionata+" ci sono i seguenti oggetti");
-                    for (String o:oggettiAula){
-                        Printer.print(o);
-                    }
+                    visualizzaOggetti();
                     break;
                 case "6":
-                    Printer.print("Oggetto:");
-                    oggettoSelezionato = br.readLine();
-                    if (!oggettiAula.contains(oggettoSelezionato)) {
-                        Printer.error("l'oggetto selezionato non è presente oppure controlla come lo hai scritto");
-                        oggettoSelezionato="";
-                        break;
-                    }
+                    selezionaOggetto();
                     break;
                 case "7":
-                    Printer.print("Descrivi problema:");
-                    descrizioneGuasto = br.readLine();
+                    inserisciDescrizione();
                     break;
                 case "8":
-                    Printer.print("*****La tua segnalazione*****");
-                    Printer.print("Edificio: "+edificioSelezionato+"\n Aula: "+aulaSelezionata+"\n Oggetto Gusto: "+oggettoSelezionato+"\n Descrizione Gasto: "+ descrizioneGuasto);
-                    if(sc.creaSegnalazione(new SegnalazioneBean(System.currentTimeMillis(),aulaSelezionata,edificioSelezionato,oggettoSelezionato,descrizioneGuasto))) {
-                        Printer.print("Segnalazione inviata con successo");
-                    }else {Printer.print("Annuncio gia esistente");
-                        edificioSelezionato="";
-                         aulaSelezionata="";
-                         oggettoSelezionato="";
-                         descrizioneGuasto="";}
+                    inviaSegnalazione();
+                    break;
+                case "9":
+                    quit = true;
                     break;
                 default:
-                    return;
+                    Printer.print("Azione non valida. Riprova.");
             }
-
         }
     }
 
+    private void stampaMenu() {
+        Printer.print("\n******* Form per l'invio di una segnalazione *******");
+        Printer.print("\t1) Visualizza gli edifici");
+        Printer.print("\t2) Seleziona Edificio -> [" + edificioSelezionato + "]");
+        Printer.print("\t3) Visualizza aule di [" + edificioSelezionato + "]");
+        Printer.print("\t4) Seleziona Aula -> [" + aulaSelezionata + "]");
+        Printer.print("\t5) Visualizza oggetti nell'aula [" + aulaSelezionata + "]");
+        Printer.print("\t6) Seleziona Oggetto -> [" + oggettoSelezionato + "]");
+        Printer.print("\t7) Inserisci una descrizione del problema");
+        Printer.print("\t8) Invia Segnalazione");
+        Printer.print("\t9) Torna al menu precedente");
+        Printer.print(": ");
+    }
+
+    private void visualizzaEdifici() {
+        // Crea una nuova ArrayList modificabile a partire dalla lista restituita dal controller
+        edificiUniciCache = new ArrayList<>(sc.getEdifici());
+        if (edificiUniciCache.isEmpty()) {
+            Printer.print("Nessun edificio trovato.");
+        } else {
+            edificiUniciCache.forEach(edificio -> Printer.print("Edificio: " + edificio));
+        }
+    }
+
+    private void selezionaEdificio() throws IOException {
+        Printer.print("Inserisci il nome dell'edificio:");
+        String input = br.readLine();
+        if (edificiUniciCache.contains(input)) {
+            edificioSelezionato = input;
+            // Reset delle selezioni dipendenti
+            aulaSelezionata = "";
+            oggettoSelezionato = "";
+        } else {
+            Printer.error("Edificio non valido. Visualizza prima gli edifici (opzione 1) e poi selezionalo.");
+        }
+    }
+
+    private void visualizzaAule() {
+        if (edificioSelezionato.isEmpty()) {
+            Printer.error("Seleziona prima un edificio.");
+            return;
+        }
+        List<Aula> aule = sc.getAuleByEdificio(edificioSelezionato);
+        if (aule.isEmpty()) {
+            Printer.print("Nessuna aula trovata per l'edificio " + edificioSelezionato);
+        } else {
+            aule.forEach(a -> Printer.print("Aula: " + a.getIdAula() + " (Piano: " + a.getPiano() + ")"));
+        }
+    }
+
+    private void selezionaAula() throws IOException {
+        Printer.print("Inserisci l'ID dell'aula:");
+        aulaSelezionata = br.readLine();
+        // Potrebbe essere utile una validazione qui per assicurarsi che l'aula esista
+        oggettoSelezionato = ""; // Reset selezione oggetto
+    }
+
+    private void visualizzaOggetti() {
+        if (aulaSelezionata.isEmpty()) {
+            Printer.error("Seleziona prima un'aula.");
+            return;
+        }
+        Aula aula = sc.getOggettiAula(aulaSelezionata);
+        if (aula != null && aula.getOggetti() != null && !aula.getOggetti().isEmpty()) {
+            // Crea una nuova ArrayList modificabile a partire dalla lista restituita
+            oggettiAulaCache = new ArrayList<>(aula.getOggetti());
+            Printer.print("Nell'aula " + aulaSelezionata + " ci sono i seguenti oggetti:");
+            oggettiAulaCache.forEach(Printer::print);
+        } else {
+            Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
+            oggettiAulaCache.clear(); // Svuota la cache se non ci sono oggetti
+        }
+    }
+
+    private void selezionaOggetto() throws IOException {
+        Printer.print("Inserisci l'oggetto:");
+        String input = br.readLine();
+        if (oggettiAulaCache.contains(input)) {
+            oggettoSelezionato = input;
+        } else {
+            Printer.error("Oggetto non valido. Visualizza prima gli oggetti (opzione 5) e poi selezionalo.");
+        }
+    }
+
+    private void inserisciDescrizione() throws IOException {
+        Printer.print("Descrivi il problema:");
+        descrizioneGuasto = br.readLine();
+    }
+
+    private void inviaSegnalazione() {
+        if (edificioSelezionato.isEmpty() || aulaSelezionata.isEmpty() || oggettoSelezionato.isEmpty() || descrizioneGuasto.isEmpty()) {
+            Printer.error("Tutti i campi sono obbligatori prima di inviare la segnalazione.");
+            return;
+        }
+
+        Printer.print("\n***** Riepilogo della tua segnalazione *****");
+        Printer.print("Edificio: " + edificioSelezionato);
+        Printer.print("Aula: " + aulaSelezionata);
+        Printer.print("Oggetto Guasto: " + oggettoSelezionato);
+        Printer.print("Descrizione: " + descrizioneGuasto);
+        Printer.print("******************************************");
+
+        SegnalazioneBean bean = new SegnalazioneBean(System.currentTimeMillis(), aulaSelezionata, edificioSelezionato, oggettoSelezionato, descrizioneGuasto);
+        if (sc.creaSegnalazione(bean)) {
+            Printer.print("Segnalazione inviata con successo!");
+            resetForm();
+        } else {
+            Printer.error("Errore: la segnalazione potrebbe essere duplicata o si è verificato un problema.");
+        }
+    }
+
+    private void resetForm() {
+        edificioSelezionato = "";
+        aulaSelezionata = "";
+        oggettoSelezionato = "";
+        descrizioneGuasto = "";
+        edificiUniciCache.clear();
+        oggettiAulaCache.clear();
+    }
 }

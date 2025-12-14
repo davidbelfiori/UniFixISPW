@@ -14,10 +14,11 @@ import java.util.List;
 
 public class TecnicoHomeCli {
 
-   private boolean quit;
-   private final BufferedReader br;
-   private TecnicoController tc;
-   private VisualizzaSegnalazioniTecnicoController vstc;
+    private boolean quit;
+    private final BufferedReader br;
+    private final TecnicoController tc;
+    private final VisualizzaSegnalazioniTecnicoController vstc;
+
     public TecnicoHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,95 +27,122 @@ public class TecnicoHomeCli {
     }
 
     public void tecnicoHome() throws IOException {
-        while(!quit) {
-
-            Printer.print("Bentornato in unifix tecnico");
-            Printer.print("\t1) Visualizza le tue segnalazioni");
-            Printer.print("\t2) View Profile Info");
-            Printer.print("\t3) Log off");
-            Printer.print("\t4) Quit");
-            Printer.print(": ");
-
+        while (!quit) {
+            stampaMenuPrincipale();
             String action = br.readLine();
 
-            switch(action) {
+            switch (action) {
                 case "1":
-                    List<Segnalazione> segnalazioniTecnico = null;
-                    try {
-                        segnalazioniTecnico = vstc.visualizzaSegnalazioniTecnico();
-                        for (Segnalazione segnalazione : segnalazioniTecnico) {
-                            Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalzione());
-                            Printer.print("Data Creazione: " + segnalazione.getDataCreazione());
-                            Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
-                            Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
-                            Printer.print("Stato: " + segnalazione.getStato());
-                            Printer.print("Descrizione: " + segnalazione.getDescrizone());
-                            Printer.print("Aula: " + segnalazione.getAula());
-                            Printer.print("Edificio: " + segnalazione.getEdifico());
-                        }
-                        Printer.print("Inserisci l'ID della segnalazione da gestire o '0' per tornare al menu principale:");
-                        String idSegnalazioneInput = br.readLine();
-                        if (!idSegnalazioneInput.equals("0")) {
-                            try {
-                                Segnalazione segnalazione = tc.getSegnalazione(idSegnalazioneInput);
-                                Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalzione());
-                                Printer.print("Data Creazione: " + segnalazione.getDataCreazione());
-                                Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
-                                Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
-                                Printer.print("Stato: " + segnalazione.getStato());
-                                Printer.print("Descrizione: " + segnalazione.getDescrizone());
-                                Printer.print("Aula: " + segnalazione.getAula());
-                                Printer.print("Edificio: " + segnalazione.getEdifico());
-                                Printer.print("Vuoi modificare lo stato della segnalazione? (y/n)");
-                                String action2 = br.readLine();
-                                if (action2.equals("y")) {
-                                    Printer.print("Seleziona lo stato della segnalazione:");
-                                    Printer.print("\t1) In lavorazione");
-                                    Printer.print("\t2) Chiusa");
-                                    Printer.print(": ");
-                                    String stato = br.readLine();
-                                    switch (stato) {
-                                        case "1":
-                                            tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "In lavorazione"));
-                                            break;
-                                        case "2":
-                                            tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "Chiusa"));
-                                            break;
-                                        default:
-                                            Printer.print("Stato non valido");
-                                            break;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                Printer.error(e.getMessage());
-                            }
-                        }
-                    } catch (Exception e) {
-                        Printer.error(e.getMessage());
-                    }
+                    gestisciSegnalazioni();
                     break;
                 case "2":
-                    InfoTecnicoBean info=tc.getTecnicoInformation();
-                    Printer.print("Ecco i tuoi dati");
-                    Printer.print("Nome:"+info.getNome());
-                    Printer.print("Cognome:"+info.getCognome());
-                    Printer.print("Email:"+info.getEmail());
-                    Printer.print("Password:"+info.getPassword());
-                    Printer.print("Numero di segnalazioni assegnate:"+info.getNumeroSegnalazioni());
+                    visualizzaInfoProfilo();
                     break;
-                case "3":
+                case "3": // Log off
                     return;
-                case "4":
-                    quit=true;
+                case "4": // Quit
+                    quit = true;
                     break;
-
-                default: return;
+                default:
+                    Printer.print("Azione non valida. Riprova.");
             }
         }
         System.exit(0);
-
-
     }
 
-}
+    private void stampaMenuPrincipale() {
+        Printer.print("\nBentornato in UniFix Tecnico");
+        Printer.print("\t1) Visualizza le tue segnalazioni");
+        Printer.print("\t2) Visualizza informazioni profilo");
+        Printer.print("\t3) Log off");
+        Printer.print("\t4) Esci");
+        Printer.print(": ");
+    }
 
+    private void gestisciSegnalazioni() throws IOException {
+        try {
+            List<Segnalazione> segnalazioni = vstc.visualizzaSegnalazioniTecnico();
+            if (segnalazioni.isEmpty()) {
+                Printer.print("Nessuna segnalazione da visualizzare.");
+                return;
+            }
+
+            segnalazioni.forEach(this::stampaDettagliSegnalazione);
+
+            Printer.print("\nInserisci l'ID della segnalazione da gestire o '0' per tornare al menu principale:");
+            String idSegnalazioneInput = br.readLine();
+
+            if (!"0".equals(idSegnalazioneInput)) {
+                selezionaEProcessaSegnalazione(idSegnalazioneInput);
+            }
+        } catch (Exception e) {
+            Printer.error(e.getMessage());
+        }
+    }
+
+    private void selezionaEProcessaSegnalazione(String idSegnalazioneInput) throws IOException {
+        try {
+            Segnalazione segnalazione = tc.getSegnalazione(idSegnalazioneInput);
+            stampaDettagliSegnalazione(segnalazione);
+
+            Printer.print("Vuoi modificare lo stato della segnalazione? (y/n)");
+            String action = br.readLine();
+
+            if ("y".equalsIgnoreCase(action)) {
+                aggiornaStatoSegnalazione(segnalazione);
+            }
+        } catch (Exception e) {
+            Printer.error(e.getMessage());
+        }
+    }
+
+    private void aggiornaStatoSegnalazione(Segnalazione segnalazione) throws IOException {
+        Printer.print("Seleziona il nuovo stato:");
+        Printer.print("\t1) In lavorazione");
+        Printer.print("\t2) Chiusa");
+        Printer.print(": ");
+        String statoInput = br.readLine();
+        String nuovoStato;
+
+        switch (statoInput) {
+            case null:
+                Printer.print("Input non valido.");
+                return;
+            case "1":
+                nuovoStato = "In lavorazione";
+                break;
+            case "2":
+                nuovoStato = "Chiusa";
+                break;
+            default:
+                Printer.print("Stato non valido.");
+                return;
+        }
+        tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), nuovoStato));
+        Printer.print("Stato della segnalazione aggiornato con successo.");
+    }
+
+    private void stampaDettagliSegnalazione(Segnalazione segnalazione) {
+        Printer.print("---------------------------------");
+        Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalzione());
+        Printer.print("Data Creazione: " + segnalazione.getDataCreazione());
+        Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
+        Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
+        Printer.print("Stato: " + segnalazione.getStato());
+        Printer.print("Descrizione: " + segnalazione.getDescrizone());
+        Printer.print("Aula: " + segnalazione.getAula());
+        Printer.print("Edificio: " + segnalazione.getEdifico());
+        Printer.print("---------------------------------");
+    }
+
+    private void visualizzaInfoProfilo() {
+        InfoTecnicoBean info = tc.getTecnicoInformation();
+        Printer.print("\n--- I tuoi dati ---");
+        Printer.print("Nome: " + info.getNome());
+        Printer.print("Cognome: " + info.getCognome());
+        Printer.print("Email: " + info.getEmail());
+        Printer.print("Password: " + info.getPassword());
+        Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
+        Printer.print("--------------------");
+    }
+}

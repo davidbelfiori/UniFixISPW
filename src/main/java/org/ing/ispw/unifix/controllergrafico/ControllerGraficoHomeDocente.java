@@ -84,7 +84,7 @@ public class ControllerGraficoHomeDocente {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
             }
         }
-        catch(NessunaSegnalazioneException | NessunSegnalazioneDocenteException e){
+        catch(NessunaSegnalazioneException | NessunSegnalazioneDocenteException _){
             testoSegnalazioni.setText("Non ci sono segnalazioni");
             testoSegnalazioni.setStyle("-fx-text-fill: white;");
         }
@@ -101,10 +101,9 @@ public class ControllerGraficoHomeDocente {
         hbox.setPrefWidth(700);
         hbox.setPadding(new Insets(10));
         hbox.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-radius: 5; -fx-background-radius: 5;");
-        hbox.setOnMouseClicked(event -> {
+        hbox.setOnMouseClicked(event ->
             // Mostra i dettagli della segnalazione
-            popUp.showSuccessPopup("Dettagli segnalazione","Aula: "+segnalazione.getAula()+"\nOggetto: "+segnalazione.getOggettoGuasto()+"\nDescrizione: "+segnalazione.getDescrizone()+"\nStato: "+segnalazione.getStato()+"\nTecnico: "+segnalazione.getTecnico().getNome()+" "+segnalazione.getTecnico().getCognome());
-        });
+            popUp.showSuccessPopup("Dettagli segnalazione","Aula: "+segnalazione.getAula()+"\nOggetto: "+segnalazione.getOggettoGuasto()+"\nDescrizione: "+segnalazione.getDescrizone()+"\nStato: "+segnalazione.getStato()+"\nTecnico: "+segnalazione.getTecnico().getNome()+" "+segnalazione.getTecnico().getCognome()));
 
         // Aggiungi le informazioni della segnalazione
         VBox dettagli = getVBox(segnalazione);

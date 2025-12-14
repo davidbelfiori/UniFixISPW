@@ -61,7 +61,7 @@ public class ControllerGraficoHomeTecnico {
             for (Segnalazione segnalazione : segnalazioni) {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
             }
-        }catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException e){
+        }catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException _){
             testoSegnalazioniTecnico.setText("Non ci sono interventi da visualizzare");
             testoSegnalazioniTecnico.setStyle("-fx-text-fill: white");
         }

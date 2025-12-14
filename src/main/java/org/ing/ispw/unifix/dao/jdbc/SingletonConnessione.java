@@ -32,9 +32,9 @@ public class SingletonConnessione {
             if (connection == null) {
                 new SingletonConnessione();
             }
-        }catch (SQLException e){
+        }catch (SQLException _){
             throw new SQLException("impossibile connettersi al database\nriprova più tardi");
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new ErroreLetturaPasswordException ("impossibile estrarre la password\ndi connessione al db");
         }
         return connection;
@@ -44,7 +44,7 @@ public class SingletonConnessione {
         if (connection != null) {
             try {
                 connection.close();
-            }catch (SQLException e){
+            }catch (SQLException _){
                 //ho provato tutti i casi possibili e non viene mai lanciata un eccezione del tipo sql exception
                 //da questo metodo
                 System.exit(-2);

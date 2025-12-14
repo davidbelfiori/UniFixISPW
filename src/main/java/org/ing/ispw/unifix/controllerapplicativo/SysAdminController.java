@@ -52,17 +52,15 @@ public class SysAdminController {
                 if (fields.length != 4) {
                     return false;
                 }
-                try {
-                    Integer.parseInt(fields[2].trim());
-                } catch (NumberFormatException e) {
-                    return false;
-                }
+
+                Integer.parseInt(fields[2].trim());
+
                 if (!fields[3].contains(";") && !fields[3].trim().isEmpty()) {
                     return false;
                 }
             }
             return true;
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             Printer.error("Errore nella lettura del file: " + e.getMessage());
             return false;
         }

@@ -71,6 +71,7 @@ public class InviaSegnalazioneController {
         Tecnico tecnicoSelto= tecnici.stream()
                 .min((t1, t2) -> Integer.compare(t1.getNumeroSegnalazioni(), t2.getNumeroSegnalazioni()))
                 .orElse(null);
+        if (tecnicoSelto==null) throw new NonCiSonoTecniciException("Non ci sono tecnici disponibili");
         tecnicoSelto.incrementaSegnalazioni();
         userDao.update(tecnicoSelto);
         return tecnicoSelto;
