@@ -155,6 +155,13 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
     }
 
+
+    @FXML
+    void goToGestioneAule(MouseEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("GestioneAule.fxml"));
+        ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
+    }
+
     @Override
     public void update() {
         Platform.runLater(this::updateLabels);

@@ -1,7 +1,9 @@
 package org.ing.ispw.unifix.controllerapplicativo;
 
+import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
+import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Printer;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SysAdminController {
@@ -137,5 +140,19 @@ public class SysAdminController {
         List<Aula> aule = aulaDao.getAllAule();
         return aule.stream()
                 .collect(Collectors.groupingBy(Aula::getEdificio, Collectors.counting()));
+    }
+
+    public void inserisciAula(Optional<AulaBean> result) throws AulaGiaPresenteException {
+        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
+        if (!aulaDao.exists(result.get().getIdAula())) {
+        Aula aula = aulaDao.create(result.get().getIdAula());
+        aula.setEdificio(result.get().getEdificio());
+        aula.setPiano(result.get().getPiano());
+        aula.setOggetti(result.get().getOggetti());
+        aulaDao.store(aula);
+        subject.notifyObservers();}
+        else {
+            throw new AulaGiaPresenteException("Aula già presente");
+        }
     }
 }

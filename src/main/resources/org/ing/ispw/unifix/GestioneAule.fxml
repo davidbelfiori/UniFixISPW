@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ing.ispw.unifix.controllergrafico.ControllerGraficoGestioneAule">
+   <children>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="1035.0" layoutY="61.0" onMouseClicked="#aggiungiAula" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../photo/plus.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="1082.0" layoutY="53.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+         <Image url="@../../../../photo/logout.png" />
+      </ImageView>
+      <AnchorPane layoutX="-2.0" prefHeight="800.0" prefWidth="406.0" style="-fx-background-color: #D9D9D9;">
+         <children>
+            <Label layoutX="157.0" layoutY="96.0" prefHeight="58.0" prefWidth="78.0" text="Admin">
+               <font>
+                  <Font name="Segoe UI Light" size="26.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="217.0" fitWidth="273.0" layoutX="87.0" layoutY="-42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../photo/UniFix_transparent-.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="50.0" layoutY="174.0" onMouseClicked="#goToHomeAdmin" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../photo/ControlPanel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="49.0" layoutY="268.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../photo/Room.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Label layoutX="459.0" layoutY="50.0" prefHeight="58.0" prefWidth="205.0" text="Gestione Aule">
+         <font>
+            <Font name="Segoe UI Semibold" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="155.0" layoutY="170.0" onMouseClicked="#goToHomeAdmin" prefHeight="58.0" prefWidth="117.0" text="Dashboard">
+         <font>
+            <Font name="Segoe UI Light" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="155.0" layoutY="262.0" prefHeight="58.0" prefWidth="147.0" text="Gestione Aule">
+         <font>
+            <Font name="Segoe UI Light" size="22.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="inserisciAule" layoutX="458.0" layoutY="146.0" prefHeight="608.0" prefWidth="676.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10;">
+         <children>
+            <ScrollPane fitToWidth="true" layoutX="6.0" layoutY="5.0" prefHeight="598.0" prefWidth="665.0" style="-fx-background-color: #D9D9D9; -fx-background: #D9D9D9;">
+               <content>
+                  <VBox fx:id="aulaContainer" />
+               </content>
+            </ScrollPane>
+         </children></AnchorPane>
+   </children>
+</AnchorPane>

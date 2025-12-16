@@ -28,7 +28,7 @@
                   <Image url="@../../../../photo/ControlPanel.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="49.0" layoutY="268.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="49.0" layoutY="268.0" pickOnBounds="true" onMouseClicked="#goToGestioneAule" preserveRatio="true">
                <image>
                   <Image url="@../../../../photo/Room.png" />
                </image>
