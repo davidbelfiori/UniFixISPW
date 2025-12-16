@@ -52,7 +52,20 @@ public class JdbcUserDao  implements UserDao {
                     user.setPassword(rs.getString("password"));
                     user.setNome(rs.getString("nome"));
                     user.setCognome(rs.getString("cognome"));
-                    user.setRuolo(UserType.valueOf(rs.getString("ruolo")));
+                    switch (rs.getString("ruolo")){
+                        case "DOCENTE":
+                            user.setRuolo(UserType.DOCENTE);
+                            break;
+                        case "TECNICO":
+                            user.setRuolo(UserType.TECNICO);
+                            break;
+                        case "SYSADMIN":
+                            user.setRuolo(UserType.SYSADMIN);
+                            break;
+                        default:
+                            user.setRuolo(UserType.UNKNOWN);
+                            break;
+                    }
                     return user;
                 }
             }

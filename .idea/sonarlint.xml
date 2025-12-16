@@ -2,7 +2,7 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
-    <option name="projectKey" value="unifix" />
-    <option name="serverId" value="cc" />
+    <option name="projectKey" value="davidbelfiori_UniFixISPW" />
+    <option name="serverId" value="unifix" />
   </component>
 </project>
