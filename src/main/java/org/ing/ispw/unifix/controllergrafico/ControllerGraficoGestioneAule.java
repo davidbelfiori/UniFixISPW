@@ -98,7 +98,7 @@ public class ControllerGraficoGestioneAule {
         return dettagli;
     }
 
-    public void aggiungiAula(MouseEvent mouseEvent) throws IOException {
+    public void aggiungiAula() {
         // Creazione del Dialog
         Dialog<AulaBean> dialog = new Dialog<>();
         dialog.setTitle("Aggiungi Nuova Aula");
@@ -155,7 +155,7 @@ public class ControllerGraficoGestioneAule {
                 newAula.setEdificio(edificio.getText());
                 try {
                     newAula.setPiano(Integer.parseInt(piano.getText()));
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException _) {
                     newAula.setPiano(0); // Valore di default in caso di errore
                 }
                 List<String> oggetti = new ArrayList<>();
