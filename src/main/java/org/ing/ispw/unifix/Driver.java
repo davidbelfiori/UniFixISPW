@@ -10,7 +10,6 @@ import org.ing.ispw.unifix.cli.StartHomeViewCLI;
 
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.PersistenceProvider;
-import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.IOException;

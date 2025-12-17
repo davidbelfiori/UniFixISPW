@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.SignUpException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Sysadmin;
@@ -25,7 +26,7 @@ public class JdbcUserDao  implements UserDao {
         try {
             this.connection =  SingletonConnessione.getInstance();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DbConnException("Impossibile connettersi al database:"+e.getMessage());
         }
     }
 
@@ -85,8 +86,8 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public void store(User entity) {
-        try{
-            if (existsEmail(entity.getEmail())) {
+
+        if (existsEmail(entity.getEmail())) {
                 throw new SignUpException("Email già registrata");
             }
             try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)")) {
@@ -101,9 +102,6 @@ public class JdbcUserDao  implements UserDao {
                 Printer.error("Errore durante la registrazione dell'utente" + e.getMessage());
 
             }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -171,7 +169,7 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public List<Tecnico> getAllTecnici() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE ruolo = 'TECNICO'")){
+        try (PreparedStatement statement = connection.prepareStatement("SELECT email, password, nome, cognome, numeroSegnalazioni FROM user WHERE ruolo = 'TECNICO'")){
 
             try (ResultSet rs = statement.executeQuery()) {
                 List<Tecnico> tecnici = new ArrayList<>();
@@ -189,7 +187,7 @@ public class JdbcUserDao  implements UserDao {
         }catch (SQLException e) {
             Printer.error( "Errore durante la verifica dell'esistenza dell'utente"+e.getMessage());
         }
-        return null;
+        return List.of();
     }
 
     public boolean existsEmail(String email) {

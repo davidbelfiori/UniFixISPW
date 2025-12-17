@@ -2,6 +2,10 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.exception.DbConnException;
+import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
+import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
+import org.ing.ispw.unifix.exception.UpdateSegnalazioneException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
@@ -29,8 +33,8 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
     public JdbcSegnalazioneDao(){
         try {
             this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new DbConnException("Impossibile connettersi al database");
         }
     }
 
@@ -55,8 +59,8 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
             stmt.setString(9,entity.getTecnico().getEmail());
             stmt.executeUpdate();
         }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
+        catch (SQLException _) {
+            throw new SegnalazioneGiaEsistenteException("Errore durante l'inserimento della segnalazione");
         }
     }
 
@@ -68,8 +72,8 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
             return rs.next() && rs.getInt(1) > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new SegnalazioneGiaEsistenteException("La segnalazione Esiste Gia");
         }
     }
 
@@ -92,8 +96,8 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
             }
             stmt.setString(9, entity.getIdSegnalzione());
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new UpdateSegnalazioneException("Errore durante l'aggiornamento della segnalazione");
         }
     }
 
@@ -132,8 +136,8 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
                 segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
                 segnalazioni.add(segnalazione);
             }
-        }catch (SQLException e){
-            throw new RuntimeException(e);
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
         }
         return segnalazioni;
     }
@@ -174,11 +178,11 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
                 segnalazione.setEdificio(rs.getString("edificio"));
                 segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
             }else {
-                throw new RuntimeException("Segnalazione non trovata");
+                throw new NessunaSegnalazioneException("Segnalazione non trovata");
             }
 
-        }catch (SQLException e){
-            throw new RuntimeException(e);
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
         }
         return segnalazione;
     }

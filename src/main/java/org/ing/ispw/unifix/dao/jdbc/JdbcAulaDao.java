@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 
 import org.ing.ispw.unifix.dao.AulaDao;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.model.Aula;
 
 import java.sql.Connection;
@@ -16,8 +17,8 @@ public class JdbcAulaDao   implements AulaDao {
     public JdbcAulaDao() {
         try {
             this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new DbConnException("Impossibile connettersi al database");
         }
     }
 
@@ -42,7 +43,6 @@ public class JdbcAulaDao   implements AulaDao {
         String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)){
             stmt.setString(1, id);
-            try {
                 ResultSet rs = stmt.executeQuery();
                 Aula aula = new Aula(id);
                 List<String> oggetti = new ArrayList<>();
@@ -52,20 +52,16 @@ public class JdbcAulaDao   implements AulaDao {
                 }
                 aula.setOggetti(oggetti);
                 return aula;
-            }catch (SQLException e){
-                throw new RuntimeException("Errore durante il caricamento dell'aula" + e.getMessage());
-            }
+
         }catch (SQLException e){
-            throw new RuntimeException("Errore durante il caricamento dell'aula" + e.getMessage());
+            throw new AulaGiaPresenteException("Errore durante il caricamento dell'aula" + e.getMessage());
         }
 
     }
 
     @Override
     public void store(Aula entity) {
-//        if (entity == null) {
-//            throw new IllegalArgumentException("Aula non valida");
-//        }
+       if (entity == null) {throw new IllegalArgumentException("Aula non valida");}
         String insertAulaQuery = "INSERT INTO aule (IdAula, Edificio, Piano) VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE Edificio = VALUES(Edificio), Piano = VALUES(Piano)";
 
@@ -97,7 +93,7 @@ public class JdbcAulaDao   implements AulaDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore nell'inserimento dell'aula: " + e.getMessage(), e);
+            throw new ErroreCaricamentoAuleException("Errore nell'inserimento dell'aula: " + e.getMessage());
         }
     }
 
@@ -115,7 +111,7 @@ public class JdbcAulaDao   implements AulaDao {
                 return rs.next() && rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Errore durante il controllo dell'esistenza dell'aula: " + e.getMessage(), e);
+            throw new AuleNonTrovateException("Errore durante il controllo dell'esistenza dell'aula: " + e.getMessage());
         }
     }
 
@@ -164,7 +160,7 @@ public class JdbcAulaDao   implements AulaDao {
             aule.addAll(aulaMap.values());
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore nel recupero delle aule: " + e.getMessage(), e);
+            throw new AuleNonTrovateException("Errore nel recupero delle aule: " + e.getMessage());
         }
 
         return aule;
@@ -183,8 +179,8 @@ public class JdbcAulaDao   implements AulaDao {
                 edifici.add(edificio);
             }
             return edifici;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new EdificiNonTrovatiException("Impossibile trovare degli edifici");
         }
     }
 
@@ -201,8 +197,8 @@ public class JdbcAulaDao   implements AulaDao {
                 }
                 return oggetti;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new AuleNonTrovateException("Errore durante il recupero degli oggetti nell'aula"+idAula);
         }
     }
 

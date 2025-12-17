@@ -160,8 +160,8 @@ public class ControllerGraficoGestioneAule {
                 }
                 List<String> oggetti = new ArrayList<>();
                 for (Node node : oggettiContainer.getChildren()) {
-                    if (node instanceof TextField && !((TextField) node).getText().isEmpty()) {
-                        oggetti.add(((TextField) node).getText());
+                    if (node instanceof TextField textfield && !textfield.getText().isEmpty()) {
+                        oggetti.add(textfield.getText());
                     }
                 }
                 newAula.setOggetti(oggetti);

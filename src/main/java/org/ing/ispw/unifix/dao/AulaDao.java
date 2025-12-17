@@ -1,6 +1,5 @@
 package org.ing.ispw.unifix.dao;
 
-import org.checkerframework.checker.units.qual.A;
 import org.ing.ispw.unifix.model.Aula;
 
 import java.util.List;

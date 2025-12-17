@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.exception.ErroreLetturaPasswordException;
+import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,8 +23,12 @@ public class SingletonConnessione {
 
     private static void collegatiAlDB() throws IOException, SQLException {
         Properties properties=new Properties();
-        InputStream is= new FileInputStream("application.properties");
-        properties.load(is);
+
+            try (InputStream is = new FileInputStream("application.properties")) {
+                properties.load(is);
+            } catch (IOException _) {
+                Printer.error("impossibile leggere il file application.properties");
+        }
         connection= DriverManager.getConnection(URL,USERNAME,(String)properties.get("password"));
     }
 

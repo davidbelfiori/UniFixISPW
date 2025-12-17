@@ -26,7 +26,8 @@ public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDa
 
     @Override
     public void update(Tecnico entity) {
-
+        // Specific update logic for Tecnico if needed, otherwise rely on the generic update
+        super.update(entity); // Calls the update(V entity) method in InMemoryDao
     }
 
     public List<Tecnico> getAllTecnici() {
