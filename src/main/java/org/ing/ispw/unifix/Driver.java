@@ -50,8 +50,8 @@ public class Driver extends Application {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
        Printer.print("Benvenuto in UniFix!");
-       //setPersistenceProvider("in memory");
-        //DemoData.load();
+//       setPersistenceProvider("in memory");
+//        DemoData.load();
         setPersistenceProvider("persistence");
 
 

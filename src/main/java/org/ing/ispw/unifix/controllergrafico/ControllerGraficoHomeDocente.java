@@ -22,6 +22,7 @@ import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
+import org.ing.ispw.unifix.utils.Printer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -108,7 +109,7 @@ public class ControllerGraficoHomeDocente {
         hbox.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-radius: 5; -fx-background-radius: 5;");
         hbox.setOnMouseClicked(event ->
             // Mostra i dettagli della segnalazione
-            popUp.showSuccessPopup("Dettagli segnalazione","Aula: "+segnalazione.getAula()+"\nOggetto: "+segnalazione.getOggettoGuasto()+"\nDescrizione: "+segnalazione.getDescrizone()+"\nStato: "+segnalazione.getStato()+"\nTecnico: "+segnalazione.getTecnico().getNome()+" "+segnalazione.getTecnico().getCognome()));
+            popUp.showSuccessPopup("Dettagli segnalazione","Aula: "+segnalazione.getAula()+"\nOggetto: "+segnalazione.getOggettoGuasto()+"\nDescrizione: "+segnalazione.getDescrizione()+"\nStato: "+segnalazione.getStato()+"\nTecnico: "+segnalazione.getTecnico().getNome()+" "+segnalazione.getTecnico().getCognome()));
 
         // Aggiungi le informazioni della segnalazione
         VBox dettagli = getVBox(segnalazione);
@@ -120,7 +121,7 @@ public class ControllerGraficoHomeDocente {
     }
     @NotNull
     private static VBox getVBox(Segnalazione segnalazione) {
-        Label testoLabel = new Label("Edificio: " + segnalazione.getEdifico() +
+        Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
                 "    Aula: " + segnalazione.getAula() +
                 "    Oggetto: " + segnalazione.getOggettoGuasto() +
                 "    Stato: " + segnalazione.getStato());
@@ -142,9 +143,13 @@ public class ControllerGraficoHomeDocente {
     }
     @FXML
     private void aggiornaOggetti(String aulaScelta) {
-        Aula oggettiAulaSelezionata = sc.getOggettiAula(aulaScelta);
-        List<String> oggettiAula=  oggettiAulaSelezionata.getOggetti();
-        oggettoComboBox.setItems(FXCollections.observableList(oggettiAula));
+        List<String> oggettiAulaSelezionata = sc.getOggettiAula(aulaScelta);
+        if (oggettiAulaSelezionata == null){
+            Printer.error("Oggetti selezionata non trovata");
+        }else {
+            oggettoComboBox.setItems(FXCollections.observableList(oggettiAulaSelezionata));
+        }
+
     }
 
     @FXML

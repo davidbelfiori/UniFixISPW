@@ -9,9 +9,9 @@ public class Segnalazione {
     private String oggettoGuasto;
     private Docente docente;
     private String  stato;
-    private String descrizone;
+    private String descrizione;
     private String aula;
-    private String edifico;
+    private String edificio;
     private Tecnico tecnico;
 
 
@@ -28,12 +28,12 @@ public class Segnalazione {
         this.stato = stato;
     }
 
-    public String getEdifico() {
-        return edifico;
+    public String getEdificio() {
+        return edificio;
     }
 
-    public void setEdifico(String edifico) {
-        this.edifico = edifico;
+    public void setEdificio(String edificio) {
+        this.edificio = edificio;
     }
 
     public String getIdSegnalzione() {
@@ -76,12 +76,12 @@ public class Segnalazione {
         this.tecnico = tecnico;
     }
 
-    public String getDescrizone() {
-        return descrizone;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setDescrizone(String descrizone) {
-        this.descrizone = descrizone;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public String getAula() {
@@ -100,9 +100,9 @@ public class Segnalazione {
                 ", oggettoGuasto='" + oggettoGuasto + '\'' +
                 ", docente=" + docente.getNome() + " " + docente.getCognome() +
                 ", stato='" + stato + '\'' +
-                ", descrizone='" + descrizone + '\'' +
+                ", descrizone='" + descrizione + '\'' +
                 ", aula='" + aula + '\'' +
-                ", edifico='" + edifico + '\'' +
+                ", edifico='" + edificio + '\'' +
                 ", tecnico=" + tecnico.getNome() + " " + tecnico.getCognome() +
                 '}';
     }

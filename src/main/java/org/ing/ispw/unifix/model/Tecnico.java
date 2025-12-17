@@ -14,6 +14,10 @@ public class Tecnico extends User{
         this.numeroSegnalazioni = numeroSegnalazioni;
     }
 
+    public Tecnico(String emailTecnico, String nomeTecnico, String cognomeTecnico) {
+        super(emailTecnico, nomeTecnico, cognomeTecnico);
+    }
+
     public int getNumeroSegnalazioni() {
         return numeroSegnalazioni;
     }

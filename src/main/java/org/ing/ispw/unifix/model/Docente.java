@@ -11,4 +11,8 @@ public class Docente extends User{
     public Docente(String email, String password, String nome, String cognome, UserType ruolo) {
         super(email, password, nome, cognome, ruolo);
     }
+
+    public Docente(String emailDocente, String nomeDocente, String cognomeDocente) {
+        super(emailDocente, nomeDocente, cognomeDocente);
+    }
 }

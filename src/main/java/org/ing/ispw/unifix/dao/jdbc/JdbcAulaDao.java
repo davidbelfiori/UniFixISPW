@@ -8,10 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JdbcAulaDao   implements AulaDao {
     private static JdbcAulaDao instance;
@@ -32,6 +29,8 @@ public class JdbcAulaDao   implements AulaDao {
     }
 
 
+
+
     @Override
     public Aula create(String idAula) {
         return new Aula(idAula);
@@ -39,7 +38,27 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public Aula load(String id) {
-        return null;
+
+        String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1, id);
+            try {
+                ResultSet rs = stmt.executeQuery();
+                Aula aula = new Aula(id);
+                List<String> oggetti = new ArrayList<>();
+                while (rs.next()){
+                    String oggetto = rs.getString("Oggetto");
+                    oggetti.add(oggetto);
+                }
+                aula.setOggetti(oggetti);
+                return aula;
+            }catch (SQLException e){
+                throw new RuntimeException("Errore durante il caricamento dell'aula" + e.getMessage());
+            }
+        }catch (SQLException e){
+            throw new RuntimeException("Errore durante il caricamento dell'aula" + e.getMessage());
+        }
+
     }
 
     @Override
@@ -102,7 +121,7 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public List<Aula> loadAll() {
-        return List.of();
+        return getAllAule();
     }
 
     @Override
@@ -155,7 +174,36 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public List<String> getAllEdifici() {
-        return List.of();
+        List<String> edifici = new ArrayList<>();
+        String query = "SELECT DISTINCT Edificio FROM aule";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String edificio = rs.getString("Edificio");
+                edifici.add(edificio);
+            }
+            return edifici;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<String> getAulaOggetti(String idAula) {
+        List<String> oggetti = new ArrayList<>();
+        String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query);) {
+            stmt.setString(1, idAula);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String oggetto = rs.getString("Oggetto");
+                    oggetti.add(oggetto);
+                }
+                return oggetti;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

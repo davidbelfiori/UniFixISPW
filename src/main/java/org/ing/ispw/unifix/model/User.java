@@ -22,6 +22,12 @@ public class User {
         this.ruolo = ruolo;
     }
 
+    public User(String email, String nome, String cognome) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+    }
+
     public String getCognome() {
         return cognome;
     }

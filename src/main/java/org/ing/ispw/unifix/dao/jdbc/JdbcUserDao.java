@@ -2,6 +2,8 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.SignUpException;
+import org.ing.ispw.unifix.model.Docente;
+import org.ing.ispw.unifix.model.Sysadmin;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 import org.ing.ispw.unifix.utils.Printer;
@@ -11,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao  implements UserDao {
@@ -48,24 +51,29 @@ public class JdbcUserDao  implements UserDao {
             stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    User user = new User(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
-                    user.setNome(rs.getString("nome"));
-                    user.setCognome(rs.getString("cognome"));
-                    switch (rs.getString("ruolo")){
+                    String ruolo = rs.getString("ruolo");
+                    User user;
+                    switch (ruolo){
                         case "DOCENTE":
+                            user = new Docente(rs.getString("email"));
                             user.setRuolo(UserType.DOCENTE);
                             break;
                         case "TECNICO":
+                            user = new Tecnico(rs.getString("email"));
                             user.setRuolo(UserType.TECNICO);
                             break;
                         case "SYSADMIN":
+                            user = new Sysadmin(rs.getString("email"));
                             user.setRuolo(UserType.SYSADMIN);
                             break;
                         default:
+                            user = new User(rs.getString("email"));
                             user.setRuolo(UserType.UNKNOWN);
                             break;
                     }
+                    user.setPassword(rs.getString("password"));
+                    user.setNome(rs.getString("nome"));
+                    user.setCognome(rs.getString("cognome"));
                     return user;
                 }
             }
@@ -130,12 +138,58 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public void update(User entity) {
-        //da fare se necessario
+        String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, entity.getPassword());
+            stmt.setString(2, entity.getNome());
+            stmt.setString(3, entity.getCognome());
+            stmt.setString(4, entity.getRuolo().toString());
+            stmt.setString(5, entity.getEmail());
+            stmt.executeUpdate();
+            Printer.print("Utente aggiornato con successo: " + entity.getEmail());
+        } catch (SQLException e) {
+            Printer.error("Errore durante l'aggiornamento dell'utente: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void update(Tecnico entity) {
+        String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ?, numeroSegnalazioni = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, entity.getPassword());
+            stmt.setString(2, entity.getNome());
+            stmt.setString(3, entity.getCognome());
+            stmt.setString(4, entity.getRuolo().toString());
+            stmt.setInt(5, entity.getNumeroSegnalazioni());
+            stmt.setString(6, entity.getEmail());
+            stmt.executeUpdate();
+            Printer.print("Utente aggiornato con successo: " + entity.getEmail());
+        } catch (SQLException e) {
+            Printer.error("Errore durante l'aggiornamento dell'utente: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Tecnico> getAllTecnici() {
-        return List.of();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE ruolo = 'TECNICO'")){
+
+            try (ResultSet rs = statement.executeQuery()) {
+                List<Tecnico> tecnici = new ArrayList<>();
+                while (rs.next()) {
+                    String email = rs.getString("email");
+                    String password = rs.getString("password");
+                    String nome = rs.getString("nome");
+                    String cognome = rs.getString("cognome");
+                    int numeroSegnalazioni = rs.getInt("numeroSegnalazioni");
+                    tecnici.add(new Tecnico(email, password, nome, cognome, UserType.TECNICO, numeroSegnalazioni));
+                }
+                return tecnici;
+            }
+
+        }catch (SQLException e) {
+            Printer.error( "Errore durante la verifica dell'esistenza dell'utente"+e.getMessage());
+        }
+        return null;
     }
 
     public boolean existsEmail(String email) {

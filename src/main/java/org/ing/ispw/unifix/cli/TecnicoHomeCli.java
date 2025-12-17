@@ -129,9 +129,9 @@ public class TecnicoHomeCli {
         Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
         Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
         Printer.print("Stato: " + segnalazione.getStato());
-        Printer.print("Descrizione: " + segnalazione.getDescrizone());
+        Printer.print("Descrizione: " + segnalazione.getDescrizione());
         Printer.print("Aula: " + segnalazione.getAula());
-        Printer.print("Edificio: " + segnalazione.getEdifico());
+        Printer.print("Edificio: " + segnalazione.getEdificio());
         Printer.print("---------------------------------");
     }
 

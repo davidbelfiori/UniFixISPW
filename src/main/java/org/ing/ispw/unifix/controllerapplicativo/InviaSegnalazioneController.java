@@ -7,10 +7,7 @@ import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
-import org.ing.ispw.unifix.model.Aula;
-import org.ing.ispw.unifix.model.Docente;
-import org.ing.ispw.unifix.model.Segnalazione;
-import org.ing.ispw.unifix.model.Tecnico;
+import org.ing.ispw.unifix.model.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,9 +53,9 @@ public class InviaSegnalazioneController {
                 .filter(aula -> aula.getEdificio().equals(edificio)).toList();
     }
 
-    public Aula getOggettiAula(String idAula){
+    public List<String> getOggettiAula(String idAula){
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        return  aulaDao.load(idAula);
+        return  aulaDao.getAulaOggetti(idAula);
 
     }
 
@@ -79,7 +76,7 @@ public class InviaSegnalazioneController {
 
     public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException {
         SegnalazioneDao segnalazioneDao=DaoFactory.getInstance().getSegnalazioneDao();
-        Docente docenteSegnalatore =(Docente) LoginController.getInstance().getCurrentUser();
+        User docenteSegnalatore = LoginController.getInstance().getCurrentUser();
 
         String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
 
@@ -88,13 +85,13 @@ public class InviaSegnalazioneController {
         Segnalazione segnalazione=segnalazioneDao.create(chiave);
         segnalazione.setAula(sb.getAula());
         segnalazione.setDataCreazione(sb.getDataCreazione());
-        segnalazione.setEdifico(sb.getEdificio());
-        segnalazione.setDocente(docenteSegnalatore);
+        segnalazione.setEdificio(sb.getEdificio());
+        segnalazione.setDocente((Docente) docenteSegnalatore);
         segnalazione.setOggettoGuasto(sb.getOggettoGuasto());
         segnalazione.setTecnico(getTecnicoConMenoSegnalazioni()); // per ora è null ma va implementata la logica in cui viene preso quello con meno segnalazioni
         segnalazione.setStato("APERTA");
         segnalazione.setIdSegnalzione(chiave);
-        segnalazione.setDescrizone(sb.getDescrizone());
+        segnalazione.setDescrizione(sb.getDescrizone());
         segnalazioneDao.store(segnalazione);
 
         return true;

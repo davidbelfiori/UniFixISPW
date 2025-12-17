@@ -14,6 +14,7 @@ module org.ing.ispw.unifix {
     requires javafx.controls;
     requires org.mariadb.jdbc;
     requires annotations;
+    requires org.checkerframework.checker.qual;
 
     opens org.ing.ispw.unifix to javafx.fxml;
     opens org.ing.ispw.unifix.controllergrafico to javafx.fxml;

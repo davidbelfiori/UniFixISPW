@@ -1,5 +1,6 @@
 package org.ing.ispw.unifix.utils;
 
+import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.model.Docente;
@@ -33,7 +34,10 @@ public class DemoData {
             userDao.store(tec);
             Printer.print("Creato utente demo: giuseppe.rossi@tec.uniroma2.eu (password: admin)");
         }
-        
+
+        SysAdminController sc = SysAdminController.getInstance();
+
+        sc.inserisciAule("src/main/resources/utvAule.csv");
 
     }
 }

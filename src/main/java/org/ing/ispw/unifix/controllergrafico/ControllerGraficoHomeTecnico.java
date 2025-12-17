@@ -80,10 +80,10 @@ public class ControllerGraficoHomeTecnico {
         hbox.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Dettagli Segnalazione");
-            alert.setHeaderText("Edificio: " + segnalazione.getEdifico() +
+            alert.setHeaderText("Edificio: " + segnalazione.getEdificio() +
                     "\nAula: " + segnalazione.getAula() +
                     "\nOggetto: " + segnalazione.getOggettoGuasto() +
-                    "\nDescrizione: " + segnalazione.getDescrizone() +
+                    "\nDescrizione: " + segnalazione.getDescrizione() +
                     "\nStato: " + segnalazione.getStato() +
                     "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
 
@@ -120,7 +120,7 @@ public class ControllerGraficoHomeTecnico {
 
     @NotNull
     private static VBox getVBox(Segnalazione segnalazione) {
-        Label testoLabel = new Label("Edificio: " + segnalazione.getEdifico() +
+        Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
                 "    Aula: " + segnalazione.getAula() +
                 "    Oggetto: " + segnalazione.getOggettoGuasto()+
                 "    Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());

@@ -6,10 +6,6 @@ import java.util.List;
 
 public abstract class PersitenceDao <K, V> implements Dao<K, V> {
 
-    @Override
-    public V create(K id) {
-        return null;
-    }
 
     @Override
     public V load(K id) {
@@ -26,18 +22,11 @@ public abstract class PersitenceDao <K, V> implements Dao<K, V> {
 
     }
 
-    @Override
-    public boolean exists(K id) {
-        return false;
-    }
 
     @Override
     public List<V> loadAll() {
         return List.of();
     }
 
-    @Override
-    public void update(V entity) {
 
-    }
 }

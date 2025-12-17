@@ -134,16 +134,17 @@ public class SegnalazioneCli {
             Printer.error("Seleziona prima un'aula.");
             return;
         }
-        Aula aula = sc.getOggettiAula(aulaSelezionata);
-        if (aula != null && aula.getOggetti() != null && !aula.getOggetti().isEmpty()) {
-            // Crea una nuova ArrayList modificabile a partire dalla lista restituita
-            oggettiAulaCache = new ArrayList<>(aula.getOggetti());
-            Printer.print("Nell'aula " + aulaSelezionata + " ci sono i seguenti oggetti:");
-            oggettiAulaCache.forEach(Printer::print);
-        } else {
-            Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
-            oggettiAulaCache.clear(); // Svuota la cache se non ci sono oggetti
-        }
+        oggettiAulaCache= sc.getOggettiAula(aulaSelezionata);
+        oggettiAulaCache.forEach(Printer::print);
+//        if (aula != null && aula.getOggetti() != null && !aula.getOggetti().isEmpty()) {
+//            // Crea una nuova ArrayList modificabile a partire dalla lista restituita
+//            oggettiAulaCache = new ArrayList<>(aula.getOggetti());
+//            Printer.print("Nell'aula " + aulaSelezionata + " ci sono i seguenti oggetti:");
+//            oggettiAulaCache.forEach(Printer::print);
+//        } else {
+//            Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
+//            oggettiAulaCache.clear(); // Svuota la cache se non ci sono oggetti
+//        }
     }
 
     private void selezionaOggetto() throws IOException {

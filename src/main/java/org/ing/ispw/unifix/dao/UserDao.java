@@ -9,5 +9,7 @@ public interface UserDao extends Dao<String, User> {
 
     User create(String email);
 
+    void update(Tecnico entity);
+
     List<Tecnico> getAllTecnici();
 }

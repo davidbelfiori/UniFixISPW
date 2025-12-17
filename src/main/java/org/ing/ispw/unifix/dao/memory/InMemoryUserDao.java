@@ -24,6 +24,11 @@ public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDa
         return new User(email);
     }
 
+    @Override
+    public void update(Tecnico entity) {
+
+    }
+
     public List<Tecnico> getAllTecnici() {
         return loadAll().stream()
                 .filter(Tecnico.class::isInstance)
