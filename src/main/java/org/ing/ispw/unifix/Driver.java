@@ -10,6 +10,7 @@ import org.ing.ispw.unifix.cli.StartHomeViewCLI;
 
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.PersistenceProvider;
+import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.IOException;
@@ -49,9 +50,9 @@ public class Driver extends Application {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
        Printer.print("Benvenuto in UniFix!");
-//       setPersistenceProvider("in memory");
-//        DemoData.load();
-        setPersistenceProvider("persistence");
+     setPersistenceProvider("in memory");
+        DemoData.load();
+  //      setPersistenceProvider("persistence");
 
 
         Printer.print("Scegli l'interfaccia: CLI o GUI");

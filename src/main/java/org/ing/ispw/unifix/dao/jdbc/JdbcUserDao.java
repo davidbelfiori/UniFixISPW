@@ -17,10 +17,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcUserDao  implements UserDao {
+public class JdbcUserDao  extends PersitenceDao<String, User> implements UserDao {
 
     private static JdbcUserDao instance;
     private Connection connection;
+
+    private static final String ACTION_1 = "email";
 
     public JdbcUserDao() {
         try {
@@ -56,19 +58,19 @@ public class JdbcUserDao  implements UserDao {
                     User user;
                     switch (ruolo){
                         case "DOCENTE":
-                            user = new Docente(rs.getString("email"));
+                            user = new Docente(rs.getString(ACTION_1));
                             user.setRuolo(UserType.DOCENTE);
                             break;
                         case "TECNICO":
-                            user = new Tecnico(rs.getString("email"));
+                            user = new Tecnico(rs.getString(ACTION_1));
                             user.setRuolo(UserType.TECNICO);
                             break;
                         case "SYSADMIN":
-                            user = new Sysadmin(rs.getString("email"));
+                            user = new Sysadmin(rs.getString(ACTION_1));
                             user.setRuolo(UserType.SYSADMIN);
                             break;
                         default:
-                            user = new User(rs.getString("email"));
+                            user = new User(rs.getString(ACTION_1));
                             user.setRuolo(UserType.UNKNOWN);
                             break;
                     }
@@ -150,7 +152,7 @@ public class JdbcUserDao  implements UserDao {
         }
     }
 
-    @Override
+
     public void update(Tecnico entity) {
         String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ?, numeroSegnalazioni = ? WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -174,7 +176,7 @@ public class JdbcUserDao  implements UserDao {
             try (ResultSet rs = statement.executeQuery()) {
                 List<Tecnico> tecnici = new ArrayList<>();
                 while (rs.next()) {
-                    String email = rs.getString("email");
+                    String email = rs.getString(ACTION_1);
                     String password = rs.getString("password");
                     String nome = rs.getString("nome");
                     String cognome = rs.getString("cognome");

@@ -1,13 +1,15 @@
 package org.ing.ispw.unifix.dao.memory;
 
 import org.ing.ispw.unifix.dao.Dao;
+import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.model.Tecnico;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class InMemoryDao<K, V> implements Dao<K, V> {
+public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
 
     private final Map<K, V> memory = new HashMap<>();
 
@@ -41,14 +43,17 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V> {
         store(key, entity);
     }
 
+
+
     @Override
-    public void update(V entity) {
+    public final void update(V entity) {
         K key = getKey(entity); // Recupera la chiave dell'entità
         if (!memory.containsKey(key)) {
             throw new IllegalArgumentException("Impossibile aggiornare: entità con ID " + key + " non trovata.");
         }
         memory.put(key, entity); // Aggiorna l'entità esistente
     }
+
 
     protected abstract K getKey(V value);
 }

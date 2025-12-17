@@ -14,6 +14,8 @@ import java.util.*;
 public class JdbcAulaDao   implements AulaDao {
     private static JdbcAulaDao instance;
     private Connection  connection;
+
+    private static  final String ACTION_1 ="Oggetto";
     public JdbcAulaDao() {
         try {
             this.connection =  SingletonConnessione.getInstance();
@@ -47,7 +49,7 @@ public class JdbcAulaDao   implements AulaDao {
                 Aula aula = new Aula(id);
                 List<String> oggetti = new ArrayList<>();
                 while (rs.next()){
-                    String oggetto = rs.getString("Oggetto");
+                    String oggetto = rs.getString(ACTION_1);
                     oggetti.add(oggetto);
                 }
                 aula.setOggetti(oggetti);
@@ -88,13 +90,15 @@ public class JdbcAulaDao   implements AulaDao {
                 for (String oggetto : oggetti) {
                     oggettoStmt.setString(1, entity.getIdAula());
                     oggettoStmt.setString(2, oggetto);
-                    oggettoStmt.executeUpdate();
+                    oggettoStmt.addBatch();
                 }
+                oggettoStmt.executeBatch();
             }
 
         } catch (SQLException e) {
             throw new ErroreCaricamentoAuleException("Errore nell'inserimento dell'aula: " + e.getMessage());
         }
+
     }
 
     @Override
@@ -143,7 +147,7 @@ public class JdbcAulaDao   implements AulaDao {
                 String idAula = rs.getString("IdAula");
                 String edificio = rs.getString("Edificio");
                 int piano = rs.getInt("Piano");
-                String oggetto = rs.getString("Oggetto");
+                String oggetto = rs.getString(ACTION_1);
 
                 Aula aula = aulaMap.get(idAula);
                 if (aula == null) {
@@ -192,7 +196,7 @@ public class JdbcAulaDao   implements AulaDao {
             stmt.setString(1, idAula);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    String oggetto = rs.getString("Oggetto");
+                    String oggetto = rs.getString(ACTION_1);
                     oggetti.add(oggetto);
                 }
                 return oggetti;

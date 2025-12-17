@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.Dao;
+import org.ing.ispw.unifix.model.Tecnico;
 
 import java.util.List;
 
@@ -28,5 +29,8 @@ public abstract class PersitenceDao <K, V> implements Dao<K, V> {
         return List.of();
     }
 
+    @Override
+    public void update(V entity) {
 
+    }
 }
