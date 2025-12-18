@@ -1,8 +1,7 @@
 package org.ing.ispw.unifix.dao.memory;
 
 import org.ing.ispw.unifix.dao.Dao;
-import org.ing.ispw.unifix.dao.UserDao;
-import org.ing.ispw.unifix.model.Tecnico;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;

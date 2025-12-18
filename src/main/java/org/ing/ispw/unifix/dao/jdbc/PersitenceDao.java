@@ -1,7 +1,6 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.Dao;
-import org.ing.ispw.unifix.model.Tecnico;
 
 import java.util.List;
 
