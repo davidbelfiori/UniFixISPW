@@ -144,15 +144,18 @@ public class SysAdminController {
 
     public void inserisciAula(Optional<AulaBean> result) throws AulaGiaPresenteException {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        if (!aulaDao.exists(result.get().getIdAula())) {
-        Aula aula = aulaDao.create(result.get().getIdAula());
-        aula.setEdificio(result.get().getEdificio());
-        aula.setPiano(result.get().getPiano());
-        aula.setOggetti(result.get().getOggetti());
-        aulaDao.store(aula);
-        subject.notifyObservers();}
-        else {
+        if (result.isPresent()) {
+            AulaBean aulaBean = result.get();
+            if (!aulaDao.exists(aulaBean.getIdAula())) {
+                Aula aula = aulaDao.create(aulaBean.getIdAula());
+                aula.setEdificio(aulaBean.getEdificio());
+                aula.setPiano(aulaBean.getPiano());
+                aula.setOggetti(aulaBean.getOggetti());
+                aulaDao.store(aula);
+                subject.notifyObservers();
+            } else {
             throw new AulaGiaPresenteException("Aula già presente");
+        }
         }
     }
 }

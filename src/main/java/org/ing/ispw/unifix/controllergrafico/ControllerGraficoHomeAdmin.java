@@ -56,7 +56,7 @@ public class ControllerGraficoHomeAdmin implements Observer {
     public ControllerGraficoHomeAdmin() {
         sac = SysAdminController.getInstance();
         sac.attach(this);
-        gs = GestisciSegnalazioniAdmin.getInstance();
+        gs = new GestisciSegnalazioniAdmin();
     }
 
     private String getAuleGestite() {

@@ -37,12 +37,12 @@ public class ControllerGraficoHomeTecnico {
     private LoginController lc;
     private TecnicoController tc;
     PopUp popUp = new PopUp();
-    private final VisualizzaSegnalazioniTecnicoController vstc;
+    private  VisualizzaSegnalazioniTecnicoController vstc;
 
     public ControllerGraficoHomeTecnico() {
         tc= TecnicoController.getInstance();
         lc = LoginController.getInstance();
-        vstc = VisualizzaSegnalazioniTecnicoController.getInstance();
+        vstc = new  VisualizzaSegnalazioniTecnicoController();
     }
 
     public void initialize() {

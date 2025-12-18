@@ -26,6 +26,8 @@ import org.ing.ispw.unifix.utils.Printer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,9 +57,9 @@ public class ControllerGraficoHomeDocente {
 
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
-        sc=InviaSegnalazioneController.getInstance();
+        sc=new InviaSegnalazioneController();
         sysAdminController = SysAdminController.getInstance();
-        vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
+        vsdc = new VisualizzaSegnalazioniDocenteController();
         docenteController = DocenteController.getInstance();
     }
 
@@ -184,7 +186,7 @@ public class ControllerGraficoHomeDocente {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == buttonConferma){
         try {
-                sc.creaSegnalazione(new SegnalazioneBean(System.currentTimeMillis(), aula, edificio, oggetto, descrizione));
+                sc.creaSegnalazione(new SegnalazioneBean(new Date(System.currentTimeMillis()), aula, edificio, oggetto, descrizione));
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();
             }catch (NonCiSonoTecniciException | SegnalazioneGiaEsistenteException e) {

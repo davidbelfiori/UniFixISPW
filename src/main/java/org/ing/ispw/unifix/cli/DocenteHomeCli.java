@@ -23,7 +23,7 @@ public class DocenteHomeCli {
     public DocenteHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        vsdc = VisualizzaSegnalazioniDocenteController.getInstance();
+        vsdc = new VisualizzaSegnalazioniDocenteController();
         dc = DocenteController.getInstance();
     }
 

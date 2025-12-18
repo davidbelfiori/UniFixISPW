@@ -10,18 +10,7 @@ import org.ing.ispw.unifix.model.Segnalazione;
 import java.util.List;
 
 public class GestisciSegnalazioniAdmin {
-    private static GestisciSegnalazioniAdmin instance;
 
-
-
-    private GestisciSegnalazioniAdmin() {}
-
-    public static GestisciSegnalazioniAdmin getInstance() {
-        if (instance == null) {
-            instance = new GestisciSegnalazioniAdmin();
-        }
-        return instance;
-    }
 
     public String visualizzaSegnalazioniAttiveAdmin() throws NessunaSegnalazioneException {
         List<Segnalazione> segnalazioni = null;
@@ -57,7 +46,7 @@ public class GestisciSegnalazioniAdmin {
     }
 
     public String visualizzaEdificiGestiti (){
-        InviaSegnalazioneController inviaSegnalazioneController = InviaSegnalazioneController.getInstance();
+        InviaSegnalazioneController inviaSegnalazioneController = new InviaSegnalazioneController();
         List<String> edifici = inviaSegnalazioneController.getEdifici();
         return String.valueOf(edifici.size());
     }

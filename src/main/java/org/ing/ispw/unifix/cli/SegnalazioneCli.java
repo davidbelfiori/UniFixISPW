@@ -8,6 +8,7 @@ import org.ing.ispw.unifix.utils.Printer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class SegnalazioneCli {
 
     public SegnalazioneCli() {
         br = new BufferedReader(new InputStreamReader(System.in));
-        sc = InviaSegnalazioneController.getInstance();
+        sc = new InviaSegnalazioneController();
     }
 
     public void segnalazioneView() throws IOException {
@@ -166,7 +167,7 @@ public class SegnalazioneCli {
         Printer.print("Descrizione: " + descrizioneGuasto);
         Printer.print("******************************************");
 
-        SegnalazioneBean bean = new SegnalazioneBean(System.currentTimeMillis(), aulaSelezionata, edificioSelezionato, oggettoSelezionato, descrizioneGuasto);
+        SegnalazioneBean bean = new SegnalazioneBean(new Date(System.currentTimeMillis()), aulaSelezionata, edificioSelezionato, oggettoSelezionato, descrizioneGuasto);
         if (sc.creaSegnalazione(bean)) {
             Printer.print("Segnalazione inviata con successo!");
             resetForm();

@@ -17,13 +17,13 @@ public class TecnicoHomeCli {
     private boolean quit;
     private final BufferedReader br;
     private final TecnicoController tc;
-    private final VisualizzaSegnalazioniTecnicoController vstc;
+    private  VisualizzaSegnalazioniTecnicoController vstc;
 
     public TecnicoHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
         tc = TecnicoController.getInstance();
-        vstc = VisualizzaSegnalazioniTecnicoController.getInstance();
+        vstc = new VisualizzaSegnalazioniTecnicoController();
     }
 
     public void tecnicoHome() throws IOException {

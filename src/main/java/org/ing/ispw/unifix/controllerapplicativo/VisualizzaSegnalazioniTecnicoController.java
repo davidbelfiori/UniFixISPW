@@ -10,18 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisualizzaSegnalazioniTecnicoController {
-    private static VisualizzaSegnalazioniTecnicoController instance;
 
-
-
-    private VisualizzaSegnalazioniTecnicoController() {}
-
-    public static VisualizzaSegnalazioniTecnicoController getInstance() {
-        if (instance == null) {
-            instance = new VisualizzaSegnalazioniTecnicoController();
-        }
-        return instance;
-    }
 
     //visualizza le segnalazioni assegnate al tecnico
     public List<Segnalazione> visualizzaSegnalazioniTecnico() throws NessunaSegnalazioneException, NessunaSegnalazioneTecnicoException {

@@ -49,7 +49,7 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
         String query = "INSERT INTO segnalazione (IdSegnalazione, dataCreazione,oggettoGuasto,docente,stato,descrizione,aula,edificio,tecnico) values (?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)){
             stmt.setString(1,entity.getIdSegnalzione());
-            stmt.setLong(2,entity.getDataCreazione());
+            stmt.setDate(2,entity.getDataCreazione());
             stmt.setString(3,entity.getOggettoGuasto());
             stmt.setString(4,entity.getDocente().getEmail());
             stmt.setString(5,entity.getStato());
@@ -81,7 +81,7 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
     public void update(Segnalazione entity) {
         String query = "UPDATE segnalazione SET dataCreazione = ?, oggettoGuasto = ?, docente = ?, stato = ?, descrizione = ?, aula = ?, edificio = ?, tecnico = ? WHERE IdSegnalazione = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setLong(1, entity.getDataCreazione());
+            stmt.setDate(1, entity.getDataCreazione());
             stmt.setString(2, entity.getOggettoGuasto());
             stmt.setString(3, entity.getDocente().getEmail());
             stmt.setString(4, entity.getStato());
@@ -126,7 +126,7 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getLong("dataCreazione"));
+                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
                 segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
                 segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
                 segnalazione.setStato(rs.getString("stato"));
@@ -169,7 +169,7 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
 
             if (rs.next()) { // Check if there's a result before trying to read it
                 segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getLong("dataCreazione"));
+                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
                 segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
                 segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
                 segnalazione.setStato(rs.getString("stato"));

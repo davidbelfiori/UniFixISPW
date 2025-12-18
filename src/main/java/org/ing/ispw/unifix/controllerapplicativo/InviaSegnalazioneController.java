@@ -17,20 +17,6 @@ import java.util.Set;
 public class InviaSegnalazioneController {
 
 
-    private static InviaSegnalazioneController instance;
-
-
-
-    private InviaSegnalazioneController() {}
-
-    public static InviaSegnalazioneController getInstance() {
-        if (instance == null) {
-            instance = new InviaSegnalazioneController();
-        }
-        return instance;
-    }
-
-
     public List<String> getEdifici(){
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();

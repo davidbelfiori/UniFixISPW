@@ -11,18 +11,7 @@ import java.util.List;
 
 public class VisualizzaSegnalazioniDocenteController {
 
-    private static VisualizzaSegnalazioniDocenteController instance;
 
-
-
-    private VisualizzaSegnalazioniDocenteController() {}
-
-    public static VisualizzaSegnalazioniDocenteController getInstance() {
-        if (instance == null) {
-            instance = new VisualizzaSegnalazioniDocenteController();
-        }
-        return instance;
-    }
 
     //visualizza le segnalazioni inviate dal docente
     public List<Segnalazione> visualizzaSegnalazioniDocente() throws NessunaSegnalazioneException, NessunSegnalazioneDocenteException {

@@ -4,12 +4,14 @@ import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.User;
 
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SegnalazioneBean {
 
     private String idSegnalzione;
-    private long dataCreazione;
+    private Date dataCreazione;
     private String oggettoGuasto;
     private User user;
     private String stato;
@@ -21,7 +23,7 @@ public class SegnalazioneBean {
     private List<Aula> aule;
     private List<String> edificiUnici;
 
-    public SegnalazioneBean(long dataCreazione, String aula, String edificio, String oggettoGuasto,String descrizone) {
+    public SegnalazioneBean(Date dataCreazione, String aula, String edificio, String oggettoGuasto, String descrizone) {
         this.dataCreazione = dataCreazione;
         this.aula = aula;
         this.edificio = edificio;
@@ -34,7 +36,7 @@ public class SegnalazioneBean {
         this.stato = stato;
     }
 
-    public SegnalazioneBean(String idSegnalzione, long dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
+    public SegnalazioneBean(String idSegnalzione, Date dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
         this.idSegnalzione = idSegnalzione;
         this.dataCreazione = dataCreazione;
         this.oggettoGuasto = oggettoGuasto;
@@ -103,11 +105,11 @@ public class SegnalazioneBean {
         this.oggettoGuasto = oggettoGuasto;
     }
 
-    public long getDataCreazione() {
+    public Date getDataCreazione() {
         return dataCreazione;
     }
 
-    public void setDataCreazione(long dataCreazione) {
+    public void setDataCreazione(Date dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 

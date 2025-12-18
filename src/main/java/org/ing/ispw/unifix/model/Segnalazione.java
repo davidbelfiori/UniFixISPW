@@ -1,11 +1,13 @@
 package org.ing.ispw.unifix.model;
 
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Segnalazione {
 
     private String idSegnalzione;
-    private Long dataCreazione;
+    private Date dataCreazione;
     private String oggettoGuasto;
     private Docente docente;
     private String  stato;
@@ -44,11 +46,11 @@ public class Segnalazione {
         this.idSegnalzione = idSegnalzione;
     }
 
-    public long getDataCreazione() {
+    public Date getDataCreazione() {
         return dataCreazione;
     }
 
-    public void setDataCreazione(long dataCreazione) {
+    public void setDataCreazione(Date dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 
