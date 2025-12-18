@@ -54,7 +54,7 @@ public class ControllerGraficoHomeAdmin implements Observer {
     private GestisciSegnalazioniAdmin gs;
     private SysAdminController sac;
     public ControllerGraficoHomeAdmin() {
-        sac = SysAdminController.getInstance();
+        sac = new  SysAdminController();
         sac.attach(this);
         gs = new GestisciSegnalazioniAdmin();
     }

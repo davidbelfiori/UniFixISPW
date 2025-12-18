@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,9 +57,9 @@ public class ControllerGraficoHomeDocente {
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
         sc=new InviaSegnalazioneController();
-        sysAdminController = SysAdminController.getInstance();
+        sysAdminController = new SysAdminController();
         vsdc = new VisualizzaSegnalazioniDocenteController();
-        docenteController = DocenteController.getInstance();
+        docenteController = new DocenteController();
     }
 
     public void initialize() {

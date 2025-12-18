@@ -40,7 +40,7 @@ public class ControllerGraficoGestioneAule {
     SysAdminController sysAdminController;
     public ControllerGraficoGestioneAule(){
         aulaDao = DaoFactory.getInstance().getAulaDao();
-        sysAdminController = SysAdminController.getInstance();
+        sysAdminController = new SysAdminController();
     }
 
 

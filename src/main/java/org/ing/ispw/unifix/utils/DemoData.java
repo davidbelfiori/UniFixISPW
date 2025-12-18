@@ -35,7 +35,7 @@ public class DemoData {
             Printer.print("Creato utente demo: giuseppe.rossi@tec.uniroma2.eu (password: admin)");
         }
 
-        SysAdminController sc = SysAdminController.getInstance();
+        SysAdminController sc = new SysAdminController();
 
         sc.inserisciAule("src/main/resources/utvAule.csv");
 

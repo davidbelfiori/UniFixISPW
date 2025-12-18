@@ -24,7 +24,7 @@ public class DocenteHomeCli {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
         vsdc = new VisualizzaSegnalazioniDocenteController();
-        dc = DocenteController.getInstance();
+        dc = new DocenteController();
     }
 
     public void docenteHome() throws IOException {

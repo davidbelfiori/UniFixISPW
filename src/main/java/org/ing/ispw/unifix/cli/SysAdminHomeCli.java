@@ -20,7 +20,7 @@ public class SysAdminHomeCli {
     public SysAdminHomeCli() {
         quit = FALSE;
         br = new BufferedReader(new InputStreamReader(System.in));
-        sc = SysAdminController.getInstance();
+        sc = new SysAdminController();
     }
 
     public void adminHome() throws IOException {

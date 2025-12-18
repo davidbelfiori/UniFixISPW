@@ -21,18 +21,11 @@ import java.util.stream.Collectors;
 
 public class SysAdminController {
 
-    private static SysAdminController instance;
+
     private final Subject subject = new Subject();
 
-    public static SysAdminController getInstance() {
-        if(instance == null) {
-            instance = new SysAdminController();
-        }
-        return instance;
-    }
 
-    private SysAdminController() {
-    }
+
 
     public void attach(Observer observer) {
         subject.attach(observer);
