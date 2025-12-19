@@ -5,7 +5,6 @@ import org.ing.ispw.unifix.model.User;
 
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SegnalazioneBean {

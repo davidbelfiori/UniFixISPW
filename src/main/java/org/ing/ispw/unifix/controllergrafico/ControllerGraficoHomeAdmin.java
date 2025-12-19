@@ -173,4 +173,9 @@ public class ControllerGraficoHomeAdmin implements Observer {
         segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
         segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
     }
+
+    public void goToGestioneSegnalazioni(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("SegnalazioniAdmin.fxml"));
+        ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+    }
 }

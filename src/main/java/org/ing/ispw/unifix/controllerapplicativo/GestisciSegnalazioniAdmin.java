@@ -45,6 +45,13 @@ public class GestisciSegnalazioniAdmin {
 
     }
 
+    public List<Segnalazione> getAllSegnalazioni(){
+
+        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
+        return segnalazioneDao.getAllSegnalazioni();
+
+    }
+
     public String visualizzaEdificiGestiti (){
         InviaSegnalazioneController inviaSegnalazioneController = new InviaSegnalazioneController();
         List<String> edifici = inviaSegnalazioneController.getEdifici();

@@ -2,7 +2,7 @@ package org.ing.ispw.unifix.model;
 
 
 import java.sql.Date;
-import java.time.LocalDateTime;
+
 
 public class Segnalazione {
 
@@ -96,16 +96,26 @@ public class Segnalazione {
 
     @Override
     public String toString() {
-        return "Segnalazione{" +
-                "idSegnalzione='" + idSegnalzione + '\'' +
-                ", dataCreazione=" + dataCreazione +
-                ", oggettoGuasto='" + oggettoGuasto + '\'' +
-                ", docente=" + docente.getNome() + " " + docente.getCognome() +
-                ", stato='" + stato + '\'' +
-                ", descrizone='" + descrizione + '\'' +
-                ", aula='" + aula + '\'' +
-                ", edifico='" + edificio + '\'' +
-                ", tecnico=" + tecnico.getNome() + " " + tecnico.getCognome() +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Dettagli Segnalazione:\n");
+        sb.append("  Data Creazione: ").append(dataCreazione).append("\n");
+        sb.append("  Oggetto Guasto: ").append(oggettoGuasto).append("\n");
+        if (docente != null) {
+            sb.append("  Docente: ").append(docente.getNome()).append(" ").append(docente.getCognome()).append("\n");
+        } else {
+            sb.append("  Docente: Non assegnato\n");
+        }
+        sb.append("  Stato: ").append(stato).append("\n");
+        sb.append("  Descrizione: ").append(descrizione).append("\n");
+        sb.append("  Aula: ").append(aula).append("\n");
+        sb.append("  Edificio: ").append(edificio).append("\n");
+        if (tecnico != null) {
+            sb.append("  Tecnico Assegnato: ").append(tecnico.getNome()).append(" ").append(tecnico.getCognome()).append("\n");
+        } else {
+            sb.append("  Tecnico Assegnato: Nessuno\n");
+        }
+        return sb.toString();
     }
+
+
 }
