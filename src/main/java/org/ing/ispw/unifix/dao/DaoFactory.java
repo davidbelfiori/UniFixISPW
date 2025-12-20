@@ -14,4 +14,5 @@ public abstract class DaoFactory {
     public abstract UserDao getUserDao();
     public abstract AulaDao getAulaDao();
     public abstract SegnalazioneDao getSegnalazioneDao();
+    public abstract NotaSegnalazioneDao getNotaSegnalazioneDao();
 }

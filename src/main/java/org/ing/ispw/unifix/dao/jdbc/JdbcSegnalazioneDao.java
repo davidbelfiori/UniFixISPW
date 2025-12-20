@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  implements SegnalazioneDao {
+public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
     //rendila singelton e aggiungi il metodo getInstance
     private static JdbcSegnalazioneDao instance;
@@ -44,6 +44,11 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
     }
 
     @Override
+    public Segnalazione load(String id) {
+        return getSegnalazione(id);
+    }
+
+    @Override
     public void store(Segnalazione entity) {
 
         String query = "INSERT INTO segnalazione (IdSegnalazione, dataCreazione,oggettoGuasto,docente,stato,descrizione,aula,edificio,tecnico) values (?,?,?,?,?,?,?,?,?)";
@@ -65,6 +70,11 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
     }
 
     @Override
+    public void delete(String id) {
+        // Da implementare
+    }
+
+    @Override
     public boolean exists(String id) {
         String query = "SELECT COUNT(*) FROM segnalazione WHERE IdSegnalazione = ?";
 
@@ -75,6 +85,11 @@ public class JdbcSegnalazioneDao extends PersitenceDao<String , Segnalazione>  i
         } catch (SQLException _) {
             throw new SegnalazioneGiaEsistenteException("La segnalazione Esiste Gia");
         }
+    }
+
+    @Override
+    public List<Segnalazione> loadAll() {
+        return getAllSegnalazioni();
     }
 
     @Override

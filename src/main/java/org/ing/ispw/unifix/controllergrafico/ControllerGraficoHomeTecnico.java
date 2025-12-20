@@ -4,26 +4,33 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 import org.ing.ispw.unifix.Driver;
+import org.ing.ispw.unifix.bean.InfoDocenteBean;
+import org.ing.ispw.unifix.bean.InfoTecnicoBean;
+import org.ing.ispw.unifix.bean.NotaSegnalazioneBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
+import org.ing.ispw.unifix.exception.StoreNotaException;
+import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 public class ControllerGraficoHomeTecnico {
     @FXML
@@ -36,6 +43,7 @@ public class ControllerGraficoHomeTecnico {
     private Label welcome;
     private LoginController lc;
     private TecnicoController tc;
+    private InserisciNotaSegnalazioneController isnsc;
     PopUp popUp = new PopUp();
     private  VisualizzaSegnalazioniTecnicoController vstc;
 
@@ -43,6 +51,8 @@ public class ControllerGraficoHomeTecnico {
         tc= TecnicoController.getInstance();
         lc = LoginController.getInstance();
         vstc = new  VisualizzaSegnalazioniTecnicoController();
+        isnsc = new InserisciNotaSegnalazioneController();
+
     }
 
     public void initialize() {
@@ -91,19 +101,34 @@ public class ControllerGraficoHomeTecnico {
             ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.CANCEL_CLOSE);
             // Bottone "Metti in lavorazione"
             ButtonType lavorazioneButton = new ButtonType("lavorazione", ButtonBar.ButtonData.OK_DONE);
-            alert.getButtonTypes().setAll(chiudiButton, lavorazioneButton);
+
+
+
+            // Bottone Note
+            ButtonType noteButton = new  ButtonType("Note", ButtonBar.ButtonData.OK_DONE);
+
+
+            alert.getButtonTypes().setAll(chiudiButton, lavorazioneButton,noteButton);
 
             alert.showAndWait().ifPresent(response -> {
-              if (response == lavorazioneButton){
+                if (response == lavorazioneButton){
                     tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "IN LAVORAZIONE"));
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
-              } else{
-                  //bug quando selezioni in lavorazione la chiude sempre
-                  tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "CHIUSA"));
-                  segnalazioniContainer.getChildren().clear();
-                  mostraSegnalazioniTecnico();
-              }
+                } else if (response == chiudiButton){
+                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "CHIUSA"));
+                    segnalazioniContainer.getChildren().clear();
+                    mostraSegnalazioniTecnico();
+                } else if (response == noteButton){
+                    if (Objects.equals(segnalazione.getStato(), "IN LAVORAZIONE")){mostraDialogoNote(segnalazione);}
+                    else {
+                        popUp.showErrorPopup("Attenzione!","Riprova più tardi","Per aggiungere una nota , l'intervento deve essere in lavorazione");
+                    }
+                }
+
+
+
+
             });
         });
 
@@ -131,6 +156,128 @@ public class ControllerGraficoHomeTecnico {
 
         dettagli.setSpacing(5);
         return dettagli;
+    }
+
+
+
+    private void mostraDialogoNote(Segnalazione segnalazione) {
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Note Segnalazione");
+        dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() + "  in  " + segnalazione.getEdificio() + "  aula  " + segnalazione.getAula());
+
+        // Layout del dialogo
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(10));
+
+        // Area per visualizzare le note esistenti
+        Label labelNoteEsistenti = new Label("Note esistenti:");
+        javafx.scene.control.TextArea noteEsistentiArea = new javafx.scene.control.TextArea();
+        noteEsistentiArea.setEditable(false);
+        noteEsistentiArea.setPrefRowCount(5);
+        noteEsistentiArea.setWrapText(true);
+
+        // Carica le note esistenti (adatta al tuo model)
+        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalzione());
+        StringBuilder noteTesto = new StringBuilder();
+        if (noteAttuali.isEmpty()) {
+            noteTesto.append("Non ci sono note presenti.");
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            for (NotaSegnalazione nota : noteAttuali) {
+                noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
+                        .append(": ").append(nota.getTesto()).append("\n");
+            }
+        }
+        noteEsistentiArea.setText(noteTesto.toString());
+
+        // Area per aggiungere nuova nota
+        Label labelNuovaNota = new Label("Aggiungi nuova nota:");
+        javafx.scene.control.TextArea nuovaNotaArea = new javafx.scene.control.TextArea();
+        nuovaNotaArea.setPromptText("Scrivi qui la nuova nota...");
+        nuovaNotaArea.setPrefRowCount(3);
+        nuovaNotaArea.setWrapText(true);
+
+        content.getChildren().addAll(labelNoteEsistenti, noteEsistentiArea, labelNuovaNota, nuovaNotaArea);
+        dialog.getDialogPane().setContent(content);
+
+        // Bottoni
+        ButtonType salvaButton = new ButtonType("Salva", ButtonBar.ButtonData.OK_DONE);
+        ButtonType annullaButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(salvaButton, annullaButton);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == salvaButton) {
+                if (Objects.equals(segnalazione.getStato(), "CHIUSA")) {
+                    return nuovaNotaArea.getText();
+                }else {
+                    popUp.showErrorPopup("Attenzione!","Operazione non consentita","Per aggiungere una nota , l'intervento deve essere in lavorazione");
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(nuovaNota -> {
+            if (!nuovaNota.trim().isEmpty()) {
+                // Salva la nuova nota tramite il controller
+                try {
+                    isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalzione(), nuovaNota));
+                }catch (StoreNotaException e){
+                    popUp.showErrorPopup("Errore","Si è verificato un errore",e.getMessage());
+                }
+            }
+        });
+    }
+
+
+    @FXML
+    void mostraInfoTecnico(MouseEvent event) {
+        // 1. Recupera i dati dal controller applicativo
+        InfoTecnicoBean info = TecnicoController.getInstance().getTecnicoInformation();
+
+        if (info == null) return;
+
+        // 2. Crea il layout della Card
+        VBox card = new VBox(10); // 10px di spazio verticale tra gli elementi
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(250);
+
+        // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #cccccc;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 8px;" +
+                        "-fx-background-radius: 8px;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+        );
+
+        // 3. Popola la card con i dati
+        Label lblNome = new Label(info.getNome() + " " + info.getCognome());
+        lblNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+
+        Label lblEmail = new Label(info.getEmail());
+        lblEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+
+        Label lblRuolo = new Label("Ruolo: Tecnico");
+        lblRuolo.setStyle("-fx-text-fill: #0056b3; -fx-font-weight: bold;");
+
+        // Aggiungi tutto al contenitore
+        card.getChildren().addAll(lblNome, lblEmail, new Separator(), lblRuolo);
+
+        // 4. Crea il Popup e mostralo
+        Popup popup = new Popup();
+        popup.getContent().add(card);
+        popup.setAutoHide(true); // Si chiude se clicchi fuori
+
+        // Posiziona il popup sotto l'icona cliccata
+        Node source = (Node) event.getSource();
+        Window stage = source.getScene().getWindow();
+
+        // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
+        double anchorX = event.getScreenX() - 200;
+        double anchorY = event.getScreenY() + 20;
+
+        popup.show(stage, anchorX, anchorY);
     }
 
     @FXML

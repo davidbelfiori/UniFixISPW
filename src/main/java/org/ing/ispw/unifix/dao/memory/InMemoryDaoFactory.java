@@ -1,9 +1,6 @@
 package org.ing.ispw.unifix.dao.memory;
 
-import org.ing.ispw.unifix.dao.AulaDao;
-import org.ing.ispw.unifix.dao.DaoFactory;
-import org.ing.ispw.unifix.dao.SegnalazioneDao;
-import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.dao.*;
 
 public class InMemoryDaoFactory extends DaoFactory {
 
@@ -19,6 +16,11 @@ public class InMemoryDaoFactory extends DaoFactory {
     @Override
     public SegnalazioneDao getSegnalazioneDao() {
         return InMemorySegnalazioneDao.getInstance();
+    }
+
+    @Override
+    public NotaSegnalazioneDao getNotaSegnalazioneDao() {
+        return InMemoryNotaSegnalazioneDao.getInstance();
     }
 
 }

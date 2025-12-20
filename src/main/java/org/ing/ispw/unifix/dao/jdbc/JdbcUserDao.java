@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcUserDao  extends PersitenceDao<String, User> implements UserDao {
+public class JdbcUserDao  implements UserDao {
 
     private static JdbcUserDao instance;
     private Connection connection;
