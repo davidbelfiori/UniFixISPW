@@ -222,7 +222,7 @@ public class ControllerGraficoHomeTecnico {
                 try {
                     isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalzione(), nuovaNota));
                 }catch (StoreNotaException e){
-                    popUp.showErrorPopup("Errore","Si è verificato un errore",e.getMessage());
+                    popUp.showErrorPopup("Errore","Si è verificato un errore","Messaggio"+e.getMessage());
                 }
             }
         });
