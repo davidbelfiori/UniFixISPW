@@ -232,12 +232,13 @@ public class ControllerGraficoHomeTecnico {
     @FXML
     void mostraInfoTecnico(MouseEvent event) {
         // 1. Recupera i dati dal controller applicativo
-        InfoTecnicoBean info = TecnicoController.getInstance().getTecnicoInformation();
+        InfoTecnicoBean infoTecnico = TecnicoController.getInstance().getTecnicoInformation();
 
-        if (info == null) return;
+        if (infoTecnico == null) {popUp.showErrorPopup("Errore","Si è verificato un errore","Riprova");
+            return;}
 
         // 2. Crea il layout della Card
-        VBox card = new VBox(10); // 10px di spazio verticale tra gli elementi
+        VBox card = new VBox(12); // 10px di spazio verticale tra gli elementi
         card.setPadding(new Insets(15));
         card.setPrefWidth(250);
 
@@ -252,17 +253,17 @@ public class ControllerGraficoHomeTecnico {
         );
 
         // 3. Popola la card con i dati
-        Label lblNome = new Label(info.getNome() + " " + info.getCognome());
-        lblNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+        Label lbNome = new Label(infoTecnico.getNome() + " " + infoTecnico.getCognome());
+        lbNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
 
-        Label lblEmail = new Label(info.getEmail());
-        lblEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+        Label lbEmail = new Label(infoTecnico.getEmail());
+        lbEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
-        Label lblRuolo = new Label("Ruolo: Tecnico");
-        lblRuolo.setStyle("-fx-text-fill: #0056b3; -fx-font-weight: bold;");
+        Label lbRuolo = new Label(infoTecnico.getRuolo().toString());
+        lbRuolo.setStyle("-fx-text-fill: #0056b4; -fx-font-weight: bold;");
 
         // Aggiungi tutto al contenitore
-        card.getChildren().addAll(lblNome, lblEmail, new Separator(), lblRuolo);
+        card.getChildren().addAll(lbNome, lbEmail, new Separator(), lbRuolo);
 
         // 4. Crea il Popup e mostralo
         Popup popup = new Popup();
