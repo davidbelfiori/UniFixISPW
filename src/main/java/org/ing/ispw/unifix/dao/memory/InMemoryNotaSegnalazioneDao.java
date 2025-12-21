@@ -10,8 +10,10 @@ public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnal
 
     private static InMemoryNotaSegnalazioneDao instance;
 
-    public static InMemoryNotaSegnalazioneDao getInstance(){
-        if(instance == null){
+    private InMemoryNotaSegnalazioneDao() {}
+
+    public static synchronized InMemoryNotaSegnalazioneDao getInstance() {
+        if (instance == null) {
             instance = new InMemoryNotaSegnalazioneDao();
         }
         return instance;

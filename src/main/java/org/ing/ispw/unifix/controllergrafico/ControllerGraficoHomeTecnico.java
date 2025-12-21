@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 import org.ing.ispw.unifix.Driver;
-import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.NotaSegnalazioneBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
@@ -125,10 +124,6 @@ public class ControllerGraficoHomeTecnico {
                         popUp.showErrorPopup("Attenzione!","Riprova più tardi","Per aggiungere una nota , l'intervento deve essere in lavorazione");
                     }
                 }
-
-
-
-
             });
         });
 

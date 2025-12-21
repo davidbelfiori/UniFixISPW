@@ -4,18 +4,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdmin;
+import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
+import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ControllerGraficoDashboardSegnalazioniAdmin {
@@ -36,6 +39,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
     }
 
     private final GestisciSegnalazioniAdmin gs;
+    private final InserisciNotaSegnalazioneController isnsc = new InserisciNotaSegnalazioneController();
 
     PopUp popUp = new PopUp();
 
@@ -93,9 +97,30 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         hbox.setPrefWidth(700);
         hbox.setPadding(new Insets(10));
         hbox.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-radius: 5; -fx-background-radius: 5;");
-        hbox.setOnMouseClicked(event ->
-                // Mostra i dettagli della segnalazione
-                popUp.showSuccessPopup("Dettagli",segnalazione.toString()));
+
+        hbox.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Dettagli Segnalazione");
+            alert.setHeaderText("Edificio: " + segnalazione.getEdificio() +
+                    "\nAula: " + segnalazione.getAula() +
+                    "\nOggetto: " + segnalazione.getOggettoGuasto() +
+                    "\nDescrizione: " + segnalazione.getDescrizione() +
+                    "\nStato: " + segnalazione.getStato() +
+                    "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome()+
+                    "\nTecnico: " + segnalazione.getTecnico().getNome() + " " + segnalazione.getTecnico().getCognome()
+                    );
+
+            // Bottone Note
+            ButtonType noteButton = new  ButtonType("Note", ButtonBar.ButtonData.OK_DONE);
+
+
+            alert.getButtonTypes().setAll(noteButton);
+
+            alert.showAndWait().ifPresent(response -> {
+              if (response == noteButton){mostraNote(segnalazione);}
+            });
+        });
+
         // Aggiungi le informazioni della segnalazione
         VBox dettagli = getVBox(segnalazione);
 
@@ -104,11 +129,62 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         hbox.getChildren().add(dettagli);
         return hbox;
     }
+
+
+    private void mostraNote(Segnalazione segnalazione) {
+        Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Note Segnalazione");
+        dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() + "  in  " + segnalazione.getEdificio() + "  aula  " + segnalazione.getAula());
+
+        // Layout del dialogo
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(10));
+
+        // Area per visualizzare le note esistenti
+        Label labelNoteEsistenti = new Label("Note esistenti:");
+        javafx.scene.control.TextArea noteEsistentiArea = new javafx.scene.control.TextArea();
+        noteEsistentiArea.setEditable(false);
+        noteEsistentiArea.setPrefRowCount(5);
+        noteEsistentiArea.setWrapText(true);
+
+        // Carica le note esistenti (adatta al tuo model)
+        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalzione());
+        StringBuilder noteTesto = new StringBuilder();
+        if (noteAttuali.isEmpty()) {
+            noteTesto.append("Non ci sono note presenti.");
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            for (NotaSegnalazione nota : noteAttuali) {
+                noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
+                        .append(": ").append(nota.getTesto()).append("\n");
+            }
+        }
+        noteEsistentiArea.setText(noteTesto.toString());
+        ButtonType closeButton = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+
+        content.getChildren().addAll(labelNoteEsistenti, noteEsistentiArea);
+        dialog.getDialogPane().getButtonTypes().addAll(closeButton);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        // Aggiungi un bottone "Chiudi" per chiudere il dialogo
+
+
+        // Imposta l'azione per il bottone "Chiudi"
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == closeButton) {
+                return "Closed"; // Puoi restituire qualsiasi valore per indicare la chiusura
+            }
+            return null;
+        });
+
+    }
+
+
     @NotNull
     private static VBox getVBox(Segnalazione segnalazione) {
         Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
-                "       Aula: " + segnalazione.getAula()+
-                "       Tecnico: " + segnalazione.getTecnico().getNome()+ "  " +segnalazione.getTecnico().getCognome());
+                "       Aula: " + segnalazione.getAula()+ "  Stato: " + segnalazione.getStato());
         testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font: Segoe UI");
 
         // Layout per i dettagli della segnalazione
