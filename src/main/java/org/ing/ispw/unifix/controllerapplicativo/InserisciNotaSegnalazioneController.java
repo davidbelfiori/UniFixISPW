@@ -19,8 +19,9 @@ public class InserisciNotaSegnalazioneController {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         Segnalazione segnalazione = segnalazioneDao.load(nsb.getIdSegnalazione());
         NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao(); // This line is unchanged
-        String chiave = "IdSegnalazione" + nsb.getIdSegnalazione().trim() + "_NotaFrom"+segnalazione.getTecnico().getEmail()+"_Date"+date.getTime();
+        String chiave = "IdSegnalazione" + nsb.getIdSegnalazione().trim() + "_NotaFrom"+segnalazione.getTecnico().getEmail()+"_Date"+System.currentTimeMillis();
         NotaSegnalazione ns = notaSegnalazioneDao.create(chiave);
+        ns.setUuid(chiave);
         ns.setSegnalazione(segnalazione);
         ns.setTesto(nsb.getTestoNota());
         ns.setTecnico(segnalazione.getTecnico());

@@ -19,6 +19,8 @@ public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnal
         return instance;
     }
 
+
+
     @Override
     public List<NotaSegnalazione> getAllNotaSegnalazioneById(String idSegnalazione) {
         List<NotaSegnalazione> note = new ArrayList<>();
@@ -40,7 +42,7 @@ public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnal
 
     @Override
     protected String getKey(NotaSegnalazione value) {
-        return  value.getSegnalazione().getIdSegnalzione();
+        return  value.getUuid();
     }
 
 

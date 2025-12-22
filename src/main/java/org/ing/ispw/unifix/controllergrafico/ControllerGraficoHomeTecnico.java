@@ -94,20 +94,19 @@ public class ControllerGraficoHomeTecnico {
                     "\nOggetto: " + segnalazione.getOggettoGuasto() +
                     "\nDescrizione: " + segnalazione.getDescrizione() +
                     "\nStato: " + segnalazione.getStato() +
-                    "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
+                    "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome()+ "\n" +
+                    "Cosa vuoi fare con questa segnalazione? Chiuderla o mettere in lavorazione?");
 
-            // Bottone "Chiudi"
-            ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.CANCEL_CLOSE);
+            // Bottone "Chiudi segnalazione"
+            ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.OK_DONE);
             // Bottone "Metti in lavorazione"
             ButtonType lavorazioneButton = new ButtonType("lavorazione", ButtonBar.ButtonData.OK_DONE);
-
-
-
             // Bottone Note
             ButtonType noteButton = new  ButtonType("Note", ButtonBar.ButtonData.OK_DONE);
 
+            ButtonType cancelButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            alert.getButtonTypes().setAll(chiudiButton, lavorazioneButton,noteButton);
+            alert.getButtonTypes().setAll(chiudiButton, lavorazioneButton,noteButton,cancelButton);
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
@@ -123,6 +122,8 @@ public class ControllerGraficoHomeTecnico {
                     else {
                         popUp.showErrorPopup("Attenzione!","Riprova più tardi","Per aggiungere una nota , l'intervento deve essere in lavorazione");
                     }
+                } else if (response == ButtonType.CLOSE){
+                    mostraSegnalazioniTecnico();
                 }
             });
         });
@@ -202,10 +203,10 @@ public class ControllerGraficoHomeTecnico {
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == salvaButton) {
-                if (Objects.equals(segnalazione.getStato(), "CHIUSA")) {
+                if (Objects.equals(segnalazione.getStato(), "IN LAVORAZIONE")) {
                     return nuovaNotaArea.getText();
                 }else {
-                    popUp.showErrorPopup("Attenzione!","Operazione non consentita","Per aggiungere una nota , l'intervento deve essere in lavorazione");
+                    popUp.showErrorPopup("Attenzione!","Operazione non consentita","Per aggiungere una nota ,\n l'intervento deve essere in lavorazione");
                 }
             }
             return null;

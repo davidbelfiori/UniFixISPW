@@ -10,6 +10,7 @@ import org.ing.ispw.unifix.cli.StartHomeViewCLI;
 
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.PersistenceProvider;
+import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.IOException;
@@ -48,11 +49,23 @@ public class Driver extends Application {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-       Printer.print("Benvenuto in UniFix!");
-//     setPersistenceProvider("in memory");
-//        DemoData.load();
-       setPersistenceProvider("persistence");
+        Printer.print("Benvenuto in UniFix!");
 
+        Printer.print("Scegli il tipo di persistenza ('in memory' o 'persistence'):");
+        String persistenceType = scanner.nextLine();
+
+        while (!persistenceType.equalsIgnoreCase("in memory") && !persistenceType.equalsIgnoreCase("persistence")) {
+            Printer.print("Scelta non valida. Per favore, inserisci 'in memory' o 'persistence':");
+            persistenceType = scanner.nextLine();
+        }
+
+        setPersistenceProvider(persistenceType.toLowerCase());
+        Printer.print("Provider di persistenza impostato su: " + persistenceType);
+
+        // Se si sceglie "in memory", si potrebbero voler caricare dati di esempio.
+         if (persistenceType.equalsIgnoreCase("in memory")) {
+             DemoData.load();
+        }
 
         Printer.print("Scegli l'interfaccia: CLI o GUI");
         String interfaceType = scanner.nextLine();
@@ -63,8 +76,10 @@ public class Driver extends Application {
             cli.start();
             
         } else if (interfaceType.equalsIgnoreCase("GUI")) {
-           launch();
+           launch(args);
             System.exit(0);
+        } else {
+            Printer.print("Scelta interfaccia non valida. Uscita.");
         }
     }
 
