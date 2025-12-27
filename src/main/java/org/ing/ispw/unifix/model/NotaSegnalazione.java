@@ -11,6 +11,9 @@ public class NotaSegnalazione {
     private Tecnico tecnico;
     private String testo;
 
+    public NotaSegnalazione() {
+    }
+
     public NotaSegnalazione(String uuid, Segnalazione segnalazione, Timestamp dataCreazione, Tecnico tecnico, String testo) {
         this.uuid = uuid;
         this.segnalazione = segnalazione;

@@ -201,4 +201,11 @@ public class ControllerGraficoGestioneAule {
         FXMLLoader fxmlLoaderrr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeAdmin.fxml"));
         ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
     }
+
+    public void goToSegnalazioni(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("SegnalazioniAdmin.fxml"));
+        ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+    }
+
+
 }

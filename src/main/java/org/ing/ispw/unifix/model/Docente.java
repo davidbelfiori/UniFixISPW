@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.utils.UserType;
 
 public class Docente extends User{
 
+
     public Docente(String email) {
         super(email);
     }

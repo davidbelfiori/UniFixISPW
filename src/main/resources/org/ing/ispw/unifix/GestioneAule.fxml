@@ -65,12 +65,12 @@
                </content>
             </ScrollPane>
          </children></AnchorPane>
-      <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="49.0" layoutY="354.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="49.0" layoutY="354.0" onMouseClicked="#goToSegnalazioni" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../photo/sommario+.png" />
          </image>
       </ImageView>
-      <Label layoutX="155.0" layoutY="348.0" prefHeight="58.0" prefWidth="147.0" text="Segnalazioni">
+      <Label layoutX="155.0" layoutY="348.0" prefHeight="58.0" prefWidth="147.0" onMouseClicked="#goToSegnalazioni"  text="Segnalazioni">
          <font>
             <Font name="Segoe UI Light" size="22.0" />
          </font>

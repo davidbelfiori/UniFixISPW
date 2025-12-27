@@ -20,7 +20,7 @@ public class GestisciSegnalazioniAdmin {
         segnalazioni= segnalazioneDao.getAllSegnalazioni();
         if (segnalazioni.isEmpty()) return "0";
         for (Segnalazione segnalazione : segnalazioni) {
-            if(segnalazione.getStato().equals("APERTA")){
+            if(segnalazione.getStato().equals("APERTA") || segnalazione.getStato().equals("IN LAVORAZIONE")){
                 count++;
             }
         }

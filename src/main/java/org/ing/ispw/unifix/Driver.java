@@ -54,11 +54,11 @@ public class Driver extends Application {
         Scanner scanner = new Scanner(System.in);
         Printer.print("Benvenuto in UniFix!");
 
-        Printer.print("Scegli il tipo di persistenza ('in memory' o 'persistence'):");
+        Printer.print("Scegli il tipo di persistenza ('in memory', 'persistence' o 'json'):");
         String persistenceType = scanner.nextLine();
 
-        while (!persistenceType.equalsIgnoreCase("in memory") && !persistenceType.equalsIgnoreCase("persistence")) {
-            Printer.print("Scelta non valida. Per favore, inserisci 'in memory' o 'persistence':");
+        while (!persistenceType.equalsIgnoreCase("in memory") && !persistenceType.equalsIgnoreCase("persistence") && !persistenceType.equalsIgnoreCase("json")) {
+            Printer.print("Scelta non valida. Per favore, inserisci 'in memory', 'persistence' o 'json':");
             persistenceType = scanner.nextLine();
         }
 

@@ -25,6 +25,7 @@ module org.ing.ispw.unifix {
     exports org.ing.ispw.unifix.controllergrafico;
     exports org.ing.ispw.unifix.dao;
     exports org.ing.ispw.unifix.dao.jdbc;
+    exports org.ing.ispw.unifix.dao.json;
     exports org.ing.ispw.unifix.dao.memory;
     exports org.ing.ispw.unifix.bean;
     exports org.ing.ispw.unifix.model;

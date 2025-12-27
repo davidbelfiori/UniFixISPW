@@ -9,6 +9,10 @@ public class Aula {
     private String edificio;
     private List<String> oggetti;
 
+    // Costruttore vuoto richiesto per la deserializzazione JSON
+    public Aula() {
+    }
+
     public Aula(String idAula) {
         this.idAula=idAula;
     }
