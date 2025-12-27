@@ -29,7 +29,18 @@ public class InserisciNotaSegnalazioneController {
         notaSegnalazioneDao.store(ns);
     }
 
-    public List<NotaSegnalazione> getNoteForSegnalazione (String idSegnalazione){
+    /**
+     * Recupera tutte le note associate a una segnalazione.
+     *
+     * @param idSegnalazione l'ID della segnalazione
+     * @return lista delle note, può essere vuota se non ci sono note
+     * @throws IllegalArgumentException se l'ID è null o vuoto
+     */
+    public List<NotaSegnalazione> getNoteForSegnalazione(String idSegnalazione) {
+        if (idSegnalazione == null || idSegnalazione.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'ID della segnalazione non può essere vuoto");
+        }
+
         NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
         return notaSegnalazioneDao.getAllNotaSegnalazioneById(idSegnalazione);
     }

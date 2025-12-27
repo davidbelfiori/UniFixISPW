@@ -18,9 +18,7 @@ import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneContro
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
-import org.ing.ispw.unifix.exception.StoreNotaException;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -47,6 +45,9 @@ public class ControllerGraficoHomeTecnico {
     private  VisualizzaSegnalazioniTecnicoController vstc;
 
     private static final String ACTION_1 = "IN LAVORAZIONE";
+    private static final String POPUPMESSAGGI_1 = "Errore";
+    private static final String POPUPMESSAGGI_2 = "Messaggio: ";
+
 
     public ControllerGraficoHomeTecnico() {
         tc= TecnicoController.getInstance();
@@ -159,71 +160,111 @@ public class ControllerGraficoHomeTecnico {
 
 
     private void mostraDialogoNote(Segnalazione segnalazione) {
-        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
-        dialog.setTitle("Note Segnalazione");
-        dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() + "  in  " + segnalazione.getEdificio() + "  aula  " + segnalazione.getAula());
+        Dialog<String> dialog = creaDialogoNote(segnalazione);
+        TextArea nuovaNotaArea = new TextArea();
 
-        // Layout del dialogo
+        VBox content = creaContenutoDialogo(segnalazione, nuovaNotaArea);
+        dialog.getDialogPane().setContent(content);
+
+        configuraBottoniDialogo(dialog, segnalazione, nuovaNotaArea);
+
+        dialog.showAndWait().ifPresent(nuovaNota -> salvaNuovaNota(segnalazione, nuovaNota));
+    }
+
+    private Dialog<String> creaDialogoNote(Segnalazione segnalazione) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Note Segnalazione");
+        dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() +
+                           "  in  " + segnalazione.getEdificio() +
+                           "  aula  " + segnalazione.getAula());
+        return dialog;
+    }
+
+    private VBox creaContenutoDialogo(Segnalazione segnalazione, TextArea nuovaNotaArea) {
         VBox content = new VBox(10);
         content.setPadding(new Insets(10));
 
-        // Area per visualizzare le note esistenti
+        // Sezione note esistenti
         Label labelNoteEsistenti = new Label("Note esistenti:");
-        javafx.scene.control.TextArea noteEsistentiArea = new javafx.scene.control.TextArea();
+        TextArea noteEsistentiArea = creaNoteEsistentiArea(segnalazione);
+
+        // Sezione nuova nota
+        Label labelNuovaNota = new Label("Aggiungi nuova nota:");
+        configuraNuovaNotaArea(nuovaNotaArea);
+
+        content.getChildren().addAll(labelNoteEsistenti, noteEsistentiArea, labelNuovaNota, nuovaNotaArea);
+        return content;
+    }
+
+    private TextArea creaNoteEsistentiArea(Segnalazione segnalazione) {
+        TextArea noteEsistentiArea = new TextArea();
         noteEsistentiArea.setEditable(false);
         noteEsistentiArea.setPrefRowCount(5);
         noteEsistentiArea.setWrapText(true);
+        noteEsistentiArea.setText(formattaNoteEsistenti(segnalazione));
+        return noteEsistentiArea;
+    }
 
-        // Carica le note esistenti (adatta al tuo model)
+    private String formattaNoteEsistenti(Segnalazione segnalazione) {
         List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalzione());
-        StringBuilder noteTesto = new StringBuilder();
-        if (noteAttuali.isEmpty()) {
-            noteTesto.append("Non ci sono note presenti.");
-        } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            for (NotaSegnalazione nota : noteAttuali) {
-                noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
-                        .append(": ").append(nota.getTesto()).append("\n");
-            }
-        }
-        noteEsistentiArea.setText(noteTesto.toString());
 
-        // Area per aggiungere nuova nota
-        Label labelNuovaNota = new Label("Aggiungi nuova nota:");
-        javafx.scene.control.TextArea nuovaNotaArea = new javafx.scene.control.TextArea();
+        if (noteAttuali.isEmpty()) {
+            return "Non ci sono note presenti.";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        StringBuilder noteTesto = new StringBuilder();
+        for (NotaSegnalazione nota : noteAttuali) {
+            noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
+                    .append(": ").append(nota.getTesto()).append("\n");
+        }
+        return noteTesto.toString();
+    }
+
+    private void configuraNuovaNotaArea(TextArea nuovaNotaArea) {
         nuovaNotaArea.setPromptText("Scrivi qui la nuova nota...");
         nuovaNotaArea.setPrefRowCount(3);
         nuovaNotaArea.setWrapText(true);
+    }
 
-        content.getChildren().addAll(labelNoteEsistenti, noteEsistentiArea, labelNuovaNota, nuovaNotaArea);
-        dialog.getDialogPane().setContent(content);
-
-        // Bottoni
+    private void configuraBottoniDialogo(Dialog<String> dialog, Segnalazione segnalazione, TextArea nuovaNotaArea) {
         ButtonType salvaButton = new ButtonType("Salva", ButtonBar.ButtonData.OK_DONE);
         ButtonType annullaButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(salvaButton, annullaButton);
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == salvaButton) {
-                if (Objects.equals(segnalazione.getStato(), ACTION_1)) {
-                    return nuovaNotaArea.getText();
-                }else {
-                    popUp.showErrorPopup("Attenzione!","Operazione non consentita","Per aggiungere una nota ,\n l'intervento deve essere in lavorazione");
-                }
+                return validaESalva(segnalazione, nuovaNotaArea.getText());
             }
             return null;
         });
+    }
 
-        dialog.showAndWait().ifPresent(nuovaNota -> {
-            if (!nuovaNota.trim().isEmpty()) {
-                // Salva la nuova nota tramite il controller
-                try {
-                    isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalzione(), nuovaNota));
-                }catch (StoreNotaException e){
-                    popUp.showErrorPopup("Errore","Si è verificato un errore","Messaggio"+e.getMessage());
-                }
-            }
-        });
+    private String validaESalva(Segnalazione segnalazione, String testoNota) {
+        if (!Objects.equals(segnalazione.getStato(), ACTION_1)) {
+            popUp.showErrorPopup("Attenzione!", "Operazione non consentita",
+                    "Per aggiungere una nota,\n l'intervento deve essere in lavorazione");
+            return null;
+        }
+        return testoNota;
+    }
+
+    private void salvaNuovaNota(Segnalazione segnalazione, String nuovaNota) {
+        if (nuovaNota == null || nuovaNota.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalzione(), nuovaNota));
+        } catch (StoreNotaException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore nel salvataggio", POPUPMESSAGGI_2 + e.getMessage());
+        } catch (SegnalazioneNonTrovataException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Segnalazione non trovata", POPUPMESSAGGI_2 + e.getMessage());
+        } catch (TecnicoNonAssegnatoException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Tecnico non assegnato", POPUPMESSAGGI_2 + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", POPUPMESSAGGI_2 + e.getMessage());
+        }
     }
 
 
@@ -232,7 +273,7 @@ public class ControllerGraficoHomeTecnico {
         // 1. Recupera i dati dal controller applicativo
         InfoTecnicoBean infoTecnico = TecnicoController.getInstance().getTecnicoInformation();
 
-        if (infoTecnico == null) {popUp.showErrorPopup("Errore","Si è verificato un errore","Riprova");
+        if (infoTecnico == null) {popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore","Riprova");
             return;}
 
         // 2. Crea il layout della Card

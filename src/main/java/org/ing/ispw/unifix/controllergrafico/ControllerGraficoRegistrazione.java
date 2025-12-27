@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -40,14 +41,20 @@ public class ControllerGraficoRegistrazione {
             popUp.showErrorPopup("Errore", "Dati Mancanti", "Inserire tutti i campi");
         } else if (!password.equals(confirmPassword)) {
             popUp.showErrorPopup("Errore", "Password non corrispondenti", "Le password non corrispondono");
-        }
-        else if ( lc.register(new RegistrazioneBean(email, password))) {
-            popUp.showSuccessPopup("Successo", "Registrazione avvenuta con successo");
-            clearFields();
         } else {
-            popUp.showErrorPopup("Errore", "Registrazione fallita", "Email già registrata");
+            try {
+                if (lc.register(new RegistrazioneBean(email, password))) {
+                    popUp.showSuccessPopup("Successo", "Registrazione avvenuta con successo");
+                    clearFields();
+                } else {
+                    popUp.showErrorPopup("Errore", "Registrazione fallita", "Email già registrata");
+                }
+            } catch (IllegalArgumentException e) {
+                popUp.showErrorPopup("Errore", "Formato email non valido", e.getMessage());
+            } catch (RuoloNonTrovatoException e) {
+                popUp.showErrorPopup("Errore", "Dominio email non riconosciuto", e.getMessage());
+            }
         }
-
 
     }
 

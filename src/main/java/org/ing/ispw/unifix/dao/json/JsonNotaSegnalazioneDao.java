@@ -154,7 +154,7 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
 
             objectMapper.writeValue(getFile(), arrayNode);
         } catch (IOException e) {
-            throw new JsonFileException("Errore durante la scrittura del file JSON: " + FILE_NAME+ e);
+            throw new JsonFileException("Errore durante la scrittura del file JSON: " + FILE_NAME, e);
         }
     }
 
