@@ -46,6 +46,8 @@ public class ControllerGraficoHomeTecnico {
     PopUp popUp = new PopUp();
     private  VisualizzaSegnalazioniTecnicoController vstc;
 
+    private static final String ACTION_1 = "IN LAVORAZIONE";
+
     public ControllerGraficoHomeTecnico() {
         tc= TecnicoController.getInstance();
         lc = LoginController.getInstance();
@@ -110,7 +112,7 @@ public class ControllerGraficoHomeTecnico {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "IN LAVORAZIONE"));
+                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), ACTION_1));
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
@@ -118,7 +120,7 @@ public class ControllerGraficoHomeTecnico {
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
-                    if (Objects.equals(segnalazione.getStato(), "IN LAVORAZIONE")){mostraDialogoNote(segnalazione);}
+                    if (Objects.equals(segnalazione.getStato(), ACTION_1)){mostraDialogoNote(segnalazione);}
                     else {
                         popUp.showErrorPopup("Attenzione!","Riprova più tardi","Per aggiungere una nota , l'intervento deve essere in lavorazione");
                     }
@@ -203,7 +205,7 @@ public class ControllerGraficoHomeTecnico {
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == salvaButton) {
-                if (Objects.equals(segnalazione.getStato(), "IN LAVORAZIONE")) {
+                if (Objects.equals(segnalazione.getStato(), ACTION_1)) {
                     return nuovaNotaArea.getText();
                 }else {
                     popUp.showErrorPopup("Attenzione!","Operazione non consentita","Per aggiungere una nota ,\n l'intervento deve essere in lavorazione");
@@ -234,19 +236,7 @@ public class ControllerGraficoHomeTecnico {
             return;}
 
         // 2. Crea il layout della Card
-        VBox card = new VBox(12); // 10px di spazio verticale tra gli elementi
-        card.setPadding(new Insets(15));
-        card.setPrefWidth(250);
-
-        // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
-        card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-border-color: #cccccc;" +
-                        "-fx-border-width: 1px;" +
-                        "-fx-border-radius: 8px;" +
-                        "-fx-background-radius: 8px;" +
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
-        );
+        VBox card = getVBox();
 
         // 3. Popola la card con i dati
         Label lbNome = new Label(infoTecnico.getNome() + " " + infoTecnico.getCognome());
@@ -275,6 +265,24 @@ public class ControllerGraficoHomeTecnico {
         double anchorY = event.getScreenY() + 20;
 
         popup.show(stage, anchorX, anchorY);
+    }
+
+    @NotNull
+    private static VBox getVBox() {
+        VBox card = new VBox(12); // 10px di spazio verticale tra gli elementi
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(250);
+
+        // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #cccccc;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 8px;" +
+                        "-fx-background-radius: 8px;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+        );
+        return card;
     }
 
     @FXML

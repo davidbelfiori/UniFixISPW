@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.ing.ispw.unifix.cli.StartHomeViewCLI;
 
@@ -15,6 +16,7 @@ import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Driver extends Application {
@@ -27,6 +29,7 @@ public class Driver extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         primaryStage.setTitle("unifix");
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Photo/logo2.png"))));
 
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);

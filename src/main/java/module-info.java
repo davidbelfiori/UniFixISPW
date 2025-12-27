@@ -15,13 +15,18 @@ module org.ing.ispw.unifix {
     requires org.mariadb.jdbc;
     requires annotations;
     requires org.checkerframework.checker.qual;
+    requires com.fasterxml.jackson.databind;
 
     opens org.ing.ispw.unifix to javafx.fxml;
     opens org.ing.ispw.unifix.controllergrafico to javafx.fxml;
+    opens org.ing.ispw.unifix.model to com.fasterxml.jackson.databind;
 
     exports org.ing.ispw.unifix;
     exports org.ing.ispw.unifix.controllergrafico;
     exports org.ing.ispw.unifix.dao;
+    exports org.ing.ispw.unifix.dao.jdbc;
+    exports org.ing.ispw.unifix.dao.memory;
+    exports org.ing.ispw.unifix.bean;
     exports org.ing.ispw.unifix.model;
     exports org.ing.ispw.unifix.utils;
     exports org.ing.ispw.unifix.cli;
