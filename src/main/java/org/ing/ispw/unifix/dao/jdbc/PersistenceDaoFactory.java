@@ -10,16 +10,16 @@ public class PersistenceDaoFactory extends DaoFactory {
 
     @Override
     public AulaDao getAulaDao() {
-        return JdbcAulaDao.getInstance();
+        return new JdbcAulaDao();
     }
 
     @Override
     public SegnalazioneDao getSegnalazioneDao() {
-        return JdbcSegnalazioneDao.getInstance();
+        return new JdbcSegnalazioneDao();
     }
 
     @Override
     public NotaSegnalazioneDao getNotaSegnalazioneDao() {
-        return JdbcNotaSegnalazione.getInstance();
+        return new JdbcNotaSegnalazione();
     }
 }

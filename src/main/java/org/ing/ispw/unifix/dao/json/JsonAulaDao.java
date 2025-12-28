@@ -8,18 +8,10 @@ import java.util.List;
 
 public class JsonAulaDao extends JsonDao<String, Aula> implements AulaDao {
 
-    private static JsonAulaDao instance;
-
-    private JsonAulaDao() {
+    public JsonAulaDao() {
         super("aule.json", Aula.class);
     }
 
-    public static synchronized JsonAulaDao getInstance() {
-        if (instance == null) {
-            instance = new JsonAulaDao();
-        }
-        return instance;
-    }
 
     @Override
     protected String getKey(Aula aula) {

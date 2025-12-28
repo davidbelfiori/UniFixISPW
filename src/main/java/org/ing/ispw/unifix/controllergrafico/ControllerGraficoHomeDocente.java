@@ -32,6 +32,8 @@ import java.util.Optional;
 
 public class ControllerGraficoHomeDocente {
 
+    private static final String ACTION_1= "Errore";
+
     @FXML
     private VBox segnalazioniContainer;
     @FXML
@@ -53,6 +55,8 @@ public class ControllerGraficoHomeDocente {
     SysAdminController sysAdminController;
     VisualizzaSegnalazioniDocenteController vsdc;
     DocenteController docenteController;
+
+
 
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
@@ -126,7 +130,7 @@ public class ControllerGraficoHomeDocente {
                 "    Aula: " + segnalazione.getAula() +
                 "    Oggetto: " + segnalazione.getOggettoGuasto() +
                 "    Stato: " + segnalazione.getStato());
-        testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font: Segoe UI");
+        testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 15px; -fx-font-weight: bold; -fx-font: Segoe UI");
 
         // Layout per i dettagli della segnalazione
         VBox dettagli = new VBox(testoLabel);
@@ -188,11 +192,14 @@ public class ControllerGraficoHomeDocente {
                 sc.creaSegnalazione(new SegnalazioneBean(new Date(System.currentTimeMillis()), aula, edificio, oggetto, descrizione));
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();
-            }catch (NonCiSonoTecniciException | SegnalazioneGiaEsistenteException e) {
-                popUp.showErrorPopup("Errore", e.getMessage(), "Riprova");
+            }catch (NonCiSonoTecniciException _) {
+                popUp.showErrorPopup(ACTION_1, "Errore tecnici non trovati", "Al momento non ci sono tecnici inseriti nel sistema");
             }
+        catch (SegnalazioneGiaEsistenteException _){
+            popUp.showErrorPopup(ACTION_1, "Segnalazione già inviata", "La segnalazione per l'oggetto selezionato è gia stata inviata");
+        }
         }else {
-            popUp.showErrorPopup("Errore", "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
+            popUp.showErrorPopup(ACTION_1, "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
         }
     }
 

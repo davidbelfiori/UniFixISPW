@@ -25,28 +25,19 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
 
     private static final String DATA_DIR = "data/json";
     private static final String FILE_NAME = "note_segnalazioni.json";
-    private static JsonNotaSegnalazioneDao instance;
-
     private static final String FIELD_TESTO = "testo";
     private static final String FIELD_ID_SEGNALAZIONE = "idSegnalazione";
     private static final String FIELD_TECNICO_EMAIL = "tecnicoEmail";
     private static final String FIELD_DATA_CREAZIONE = "dataCreazione";
 
-
     private final ObjectMapper objectMapper;
 
-    private JsonNotaSegnalazioneDao() {
+    public JsonNotaSegnalazioneDao() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         ensureDataDirectoryExists();
     }
 
-    public static synchronized JsonNotaSegnalazioneDao getInstance() {
-        if (instance == null) {
-            instance = new JsonNotaSegnalazioneDao();
-        }
-        return instance;
-    }
 
     private void ensureDataDirectoryExists() {
         try {

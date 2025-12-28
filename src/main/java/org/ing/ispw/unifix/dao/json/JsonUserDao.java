@@ -37,22 +37,14 @@ public class JsonUserDao implements UserDao {
     private static final String TYPE_TECNICO = "Tecnico";
     private static final String TYPE_SYSADMIN = "Sysadmin";
 
-    private static JsonUserDao instance;
-
     private final ObjectMapper objectMapper;
 
-    private JsonUserDao() {
+    public JsonUserDao() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         ensureDataDirectoryExists();
     }
 
-    public static synchronized JsonUserDao getInstance() {
-        if (instance == null) {
-            instance = new JsonUserDao();
-        }
-        return instance;
-    }
 
     private void ensureDataDirectoryExists() {
         try {

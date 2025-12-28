@@ -25,8 +25,6 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     private static final String DATA_DIR = "data/json";
     private static final String FILE_NAME = "segnalazioni.json";
-    private static JsonSegnalazioneDao instance;
-
     private static final String FIELD_ID_SEGNALAZIONE = "idSegnalazione";
     private static final String FIELD_DATA_CREAZIONE = "dataCreazione";
     private static final String FIELD_OGGETTO_GUASTO = "oggettoGuasto";
@@ -39,18 +37,12 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     private final ObjectMapper objectMapper;
 
-    private JsonSegnalazioneDao() {
+    public JsonSegnalazioneDao() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         ensureDataDirectoryExists();
     }
 
-    public static synchronized JsonSegnalazioneDao getInstance() {
-        if (instance == null) {
-            instance = new JsonSegnalazioneDao();
-        }
-        return instance;
-    }
 
     private void ensureDataDirectoryExists() {
         try {

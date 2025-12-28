@@ -19,16 +19,8 @@ import java.util.List;
 
 public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
-    //rendila singelton e aggiungi il metodo getInstance
-    private static JdbcSegnalazioneDao instance;
     private Connection connection;
 
-    public static JdbcSegnalazioneDao getInstance(){
-        if(instance == null){
-            instance = new JdbcSegnalazioneDao();
-        }
-        return instance;
-    }
 
     public JdbcSegnalazioneDao(){
         try {
@@ -76,7 +68,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
     @Override
     public boolean exists(String id) {
-        String query = "SELECT COUNT(*) FROM segnalazione WHERE IdSegnalazione = ?";
+        String query = "SELECT COUNT(*) FROM segnalazione WHERE IdSegnalazione = ? and stato <> 'CHIUSA' ";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)){
             stmt.setString(1,id);

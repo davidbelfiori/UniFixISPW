@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class JdbcAulaDao   implements AulaDao {
-    private static JdbcAulaDao instance;
+
     private Connection  connection;
 
     private static  final String ACTION_1 ="Oggetto";
@@ -23,16 +23,6 @@ public class JdbcAulaDao   implements AulaDao {
             throw new DbConnException("Impossibile connettersi al database");
         }
     }
-
-    public static JdbcAulaDao getInstance(){
-        if(instance == null){
-            instance = new JdbcAulaDao();
-        }
-        return instance;
-    }
-
-
-
 
     @Override
     public Aula create(String idAula) {
