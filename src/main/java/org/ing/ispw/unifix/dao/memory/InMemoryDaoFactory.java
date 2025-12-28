@@ -4,23 +4,41 @@ import org.ing.ispw.unifix.dao.*;
 
 public class InMemoryDaoFactory extends DaoFactory {
 
+    private UserDao userDao;
+    private AulaDao aulaDao;
+    private SegnalazioneDao segnalazioneDao;
+    private NotaSegnalazioneDao notaSegnalazioneDao;
+
+    @Override
     public UserDao getUserDao() {
-        return InMemoryUserDao.getInstance();
+        if (userDao == null) {
+            userDao = new InMemoryUserDao();
+        }
+        return userDao;
     }
 
     @Override
     public AulaDao getAulaDao() {
-        return InMemoryAulaDao.getInstance();
+        if (aulaDao == null) {
+            aulaDao = new InMemoryAulaDao();
+        }
+        return aulaDao;
     }
 
     @Override
     public SegnalazioneDao getSegnalazioneDao() {
-        return InMemorySegnalazioneDao.getInstance();
+        if (segnalazioneDao == null) {
+            segnalazioneDao = new InMemorySegnalazioneDao();
+        }
+        return segnalazioneDao;
     }
 
     @Override
     public NotaSegnalazioneDao getNotaSegnalazioneDao() {
-        return InMemoryNotaSegnalazioneDao.getInstance();
+        if (notaSegnalazioneDao == null) {
+            notaSegnalazioneDao = new InMemoryNotaSegnalazioneDao();
+        }
+        return notaSegnalazioneDao;
     }
 
 }

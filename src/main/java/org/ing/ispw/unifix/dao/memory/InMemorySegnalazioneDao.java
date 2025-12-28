@@ -8,18 +8,7 @@ import java.util.List;
 
 public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> implements SegnalazioneDao {
 
-    private static InMemorySegnalazioneDao instance;
 
-    public static InMemorySegnalazioneDao getInstance(){
-        if(instance == null){
-            instance = new InMemorySegnalazioneDao();
-        }
-        return instance;
-    }
-
-    private InMemorySegnalazioneDao() {
-
-    }
    public String getKey(Segnalazione segnalazione){
         return segnalazione.getIdSegnalzione();
    }

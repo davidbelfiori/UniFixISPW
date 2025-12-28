@@ -8,18 +8,6 @@ import java.util.List;
 
 public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnalazione> implements NotaSegnalazioneDao {
 
-    private static InMemoryNotaSegnalazioneDao instance;
-
-    private InMemoryNotaSegnalazioneDao() {}
-
-    public static synchronized InMemoryNotaSegnalazioneDao getInstance() {
-        if (instance == null) {
-            instance = new InMemoryNotaSegnalazioneDao();
-        }
-        return instance;
-    }
-
-
 
     @Override
     public List<NotaSegnalazione> getAllNotaSegnalazioneById(String idSegnalazione) {
