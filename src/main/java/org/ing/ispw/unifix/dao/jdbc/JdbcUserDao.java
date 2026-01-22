@@ -20,7 +20,7 @@ import java.util.List;
 public class JdbcUserDao  implements UserDao {
 
     private static JdbcUserDao instance;
-    private Connection connection;
+    private final Connection connection;
 
     private static final String ACTION_1 = "email";
 

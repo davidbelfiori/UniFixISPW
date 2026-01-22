@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
+import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.utils.observer.Observer;
@@ -13,11 +14,8 @@ import org.ing.ispw.unifix.utils.observer.Subject;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
+
 
 public class SysAdminController {
 
@@ -112,43 +110,42 @@ public class SysAdminController {
         }
     }
 
-    public void visualizzaAule() throws AuleNonTrovateException{
+    public List<AulaBean> visualizzaAule() throws AuleNonTrovateException, DatiAulaNonValidiException {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();
-        if (!aule.isEmpty()) {
-            for (Aula aula : aule) {
-                Printer.print("Edificio: " + aula.getEdificio());
-                Printer.print("ID Aula: " + aula.getIdAula());
-                Printer.print("Piano: " + aula.getPiano());
-                Printer.print("Oggetti: " + String.join(", ", aula.getOggetti()));
-                Printer.print("-------------------------");
-            }
-        }else {
+        List<AulaBean> auleToBean = new ArrayList<>();
+        if (aule.isEmpty()) {
             throw new AuleNonTrovateException("Non sono state trovate aule");
+        }else {
+            for (Aula aula : aule) {
+                AulaBean aulaBean =  new AulaBean(
+                        aula.getIdAula(),
+                        aula.getEdificio(),
+                        aula.getPiano(),
+                        aula.getOggetti()
+                );
+                auleToBean.add(aulaBean);
+            }
         }
+
+
+        //converti le aule in bean per la view (paradigma MVC)
+        return auleToBean;
     }
 
-    public Map<String, Long> getStatisticheAule() {
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        List<Aula> aule = aulaDao.getAllAule();
-        return aule.stream()
-                .collect(Collectors.groupingBy(Aula::getEdificio, Collectors.counting()));
-    }
 
-    public void inserisciAula(Optional<AulaBean> result) throws AulaGiaPresenteException {
+
+    public void inserisciAula(AulaBean aulaBean) throws AulaGiaPresenteException {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        if (result.isPresent()) {
-            AulaBean aulaBean = result.get();
-            if (!aulaDao.exists(aulaBean.getIdAula())) {
-                Aula aula = aulaDao.create(aulaBean.getIdAula());
-                aula.setEdificio(aulaBean.getEdificio());
-                aula.setPiano(aulaBean.getPiano());
-                aula.setOggetti(aulaBean.getOggetti());
-                aulaDao.store(aula);
-                subject.notifyObservers();
-            } else {
+        if (!aulaDao.exists(aulaBean.getIdAula())) {
+            Aula aula = aulaDao.create(aulaBean.getIdAula());
+            aula.setEdificio(aulaBean.getEdificio());
+            aula.setPiano(aulaBean.getPiano());
+            aula.setOggetti(aulaBean.getOggetti());
+            aulaDao.store(aula);
+            subject.notifyObservers();
+        } else {
             throw new AulaGiaPresenteException("Aula già presente");
-        }
         }
     }
 }

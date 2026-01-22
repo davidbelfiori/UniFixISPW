@@ -1,5 +1,7 @@
 package org.ing.ispw.unifix.bean;
 
+import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
+
 import java.util.List;
 
 public class AulaBean {
@@ -8,6 +10,27 @@ public class AulaBean {
     private String edificio;
     private List<String> oggetti;
 
+    //costruttore con validazione per input utente
+    public AulaBean(String idAula, String edificio, int piano, List<String> oggetti) throws DatiAulaNonValidiException {
+        //validazione dati
+        if (idAula == null || idAula.trim().isEmpty()) {
+            throw new DatiAulaNonValidiException("ID Aula non può essere vuoto");
+        }
+        if (edificio == null || edificio.trim().isEmpty()) {
+            throw new DatiAulaNonValidiException("Edificio non può essere vuoto");
+        }
+        if (piano < 0) {
+            throw new DatiAulaNonValidiException("Piano non può essere negativo");
+        }
+        if (oggetti == null || oggetti.isEmpty()) {
+            throw new DatiAulaNonValidiException("Deve essere presente almeno un oggetto");
+        }
+
+        this.idAula = idAula.trim();
+        this.edificio = edificio.trim();
+        this.piano = piano;
+        this.oggetti = oggetti;
+    }
 
 
     public String getIdAula() {

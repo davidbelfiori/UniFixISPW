@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.bean;
 
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 
 
@@ -14,20 +15,21 @@ public class SegnalazioneBean {
     private String oggettoGuasto;
     private User user;
     private String stato;
-    private String descrizone;
+    private String descrizione;
     private String aula;
     private String edificio;
+    private Tecnico tecnico;
 
 
     private List<Aula> aule;
     private List<String> edificiUnici;
 
-    public SegnalazioneBean(Date dataCreazione, String aula, String edificio, String oggettoGuasto, String descrizone) {
+    public SegnalazioneBean(Date dataCreazione, String aula, String edificio, String oggettoGuasto, String descrizione) {
         this.dataCreazione = dataCreazione;
         this.aula = aula;
         this.edificio = edificio;
         this.oggettoGuasto = oggettoGuasto;
-        this.descrizone=descrizone;
+        this.descrizione = descrizione;
     }
 
     public SegnalazioneBean(String idSegnalzione, String stato) {
@@ -35,16 +37,25 @@ public class SegnalazioneBean {
         this.stato = stato;
     }
 
-    public SegnalazioneBean(String idSegnalzione, Date dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizone, String aula) {
+    public SegnalazioneBean(String idSegnalzione, Date dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizione, String aula, Tecnico tecnico) {
         this.idSegnalzione = idSegnalzione;
         this.dataCreazione = dataCreazione;
         this.oggettoGuasto = oggettoGuasto;
         this.user = user;
         this.stato = statoSegnalazione;
-        this.descrizone = descrizone;
+        this.descrizione = descrizione;
         this.aula = aula;
+        this.tecnico = tecnico;
     }
 
+
+    public Tecnico getTecnico() {
+        return tecnico;
+    }
+
+    public void setTecnico(Tecnico tecnico) {
+        this.tecnico = tecnico;
+    }
 
     public String getEdificio() {
         return edificio;
@@ -72,12 +83,12 @@ public class SegnalazioneBean {
         this.aula = aula;
     }
 
-    public String getDescrizone() {
-        return descrizone;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setDescrizone(String descrizone) {
-        this.descrizone = descrizone;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public String getStato() {
@@ -128,4 +139,5 @@ public class SegnalazioneBean {
     public void setEdificiUnici(List<String> edifici) {
         this.edificiUnici = edifici;
     }
+
 }

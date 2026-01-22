@@ -17,7 +17,7 @@ public class TecnicoHomeCli {
     private boolean quit;
     private final BufferedReader br;
     private final TecnicoController tc;
-    private  VisualizzaSegnalazioniTecnicoController vstc;
+    private final VisualizzaSegnalazioniTecnicoController vstc;
 
     public TecnicoHomeCli() {
         quit = false;

@@ -78,7 +78,7 @@ public class InviaSegnalazioneController {
         segnalazione.setTecnico(tecnicoAssegnato);
         segnalazione.setStato("APERTA");
         segnalazione.setIdSegnalzione(chiave);
-        segnalazione.setDescrizione(sb.getDescrizone());
+        segnalazione.setDescrizione(sb.getDescrizione());
         segnalazioneDao.store(segnalazione);
 
         // Dopo aver salvato la segnalazione, aggiorno il numero di segnalazioni del tecnico

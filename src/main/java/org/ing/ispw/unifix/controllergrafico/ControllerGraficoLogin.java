@@ -29,7 +29,7 @@ public class ControllerGraficoLogin {
     @FXML
     private PasswordField passwordField;
     PopUp popUp = new PopUp();
-    private LoginController lc;
+    private final LoginController lc;
     public ControllerGraficoLogin() {
         lc= LoginController.getInstance();
     }

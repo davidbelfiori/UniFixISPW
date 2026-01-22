@@ -13,7 +13,7 @@ import java.util.*;
 
 public class JdbcAulaDao   implements AulaDao {
 
-    private Connection  connection;
+    private final Connection  connection;
 
     private static  final String ACTION_1 ="Oggetto";
     public JdbcAulaDao() {

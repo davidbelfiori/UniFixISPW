@@ -1,11 +1,11 @@
 package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.InfoDocenteBean;
+import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.DocenteController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniDocenteController;
 import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
@@ -68,12 +68,12 @@ public class DocenteHomeCli {
 
     private void visualizzaSegnalazioni() {
         try {
-            List<Segnalazione> segnalazioniDocente = vsdc.visualizzaSegnalazioniDocente();
+            List<SegnalazioneBean> segnalazioniDocente = vsdc.visualizzaSegnalazioniDocente();
             if (segnalazioniDocente.isEmpty()){
                 Printer.print("Nessuna segnalazione trovata.");
                 return;
             }
-            for (Segnalazione segnalazione : segnalazioniDocente) {
+            for (SegnalazioneBean segnalazione : segnalazioniDocente) {
                 Printer.print(segnalazione.toString());
             }
         } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException e) {

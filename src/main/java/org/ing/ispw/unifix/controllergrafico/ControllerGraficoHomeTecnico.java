@@ -38,11 +38,11 @@ public class ControllerGraficoHomeTecnico {
     private VBox segnalazioniContainer;
     @FXML
     private Label welcome;
-    private LoginController lc;
-    private TecnicoController tc;
-    private InserisciNotaSegnalazioneController isnsc;
+    private final LoginController lc;
+    private final TecnicoController tc;
+    private final InserisciNotaSegnalazioneController isnsc;
     PopUp popUp = new PopUp();
-    private  VisualizzaSegnalazioniTecnicoController vstc;
+    private final VisualizzaSegnalazioniTecnicoController vstc;
 
     private static final String ACTION_1 = "IN LAVORAZIONE";
     private static final String POPUPMESSAGGI_1 = "Errore";

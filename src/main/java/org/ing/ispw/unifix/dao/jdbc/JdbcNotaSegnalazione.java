@@ -19,7 +19,7 @@ import java.util.List;
 
 public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
-    private Connection connection;
+    private final Connection connection;
 
 
     public JdbcNotaSegnalazione() {

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
-    private Connection connection;
+    private final Connection connection;
 
 
     public JdbcSegnalazioneDao(){

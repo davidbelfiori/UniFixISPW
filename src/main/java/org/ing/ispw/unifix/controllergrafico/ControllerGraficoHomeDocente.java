@@ -20,7 +20,6 @@ import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Aula;
-import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 import org.jetbrains.annotations.NotNull;
@@ -48,20 +47,18 @@ public class ControllerGraficoHomeDocente {
     private Label testoSegnalazioni;
     @FXML
     private Label welcome;
-    private LoginController lc;
+    private final LoginController lc;
     PopUp popUp = new PopUp();
 
-    InviaSegnalazioneController sc;
-    SysAdminController sysAdminController;
-    VisualizzaSegnalazioniDocenteController vsdc;
-    DocenteController docenteController;
+    private final  InviaSegnalazioneController sc;
+    private final VisualizzaSegnalazioniDocenteController vsdc;
+    private final  DocenteController docenteController;
 
 
 
     public ControllerGraficoHomeDocente() {
         lc = LoginController.getInstance();
         sc=new InviaSegnalazioneController();
-        sysAdminController = new SysAdminController();
         vsdc = new VisualizzaSegnalazioniDocenteController();
         docenteController = new DocenteController();
     }
@@ -85,13 +82,13 @@ public class ControllerGraficoHomeDocente {
     }
 
     public void mostraSegnalazioni() {
-        List<Segnalazione> segnalazioniDocente = null;
+        List<SegnalazioneBean> segnalazioniDocente = null;
         try {
             segnalazioniDocente = vsdc.visualizzaSegnalazioniDocente();
             testoSegnalazioni.setText("Le tue segnalazioni inviate:");
             testoSegnalazioni.setStyle("-fx-text-fill: white;");
             segnalazioniContainer.getChildren().clear();
-            for (Segnalazione segnalazione : segnalazioniDocente) {
+            for (SegnalazioneBean segnalazione : segnalazioniDocente) {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
             }
         }
@@ -102,7 +99,7 @@ public class ControllerGraficoHomeDocente {
 
     }
 
-    private HBox creaBoxSegnalazione(Segnalazione segnalazione) {
+    private HBox creaBoxSegnalazione(SegnalazioneBean segnalazione) {
         HBox hbox = new HBox(10);
         hbox.setSpacing(15);
         hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -125,7 +122,7 @@ public class ControllerGraficoHomeDocente {
         return hbox;
     }
     @NotNull
-    private static VBox getVBox(Segnalazione segnalazione) {
+    private static VBox getVBox(SegnalazioneBean segnalazione) {
         Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
                 "    Aula: " + segnalazione.getAula() +
                 "    Oggetto: " + segnalazione.getOggettoGuasto() +

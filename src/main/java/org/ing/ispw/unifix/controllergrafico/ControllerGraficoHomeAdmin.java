@@ -4,28 +4,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdmin;
 import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
-import org.ing.ispw.unifix.dao.AulaDao;
-import org.ing.ispw.unifix.dao.DaoFactory;
-import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
 import org.ing.ispw.unifix.utils.observer.Observer;
 
-import java.util.List;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -51,8 +39,8 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
 
     PopUp popUp = new PopUp();
-    private GestisciSegnalazioniAdmin gs;
-    private SysAdminController sac;
+    private final GestisciSegnalazioniAdmin gs;
+    private final SysAdminController sac;
     public ControllerGraficoHomeAdmin() {
         sac = new  SysAdminController();
         sac.attach(this);
@@ -109,51 +97,6 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
     }
 
-    public void aulePopUp() {
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        List<Aula> aule = aulaDao.getAllAule();
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            stage.setTitle("Elenco Aule");
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Creazione della TableView
-            TableView<Aula> tableView = new TableView<>();
-            tableView.setPrefSize(600, 400);
-
-            // Colonne
-            TableColumn<Aula, String> colEdificio = new TableColumn<>("Edificio");
-            colEdificio.setCellValueFactory(new PropertyValueFactory<>("edificio"));
-            colEdificio.setPrefWidth(150);
-
-            TableColumn<Aula, String> colIdAula = new TableColumn<>("ID Aula");
-            colIdAula.setCellValueFactory(new PropertyValueFactory<>("idAula"));
-            colIdAula.setPrefWidth(100);
-
-            TableColumn<Aula, Integer> colPiano = new TableColumn<>("Piano");
-            colPiano.setCellValueFactory(new PropertyValueFactory<>("piano"));
-            colPiano.setPrefWidth(100);
-
-            TableColumn<Aula, String> colOggetti = new TableColumn<>("Oggetti");
-            colOggetti.setCellValueFactory(cellData ->
-                    new javafx.beans.property.SimpleStringProperty(
-                            String.join(", ", cellData.getValue().getOggetti())));
-            colOggetti.setPrefWidth(250);
-
-            // Aggiunta delle colonne alla tabella
-            tableView.getColumns().addAll(colEdificio, colIdAula, colPiano, colOggetti);
-
-            // Caricamento dei dati
-            ObservableList<Aula> data = FXCollections.observableArrayList(aule);
-            tableView.setItems(data);
-
-            // Creazione della scena e visualizzazione
-            Scene scene = new Scene(tableView);
-            stage.setScene(scene);
-            stage.show();
-        });
-
-    }
 
 
     @FXML

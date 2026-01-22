@@ -24,7 +24,7 @@ public class ControllerGraficoRegistrazione {
     @FXML
     private PasswordField confirmPasswordField;
 
-    private  LoginController lc;
+    private final LoginController lc;
     PopUp popUp = new PopUp();
     public ControllerGraficoRegistrazione() {
 

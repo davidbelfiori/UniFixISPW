@@ -13,6 +13,7 @@ import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
+import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
@@ -150,41 +151,44 @@ public class ControllerGraficoGestioneAule {
         // Conversione del risultato in un oggetto Aula
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                AulaBean newAula = new AulaBean();
-                newAula.setIdAula(idAula.getText());
-                newAula.setEdificio(edificio.getText());
-                try {
-                    newAula.setPiano(Integer.parseInt(piano.getText()));
-                } catch (NumberFormatException _) {
-                    newAula.setPiano(0); // Valore di default in caso di errore
-                }
+                //raccogli gli oggetti dalla lista
                 List<String> oggetti = new ArrayList<>();
                 for (Node node : oggettiContainer.getChildren()) {
                     if (node instanceof TextField textfield && !textfield.getText().isEmpty()) {
                         oggetti.add(textfield.getText());
                     }
                 }
-                newAula.setOggetti(oggetti);
-                return newAula;
+
+                //parsing del piano
+                int pianoValue;
+                try {
+                    pianoValue = Integer.parseInt(piano.getText());
+                } catch (NumberFormatException e) {
+                    popUp.showErrorPopup("Errore", "Piano non valido", "Inserisci un numero valido per il piano");
+                    return null;
+                }
+
+                //crea il bean con validazione
+                try {
+                    return new AulaBean(idAula.getText(), edificio.getText(), pianoValue, oggetti);
+                } catch (DatiAulaNonValidiException e) {
+                    popUp.showErrorPopup("Errore", "Dati non validi", e.getMessage());
+                    return null;
+                }
             }
             return null;
         });
 
         Optional<AulaBean> result = dialog.showAndWait();
 
-        result.ifPresent(aula -> {
+        result.ifPresent(aulaBean -> {
             try {
-                sysAdminController.inserisciAula(result);
+                sysAdminController.inserisciAula(aulaBean);
                 mostraAule();
                 popUp.showSuccessPopup("Successo", "Aula aggiunta correttamente!");
             }catch (AulaGiaPresenteException _){
                 popUp.showErrorPopup("Errore", "Aula già presente","");
-                idAula.setText("");
-                edificio.setText("");
-                piano.setText("");
-                oggettiContainer.getChildren().setAll(new TextField()); // Reset objects
             }
-
 
         });
     }
