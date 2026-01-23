@@ -34,16 +34,16 @@ public class VisualizzaSegnalazioniDocenteController {
         //converti le segnalazioni in bean per la view (paradigma MVC)
         List<SegnalazioneBean> segnalazioniBeanList = new ArrayList<>();
         for (Segnalazione segnalazione : segnalazioniDocente) {
-            SegnalazioneBean bean = new SegnalazioneBean(
-                segnalazione.getIdSegnalzione(),
-                segnalazione.getDataCreazione(),
-                segnalazione.getOggettoGuasto(),
-                segnalazione.getDocente(),
-                segnalazione.getStato(),
-                segnalazione.getDescrizione(),
-                segnalazione.getAula(),
-                    segnalazione.getTecnico()
-            );
+            SegnalazioneBean bean = new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione())
+                    .dataCreazione(segnalazione.getDataCreazione())
+                    .oggettoGuasto(segnalazione.getOggettoGuasto())
+                    .user(segnalazione.getDocente())
+                    .stato(segnalazione.getStato())
+                    .descrizione(segnalazione.getDescrizione())
+                    .aula(segnalazione.getAula())
+                    .edificio(segnalazione.getEdificio())
+                    .tecnico(segnalazione.getTecnico())
+                    .build();
             bean.setEdificio(segnalazione.getEdificio());
             segnalazioniBeanList.add(bean);
         }

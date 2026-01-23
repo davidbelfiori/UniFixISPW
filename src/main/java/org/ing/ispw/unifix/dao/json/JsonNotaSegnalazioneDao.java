@@ -127,7 +127,7 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         List<NotaSegnalazione> result = new ArrayList<>();
         for (NotaSegnalazione nota : loadAll()) {
             if (nota.getSegnalazione() != null &&
-                nota.getSegnalazione().getIdSegnalzione().equals(idSegnalazione)) {
+                nota.getSegnalazione().getIdSegnalazione().equals(idSegnalazione)) {
                 result.add(nota);
             }
         }
@@ -159,7 +159,7 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         node.put(FIELD_TESTO, n.getTesto());
 
         if (n.getSegnalazione() != null) {
-            node.put(FIELD_ID_SEGNALAZIONE, n.getSegnalazione().getIdSegnalzione());
+            node.put(FIELD_ID_SEGNALAZIONE, n.getSegnalazione().getIdSegnalazione());
         }
 
         if (n.getTecnico() != null) {

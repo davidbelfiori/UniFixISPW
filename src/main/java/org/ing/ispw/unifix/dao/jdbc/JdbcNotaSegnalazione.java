@@ -94,7 +94,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
         try {
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, nota.getUuid());
-                ps.setString(2, nota.getSegnalazione().getIdSegnalzione());
+                ps.setString(2, nota.getSegnalazione().getIdSegnalazione());
                 ps.setTimestamp(3, nota.getDataCreazione());
                 ps.setString(4, nota.getTecnico().getEmail());
                 ps.setString(5, nota.getTesto());
@@ -164,7 +164,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
         String query = "UPDATE nota_segnalazione SET idSegnalazione = ?, dataCreazione = ?, tecnico = ?, Nota = ? WHERE UUID = ?";
         try {
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, entity.getSegnalazione().getIdSegnalzione());
+                ps.setString(1, entity.getSegnalazione().getIdSegnalazione());
                 ps.setTimestamp(2, entity.getDataCreazione());
                 ps.setString(3, entity.getTecnico().getEmail());
                 ps.setString(4, entity.getTesto());

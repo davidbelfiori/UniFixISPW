@@ -38,7 +38,7 @@ public class TecnicoController {
 
     public void updateSegnalazione(SegnalazioneBean segnalazioneBean) {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        Segnalazione segnalazione= segnalazioneDao.getSegnalazione(segnalazioneBean.getIdSegnalzione());
+        Segnalazione segnalazione= segnalazioneDao.getSegnalazione(segnalazioneBean.getIdSegnalazione());
         segnalazione.setStato(segnalazioneBean.getStato());
         segnalazioneDao.update(segnalazione);
     }

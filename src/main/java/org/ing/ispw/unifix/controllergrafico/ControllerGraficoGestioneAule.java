@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class ControllerGraficoGestioneAule {
 
@@ -34,6 +33,7 @@ public class ControllerGraficoGestioneAule {
     @FXML
     private TextField newAulaName;
 
+    private static final String POPUPMESSAGGI_1 = "Errore";
 
     PopUp popUp = new PopUp();
 
@@ -100,20 +100,9 @@ public class ControllerGraficoGestioneAule {
     }
 
     public void aggiungiAula() {
-        // Creazione del Dialog
-        Dialog<AulaBean> dialog = new Dialog<>();
-        dialog.setTitle("Aggiungi Nuova Aula");
-        dialog.setHeaderText("Inserisci i dettagli della nuova aula");
-
-        // Configurazione dei bottoni
-        ButtonType loginButtonType = new ButtonType("Aggiungi", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-
-        // Creazione del layout per i campi di input
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        Dialog<AulaBean> dialog = creaDialogAula();
+        ButtonType aggiungiButtonType = new ButtonType("Aggiungi", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(aggiungiButtonType, ButtonType.CANCEL);
 
         TextField idAula = new TextField();
         idAula.setPromptText("ID Aula (es. A1)");
@@ -121,20 +110,41 @@ public class ControllerGraficoGestioneAule {
         edificio.setPromptText("Edificio");
         TextField piano = new TextField();
         piano.setPromptText("Piano (numero)");
+        VBox oggettiContainer = creaOggettiContainer();
 
-        // Container per gli oggetti dinamici
+        GridPane grid = creaGridLayout(idAula, edificio, piano, oggettiContainer, dialog);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton ->
+            convertiRisultatoDialog(dialogButton, aggiungiButtonType, idAula, edificio, piano, oggettiContainer));
+
+        dialog.showAndWait().ifPresent(this::processaAulaAggiunta);
+    }
+
+    private Dialog<AulaBean> creaDialogAula() {
+        Dialog<AulaBean> dialog = new Dialog<>();
+        dialog.setTitle("Aggiungi Nuova Aula");
+        dialog.setHeaderText("Inserisci i dettagli della nuova aula");
+        return dialog;
+    }
+
+    private VBox creaOggettiContainer() {
         VBox oggettiContainer = new VBox(5);
         TextField oggetto1 = new TextField();
         oggetto1.setPromptText("Oggetto");
         oggettiContainer.getChildren().add(oggetto1);
+        return oggettiContainer;
+    }
+
+    private GridPane creaGridLayout(TextField idAula, TextField edificio, TextField piano,
+                                     VBox oggettiContainer, Dialog<AulaBean> dialog) {
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
 
         Button btnAddOggetto = new Button("+");
-        btnAddOggetto.setOnAction(e -> {
-            TextField nuovoOggetto = new TextField();
-            nuovoOggetto.setPromptText("Oggetto");
-            oggettiContainer.getChildren().add(nuovoOggetto);
-            dialog.getDialogPane().getScene().getWindow().sizeToScene();
-        });
+        btnAddOggetto.setOnAction(e -> aggiungiCampoOggetto(oggettiContainer, dialog));
 
         grid.add(new Label("ID Aula:"), 0, 0);
         grid.add(idAula, 1, 0);
@@ -146,51 +156,56 @@ public class ControllerGraficoGestioneAule {
         grid.add(oggettiContainer, 1, 3);
         grid.add(btnAddOggetto, 2, 3);
 
-        dialog.getDialogPane().setContent(grid);
+        return grid;
+    }
 
-        // Conversione del risultato in un oggetto Aula
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                //raccogli gli oggetti dalla lista
-                List<String> oggetti = new ArrayList<>();
-                for (Node node : oggettiContainer.getChildren()) {
-                    if (node instanceof TextField textfield && !textfield.getText().isEmpty()) {
-                        oggetti.add(textfield.getText());
-                    }
-                }
+    private void aggiungiCampoOggetto(VBox oggettiContainer, Dialog<AulaBean> dialog) {
+        TextField nuovoOggetto = new TextField();
+        nuovoOggetto.setPromptText("Oggetto");
+        oggettiContainer.getChildren().add(nuovoOggetto);
+        dialog.getDialogPane().getScene().getWindow().sizeToScene();
+    }
 
-                //parsing del piano
-                int pianoValue;
-                try {
-                    pianoValue = Integer.parseInt(piano.getText());
-                } catch (NumberFormatException e) {
-                    popUp.showErrorPopup("Errore", "Piano non valido", "Inserisci un numero valido per il piano");
-                    return null;
-                }
-
-                //crea il bean con validazione
-                try {
-                    return new AulaBean(idAula.getText(), edificio.getText(), pianoValue, oggetti);
-                } catch (DatiAulaNonValidiException e) {
-                    popUp.showErrorPopup("Errore", "Dati non validi", e.getMessage());
-                    return null;
-                }
-            }
+    private AulaBean convertiRisultatoDialog(ButtonType dialogButton, ButtonType aggiungiButtonType,
+                                              TextField idAula, TextField edificio, TextField piano,
+                                              VBox oggettiContainer) {
+        if (dialogButton != aggiungiButtonType) {
             return null;
-        });
+        }
+        List<String> oggetti = raccogliOggetti(oggettiContainer);
+        return creaAulaBean(idAula.getText(), edificio.getText(), piano.getText(), oggetti);
+    }
 
-        Optional<AulaBean> result = dialog.showAndWait();
-
-        result.ifPresent(aulaBean -> {
-            try {
-                sysAdminController.inserisciAula(aulaBean);
-                mostraAule();
-                popUp.showSuccessPopup("Successo", "Aula aggiunta correttamente!");
-            }catch (AulaGiaPresenteException _){
-                popUp.showErrorPopup("Errore", "Aula già presente","");
+    private List<String> raccogliOggetti(VBox oggettiContainer) {
+        List<String> oggetti = new ArrayList<>();
+        for (Node node : oggettiContainer.getChildren()) {
+            if (node instanceof TextField textfield && !textfield.getText().isEmpty()) {
+                oggetti.add(textfield.getText());
             }
+        }
+        return oggetti;
+    }
 
-        });
+    private AulaBean creaAulaBean(String idAula, String edificio, String pianoText, List<String> oggetti) {
+        try {
+            return new AulaBean(idAula, edificio, Integer.parseInt(pianoText), oggetti);
+        } catch (DatiAulaNonValidiException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
+            return null;
+        } catch (NumberFormatException _) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Piano non valido", "Inserisci un numero valido per il piano");
+            return null;
+        }
+    }
+
+    private void processaAulaAggiunta(AulaBean aulaBean) {
+        try {
+            sysAdminController.inserisciAula(aulaBean);
+            mostraAule();
+            popUp.showSuccessPopup("Successo", "Aula aggiunta correttamente!");
+        } catch (AulaGiaPresenteException _) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Aula già presente", "");
+        }
     }
     
     

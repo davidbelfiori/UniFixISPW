@@ -6,7 +6,7 @@ import java.sql.Date;
 
 public class Segnalazione {
 
-    private String idSegnalzione;
+    private String idSegnalazione;
     private Date dataCreazione;
     private String oggettoGuasto;
     private Docente docente;
@@ -18,7 +18,7 @@ public class Segnalazione {
 
 
     public Segnalazione(String idSegnalazione) {
-        this.idSegnalzione=idSegnalazione;
+        this.idSegnalazione =idSegnalazione;
     }
 
 
@@ -38,12 +38,12 @@ public class Segnalazione {
         this.edificio = edificio;
     }
 
-    public String getIdSegnalzione() {
-        return idSegnalzione;
+    public String getIdSegnalazione() {
+        return idSegnalazione;
     }
 
-    public void setIdSegnalzione(String idSegnalzione) {
-        this.idSegnalzione = idSegnalzione;
+    public void setIdSegnalazione(String idSegnalazione) {
+        this.idSegnalazione = idSegnalazione;
     }
 
     public Date getDataCreazione() {

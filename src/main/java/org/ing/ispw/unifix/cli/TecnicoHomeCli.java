@@ -118,13 +118,13 @@ public class TecnicoHomeCli {
                 Printer.print("Stato non valido.");
                 return;
         }
-        tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), nuovoStato));
+        tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), nuovoStato));
         Printer.print("Stato della segnalazione aggiornato con successo.");
     }
 
     private void stampaDettagliSegnalazione(Segnalazione segnalazione) {
         Printer.print("---------------------------------");
-        Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalzione());
+        Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalazione());
         Printer.print("Data Creazione: " + segnalazione.getDataCreazione());
         Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
         Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());

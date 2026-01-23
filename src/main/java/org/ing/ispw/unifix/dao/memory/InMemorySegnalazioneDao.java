@@ -10,7 +10,7 @@ public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> i
 
 
    public String getKey(Segnalazione segnalazione){
-        return segnalazione.getIdSegnalzione();
+        return segnalazione.getIdSegnalazione();
    }
 
    public  Segnalazione create(String idSegnalazione){

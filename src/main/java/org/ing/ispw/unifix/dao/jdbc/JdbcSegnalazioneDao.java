@@ -45,7 +45,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
         String query = "INSERT INTO segnalazione (IdSegnalazione, dataCreazione,oggettoGuasto,docente,stato,descrizione,aula,edificio,tecnico) values (?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)){
-            stmt.setString(1,entity.getIdSegnalzione());
+            stmt.setString(1,entity.getIdSegnalazione());
             stmt.setDate(2,entity.getDataCreazione());
             stmt.setString(3,entity.getOggettoGuasto());
             stmt.setString(4,entity.getDocente().getEmail());
@@ -101,7 +101,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             } else {
                 stmt.setNull(8, java.sql.Types.VARCHAR);
             }
-            stmt.setString(9, entity.getIdSegnalzione());
+            stmt.setString(9, entity.getIdSegnalazione());
             stmt.executeUpdate();
         } catch (SQLException _) {
             throw new UpdateSegnalazioneException("Errore durante l'aggiornamento della segnalazione");

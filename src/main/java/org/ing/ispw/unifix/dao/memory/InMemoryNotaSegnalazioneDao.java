@@ -13,7 +13,7 @@ public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnal
     public List<NotaSegnalazione> getAllNotaSegnalazioneById(String idSegnalazione) {
         List<NotaSegnalazione> note = new ArrayList<>();
         for (NotaSegnalazione nota : loadAll()) {
-            if (nota.getSegnalazione().getIdSegnalzione().equals(idSegnalazione)) {
+            if (nota.getSegnalazione().getIdSegnalazione().equals(idSegnalazione)) {
                 note.add(nota);
             }
 

@@ -77,7 +77,7 @@ public class InviaSegnalazioneController {
         segnalazione.setOggettoGuasto(sb.getOggettoGuasto());
         segnalazione.setTecnico(tecnicoAssegnato);
         segnalazione.setStato("APERTA");
-        segnalazione.setIdSegnalzione(chiave);
+        segnalazione.setIdSegnalazione(chiave);
         segnalazione.setDescrizione(sb.getDescrizione());
         segnalazioneDao.store(segnalazione);
 

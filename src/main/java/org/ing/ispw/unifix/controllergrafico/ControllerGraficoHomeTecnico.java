@@ -113,11 +113,11 @@ public class ControllerGraficoHomeTecnico {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), ACTION_1));
+                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), ACTION_1));
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalzione(), "CHIUSA"));
+                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), "CHIUSA"));
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
@@ -206,7 +206,7 @@ public class ControllerGraficoHomeTecnico {
     }
 
     private String formattaNoteEsistenti(Segnalazione segnalazione) {
-        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalzione());
+        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
 
         if (noteAttuali.isEmpty()) {
             return "Non ci sono note presenti.";
@@ -255,7 +255,7 @@ public class ControllerGraficoHomeTecnico {
         }
 
         try {
-            isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalzione(), nuovaNota));
+            isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalazione(), nuovaNota));
         } catch (StoreNotaException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore nel salvataggio", POPUPMESSAGGI_2 + e.getMessage());
         } catch (SegnalazioneNonTrovataException e) {

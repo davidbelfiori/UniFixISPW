@@ -148,7 +148,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         noteEsistentiArea.setWrapText(true);
 
         // Carica le note esistenti (adatta al tuo model)
-        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalzione());
+        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
         StringBuilder noteTesto = new StringBuilder();
         if (noteAttuali.isEmpty()) {
             noteTesto.append("Non ci sono note presenti.");

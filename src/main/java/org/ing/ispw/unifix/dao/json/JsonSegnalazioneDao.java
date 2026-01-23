@@ -68,7 +68,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
     public Segnalazione load(String id) {
         List<Segnalazione> segnalazioni = loadAll();
         for (Segnalazione s : segnalazioni) {
-            if (s.getIdSegnalzione().equals(id)) {
+            if (s.getIdSegnalazione().equals(id)) {
                 return s;
             }
         }
@@ -78,9 +78,9 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
     @Override
     public void store(Segnalazione entity) {
         List<Segnalazione> segnalazioni = loadAll();
-        String key = entity.getIdSegnalzione();
+        String key = entity.getIdSegnalazione();
 
-        segnalazioni.removeIf(s -> s.getIdSegnalzione().equals(key));
+        segnalazioni.removeIf(s -> s.getIdSegnalazione().equals(key));
         segnalazioni.add(entity);
 
         saveAll(segnalazioni);
@@ -89,7 +89,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
     @Override
     public void delete(String id) {
         List<Segnalazione> segnalazioni = loadAll();
-        segnalazioni.removeIf(s -> s.getIdSegnalzione().equals(id));
+        segnalazioni.removeIf(s -> s.getIdSegnalazione().equals(id));
         saveAll(segnalazioni);
     }
 
@@ -121,8 +121,8 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     @Override
     public void update(Segnalazione entity) {
-        if (!exists(entity.getIdSegnalzione())) {
-            throw new IllegalArgumentException("Impossibile aggiornare: segnalazione con ID " + entity.getIdSegnalzione() + " non trovata.");
+        if (!exists(entity.getIdSegnalazione())) {
+            throw new IllegalArgumentException("Impossibile aggiornare: segnalazione con ID " + entity.getIdSegnalazione() + " non trovata.");
         }
         store(entity);
     }
@@ -155,7 +155,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
     private ObjectNode serializeSegnalazione(Segnalazione s) {
         ObjectNode node = objectMapper.createObjectNode();
 
-        node.put(FIELD_ID_SEGNALAZIONE, s.getIdSegnalzione());
+        node.put(FIELD_ID_SEGNALAZIONE, s.getIdSegnalazione());
         if (s.getDataCreazione() != null) {
             node.put(FIELD_DATA_CREAZIONE, s.getDataCreazione().getTime());
         }

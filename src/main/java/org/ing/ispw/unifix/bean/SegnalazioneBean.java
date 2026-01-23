@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SegnalazioneBean {
 
-    private String idSegnalzione;
+    private String idSegnalazione;
     private Date dataCreazione;
     private String oggettoGuasto;
     private User user;
@@ -22,7 +22,6 @@ public class SegnalazioneBean {
 
 
     private List<Aula> aule;
-    private List<String> edificiUnici;
 
     public SegnalazioneBean(Date dataCreazione, String aula, String edificio, String oggettoGuasto, String descrizione) {
         this.dataCreazione = dataCreazione;
@@ -32,20 +31,21 @@ public class SegnalazioneBean {
         this.descrizione = descrizione;
     }
 
-    public SegnalazioneBean(String idSegnalzione, String stato) {
-        this.idSegnalzione = idSegnalzione;
+    public SegnalazioneBean(String idSegnalazione, String stato) {
+        this.idSegnalazione = idSegnalazione;
         this.stato = stato;
     }
 
-    public SegnalazioneBean(String idSegnalzione, Date dataCreazione, String oggettoGuasto, User user, String statoSegnalazione, String descrizione, String aula, Tecnico tecnico) {
-        this.idSegnalzione = idSegnalzione;
-        this.dataCreazione = dataCreazione;
-        this.oggettoGuasto = oggettoGuasto;
-        this.user = user;
-        this.stato = statoSegnalazione;
-        this.descrizione = descrizione;
-        this.aula = aula;
-        this.tecnico = tecnico;
+    private SegnalazioneBean(Builder builder) {
+        this.idSegnalazione = builder.idSegnalazione;
+        this.dataCreazione = builder.dataCreazione;
+        this.oggettoGuasto = builder.oggettoGuasto;
+        this.user = builder.user;
+        this.stato = builder.stato;
+        this.descrizione = builder.descrizione;
+        this.aula = builder.aula;
+        this.edificio = builder.edificio;
+        this.tecnico = builder.tecnico;
     }
 
 
@@ -123,21 +123,81 @@ public class SegnalazioneBean {
         this.dataCreazione = dataCreazione;
     }
 
-    public String getIdSegnalzione() {
-        return idSegnalzione;
+    public String getIdSegnalazione() {
+        return idSegnalazione;
     }
 
-    public void setIdSegnalzione(String idSegnalzione) {
-        this.idSegnalzione = idSegnalzione;
+    public void setIdSegnalazione(String idSegnalazione) {
+        this.idSegnalazione = idSegnalazione;
     }
 
+    // --- 2. Classe statica interna "Builder" ---
+    public static class Builder {
+        // Copia degli stessi campi della classe principale
+        private String idSegnalazione;
+        private Date dataCreazione;
+        private String oggettoGuasto;
+        private User user;
+        private String stato;
+        private String descrizione;
+        private String aula;
+        private String edificio;
+        private Tecnico tecnico;
 
-    public List<String> getEdificiUnici() {
-        return edificiUnici;
+        // Costruttore del Builder
+        // Puoi rendere obbligatorio l'ID passandolo qui, o lasciarlo vuoto
+        public Builder(String idSegnalazione) {
+            this.idSegnalazione = idSegnalazione;
+        }
+
+        // --- Metodi "Setter" che ritornano il Builder stesso ---
+
+        public Builder dataCreazione(Date dataCreazione) {
+            this.dataCreazione = dataCreazione;
+            return this;
+        }
+
+        public Builder oggettoGuasto(String oggettoGuasto) {
+            this.oggettoGuasto = oggettoGuasto;
+            return this;
+        }
+
+        public Builder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder stato(String stato) {
+            this.stato = stato;
+            return this;
+        }
+
+        public Builder descrizione(String descrizione) {
+            this.descrizione = descrizione;
+            return this;
+        }
+
+        public Builder aula(String aula) {
+            this.aula = aula;
+            return this;
+        }
+
+        public Builder edificio(String edificio) {
+            this.edificio = edificio;
+            return this;
+        }
+
+        public Builder tecnico(Tecnico tecnico) {
+            this.tecnico = tecnico;
+            return this;
+        }
+
+        // --- Metodo finale per creare l'oggetto ---
+        public SegnalazioneBean build() {
+            // Qui potresti anche aggiungere validazioni (es. se dataCreazione è null)
+            return new SegnalazioneBean(this);
+        }
     }
 
-    public void setEdificiUnici(List<String> edifici) {
-        this.edificiUnici = edifici;
-    }
 
 }
