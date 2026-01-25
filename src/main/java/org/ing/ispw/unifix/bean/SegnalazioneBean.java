@@ -31,10 +31,7 @@ public class SegnalazioneBean {
         this.descrizione = descrizione;
     }
 
-    public SegnalazioneBean(String idSegnalazione, String stato) {
-        this.idSegnalazione = idSegnalazione;
-        this.stato = stato;
-    }
+
 
     private SegnalazioneBean(Builder builder) {
         this.idSegnalazione = builder.idSegnalazione;
@@ -131,7 +128,7 @@ public class SegnalazioneBean {
         this.idSegnalazione = idSegnalazione;
     }
 
-    // --- 2. Classe statica interna "Builder" ---
+    // ---  Classe statica interna "Builder" ---
     public static class Builder {
         // Copia degli stessi campi della classe principale
         private String idSegnalazione;
@@ -145,7 +142,6 @@ public class SegnalazioneBean {
         private Tecnico tecnico;
 
         // Costruttore del Builder
-        // Puoi rendere obbligatorio l'ID passandolo qui, o lasciarlo vuoto
         public Builder(String idSegnalazione) {
             this.idSegnalazione = idSegnalazione;
         }
@@ -194,7 +190,6 @@ public class SegnalazioneBean {
 
         // --- Metodo finale per creare l'oggetto ---
         public SegnalazioneBean build() {
-            // Qui potresti anche aggiungere validazioni (es. se dataCreazione è null)
             return new SegnalazioneBean(this);
         }
     }

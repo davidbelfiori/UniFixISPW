@@ -4,6 +4,8 @@ import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
+import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
+import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -61,13 +63,15 @@ public class TecnicoHomeCli {
 
     private void gestisciSegnalazioni() throws IOException {
         try {
-            List<Segnalazione> segnalazioni = vstc.visualizzaSegnalazioniTecnico();
-            if (segnalazioni.isEmpty()) {
-                Printer.print("Nessuna segnalazione da visualizzare.");
-                return;
+            List<SegnalazioneBean> segnalazioni = vstc.visualizzaSegnalazioniTecnico();
+            for (SegnalazioneBean segnalazioneBean: segnalazioni){
+                stampaDettagliSegnalazione(segnalazioneBean);
             }
+        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException ex) {
+            Printer.print(ex.getMessage());
+            return;
+        }
 
-            segnalazioni.forEach(this::stampaDettagliSegnalazione);
 
             Printer.print("\nInserisci l'ID della segnalazione da gestire o '0' per tornare al menu principale:");
             String idSegnalazioneInput = br.readLine();
@@ -75,14 +79,12 @@ public class TecnicoHomeCli {
             if (!"0".equals(idSegnalazioneInput)) {
                 selezionaEProcessaSegnalazione(idSegnalazioneInput);
             }
-        } catch (Exception e) {
-            Printer.error(e.getMessage());
-        }
+
     }
 
     private void selezionaEProcessaSegnalazione(String idSegnalazioneInput) throws IOException {
         try {
-            Segnalazione segnalazione = tc.getSegnalazione(idSegnalazioneInput);
+            SegnalazioneBean segnalazione = tc.getSegnalazione(idSegnalazioneInput);
             stampaDettagliSegnalazione(segnalazione);
 
             Printer.print("Vuoi modificare lo stato della segnalazione? (y/n)");
@@ -96,7 +98,7 @@ public class TecnicoHomeCli {
         }
     }
 
-    private void aggiornaStatoSegnalazione(Segnalazione segnalazione) throws IOException {
+    private void aggiornaStatoSegnalazione(SegnalazioneBean segnalazione) throws IOException {
         Printer.print("Seleziona il nuovo stato:");
         Printer.print("\t1) In lavorazione");
         Printer.print("\t2) Chiusa");
@@ -109,25 +111,26 @@ public class TecnicoHomeCli {
                 Printer.print("Input non valido.");
                 return;
             case "1":
-                nuovoStato = "In lavorazione";
+                nuovoStato = "IN LAVORAZIONE";
                 break;
             case "2":
-                nuovoStato = "Chiusa";
+                nuovoStato = "CHIUSA";
                 break;
             default:
                 Printer.print("Stato non valido.");
                 return;
         }
-        tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), nuovoStato));
+
+        tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato(nuovoStato).build());
         Printer.print("Stato della segnalazione aggiornato con successo.");
     }
 
-    private void stampaDettagliSegnalazione(Segnalazione segnalazione) {
+    private void stampaDettagliSegnalazione(SegnalazioneBean segnalazione) {
         Printer.print("---------------------------------");
         Printer.print("ID Segnalazione: " + segnalazione.getIdSegnalazione());
         Printer.print("Data Creazione: " + segnalazione.getDataCreazione());
         Printer.print("Oggetto Guasto: " + segnalazione.getOggettoGuasto());
-        Printer.print("Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
+        Printer.print("Docente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome());
         Printer.print("Stato: " + segnalazione.getStato());
         Printer.print("Descrizione: " + segnalazione.getDescrizione());
         Printer.print("Aula: " + segnalazione.getAula());

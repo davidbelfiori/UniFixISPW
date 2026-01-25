@@ -30,9 +30,18 @@ public class TecnicoController {
 
     }
 
-    public Segnalazione getSegnalazione(String idSegnalazione) {
+    public SegnalazioneBean getSegnalazione(String idSegnalazione) {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        return segnalazioneDao.getSegnalazione(idSegnalazione);
+        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        return new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).dataCreazione(segnalazione.getDataCreazione())
+                .oggettoGuasto(segnalazione.getOggettoGuasto())
+                .user(segnalazione.getDocente())
+                .stato(segnalazione.getStato())
+                .descrizione(segnalazione.getDescrizione())
+                .aula(segnalazione.getAula())
+                .edificio(segnalazione.getEdificio())
+                .tecnico(segnalazione.getTecnico())
+                .build();
     }
 
 

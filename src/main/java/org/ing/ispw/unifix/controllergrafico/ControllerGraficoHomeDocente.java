@@ -187,6 +187,7 @@ public class ControllerGraficoHomeDocente {
         if (result.isPresent() && result.get() == buttonConferma){
         try {
                 sc.creaSegnalazione(new SegnalazioneBean(new Date(System.currentTimeMillis()), aula, edificio, oggetto, descrizione));
+
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();
             }catch (NonCiSonoTecniciException _) {

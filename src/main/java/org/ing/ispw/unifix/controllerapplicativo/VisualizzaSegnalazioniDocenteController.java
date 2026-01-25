@@ -44,7 +44,6 @@ public class VisualizzaSegnalazioniDocenteController {
                     .edificio(segnalazione.getEdificio())
                     .tecnico(segnalazione.getTecnico())
                     .build();
-            bean.setEdificio(segnalazione.getEdificio());
             segnalazioniBeanList.add(bean);
         }
         return segnalazioniBeanList;

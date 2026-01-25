@@ -20,7 +20,6 @@ import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
-import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,12 +64,12 @@ public class ControllerGraficoHomeTecnico {
 
 
     public void mostraSegnalazioniTecnico(){
-        List<Segnalazione> segnalazioni = null;
+        List<SegnalazioneBean> segnalazioni = null;
         try{
             segnalazioni = vstc.visualizzaSegnalazioniTecnico();
             testoSegnalazioniTecnico.setText("I tuoi interventi:");
             testoSegnalazioniTecnico.setStyle("-fx-text-fill: white");
-            for (Segnalazione segnalazione : segnalazioni) {
+            for (SegnalazioneBean segnalazione : segnalazioni) {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
             }
         }catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException _){
@@ -80,7 +79,7 @@ public class ControllerGraficoHomeTecnico {
 
     }
 
-    private HBox creaBoxSegnalazione(Segnalazione segnalazione) {
+    private HBox creaBoxSegnalazione(SegnalazioneBean segnalazione) {
         HBox hbox = new HBox(10);
         hbox.setSpacing(15);
         hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -97,7 +96,7 @@ public class ControllerGraficoHomeTecnico {
                     "\nOggetto: " + segnalazione.getOggettoGuasto() +
                     "\nDescrizione: " + segnalazione.getDescrizione() +
                     "\nStato: " + segnalazione.getStato() +
-                    "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome()+ "\n" +
+                    "\nDocente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()+ "\n" +
                     "Cosa vuoi fare con questa segnalazione? Chiuderla o mettere in lavorazione?");
 
             // Bottone "Chiudi segnalazione"
@@ -113,11 +112,11 @@ public class ControllerGraficoHomeTecnico {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), ACTION_1));
+                    tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato(ACTION_1).build());
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
-                    tc.updateSegnalazione(new SegnalazioneBean(segnalazione.getIdSegnalazione(), "CHIUSA"));
+                    tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato("CHIUSA").build());
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
@@ -143,11 +142,11 @@ public class ControllerGraficoHomeTecnico {
 
 
     @NotNull
-    private static VBox getVBox(Segnalazione segnalazione) {
+    private static VBox getVBox(SegnalazioneBean segnalazione) {
         Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
                 "    Aula: " + segnalazione.getAula() +
                 "    Oggetto: " + segnalazione.getOggettoGuasto()+
-                "    Docente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome());
+                "    Docente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome());
         testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-font-weight: bold; -fx-font: Segoe UI");
 
         // Layout per i dettagli della segnalazione
@@ -159,7 +158,7 @@ public class ControllerGraficoHomeTecnico {
 
 
 
-    private void mostraDialogoNote(Segnalazione segnalazione) {
+    private void mostraDialogoNote(SegnalazioneBean segnalazione) {
         Dialog<String> dialog = creaDialogoNote(segnalazione);
         TextArea nuovaNotaArea = new TextArea();
 
@@ -171,7 +170,7 @@ public class ControllerGraficoHomeTecnico {
         dialog.showAndWait().ifPresent(nuovaNota -> salvaNuovaNota(segnalazione, nuovaNota));
     }
 
-    private Dialog<String> creaDialogoNote(Segnalazione segnalazione) {
+    private Dialog<String> creaDialogoNote(SegnalazioneBean segnalazione) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Note Segnalazione");
         dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() +
@@ -180,7 +179,7 @@ public class ControllerGraficoHomeTecnico {
         return dialog;
     }
 
-    private VBox creaContenutoDialogo(Segnalazione segnalazione, TextArea nuovaNotaArea) {
+    private VBox creaContenutoDialogo(SegnalazioneBean segnalazione, TextArea nuovaNotaArea) {
         VBox content = new VBox(10);
         content.setPadding(new Insets(10));
 
@@ -196,7 +195,7 @@ public class ControllerGraficoHomeTecnico {
         return content;
     }
 
-    private TextArea creaNoteEsistentiArea(Segnalazione segnalazione) {
+    private TextArea creaNoteEsistentiArea(SegnalazioneBean segnalazione) {
         TextArea noteEsistentiArea = new TextArea();
         noteEsistentiArea.setEditable(false);
         noteEsistentiArea.setPrefRowCount(5);
@@ -205,7 +204,7 @@ public class ControllerGraficoHomeTecnico {
         return noteEsistentiArea;
     }
 
-    private String formattaNoteEsistenti(Segnalazione segnalazione) {
+    private String formattaNoteEsistenti(SegnalazioneBean segnalazione) {
         List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
 
         if (noteAttuali.isEmpty()) {
@@ -227,7 +226,7 @@ public class ControllerGraficoHomeTecnico {
         nuovaNotaArea.setWrapText(true);
     }
 
-    private void configuraBottoniDialogo(Dialog<String> dialog, Segnalazione segnalazione, TextArea nuovaNotaArea) {
+    private void configuraBottoniDialogo(Dialog<String> dialog, SegnalazioneBean segnalazione, TextArea nuovaNotaArea) {
         ButtonType salvaButton = new ButtonType("Salva", ButtonBar.ButtonData.OK_DONE);
         ButtonType annullaButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(salvaButton, annullaButton);
@@ -240,7 +239,7 @@ public class ControllerGraficoHomeTecnico {
         });
     }
 
-    private String validaESalva(Segnalazione segnalazione, String testoNota) {
+    private String validaESalva(SegnalazioneBean segnalazione, String testoNota) {
         if (!Objects.equals(segnalazione.getStato(), ACTION_1)) {
             popUp.showErrorPopup("Attenzione!", "Operazione non consentita",
                     "Per aggiungere una nota,\n l'intervento deve essere in lavorazione");
@@ -249,7 +248,7 @@ public class ControllerGraficoHomeTecnico {
         return testoNota;
     }
 
-    private void salvaNuovaNota(Segnalazione segnalazione, String nuovaNota) {
+    private void salvaNuovaNota(SegnalazioneBean segnalazione, String nuovaNota) {
         if (nuovaNota == null || nuovaNota.trim().isEmpty()) {
             return;
         }
