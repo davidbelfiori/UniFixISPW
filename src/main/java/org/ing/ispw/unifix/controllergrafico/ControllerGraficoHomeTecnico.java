@@ -19,7 +19,7 @@ import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.*;
-import org.ing.ispw.unifix.model.NotaSegnalazione;
+
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -205,7 +205,7 @@ public class ControllerGraficoHomeTecnico {
     }
 
     private String formattaNoteEsistenti(SegnalazioneBean segnalazione) {
-        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
+        List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
 
         if (noteAttuali.isEmpty()) {
             return "Non ci sono note presenti.";
@@ -213,9 +213,9 @@ public class ControllerGraficoHomeTecnico {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         StringBuilder noteTesto = new StringBuilder();
-        for (NotaSegnalazione nota : noteAttuali) {
+        for (NotaSegnalazioneBean nota : noteAttuali) {
             noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
-                    .append(": ").append(nota.getTesto()).append("\n");
+                    .append(": ").append(nota.getTestoNota()).append("\n");
         }
         return noteTesto.toString();
     }

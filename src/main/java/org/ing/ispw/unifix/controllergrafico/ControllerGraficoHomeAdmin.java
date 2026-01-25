@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.ing.ispw.unifix.Driver;
-import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdmin;
+import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -39,12 +39,12 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
 
     PopUp popUp = new PopUp();
-    private final GestisciSegnalazioniAdmin gs;
+    private final GestisciSegnalazioniAdminController gs;
     private final SysAdminController sac;
     public ControllerGraficoHomeAdmin() {
         sac = new  SysAdminController();
         sac.attach(this);
-        gs = new GestisciSegnalazioniAdmin();
+        gs = new GestisciSegnalazioniAdminController();
     }
 
     private String getAuleGestite() {

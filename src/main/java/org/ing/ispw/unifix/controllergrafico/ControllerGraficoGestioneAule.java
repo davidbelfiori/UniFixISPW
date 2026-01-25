@@ -10,11 +10,8 @@ import javafx.scene.layout.*;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
-import org.ing.ispw.unifix.dao.AulaDao;
-import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
-import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,10 +34,9 @@ public class ControllerGraficoGestioneAule {
 
     PopUp popUp = new PopUp();
 
-    AulaDao aulaDao ;
+
     SysAdminController sysAdminController;
     public ControllerGraficoGestioneAule(){
-        aulaDao = DaoFactory.getInstance().getAulaDao();
         sysAdminController = new SysAdminController();
     }
 
@@ -52,19 +48,24 @@ public class ControllerGraficoGestioneAule {
 
     public void mostraAule () {
 
-        List<Aula> aule = aulaDao.getAllAule();
-        aulaContainer.getChildren().clear();
+        try {
+            List<AulaBean> aule = sysAdminController.visualizzaAule();
+            aulaContainer.getChildren().clear();
 
-        // Ordina le aule per edificio
-        aule.sort(Comparator.comparing(Aula::getEdificio));
+            // Ordina le aule per edificio
+            aule.sort(Comparator.comparing(AulaBean::getEdificio));
 
-        for (Aula a : aule) {
-            aulaContainer.getChildren().add(creaBoxAula(a));
+            for (AulaBean a : aule) {
+                aulaContainer.getChildren().add(creaBoxAula(a));
+            }
+        }catch (DatiAulaNonValidiException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
         }
+
     }
 
 
-    private HBox creaBoxAula(Aula aula) {
+    private HBox creaBoxAula(AulaBean aula) {
         HBox hbox = new HBox(10);
         hbox.setSpacing(15);
         hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -87,7 +88,7 @@ public class ControllerGraficoGestioneAule {
         return hbox;
     }
     @NotNull
-    private static VBox getVBox(Aula aula) {
+    private static VBox getVBox(AulaBean aula) {
         Label testoLabel = new Label("Edificio: " + aula.getEdificio() +
                 "    Aula: " + aula.getIdAula()+
                 "    Piano: " + aula.getPiano());

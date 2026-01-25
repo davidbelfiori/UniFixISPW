@@ -48,8 +48,9 @@ public class LoginCli {
                     password = br.readLine();
                     break;
                 case "3":
-                    UserType ruolo=lc.validate(new LoginBean(email,password));
+
                     try {
+                        UserType ruolo=lc.validate(new LoginBean(email,password));
                         switch (ruolo) {
                             case DOCENTE:
                                 DocenteHomeCli docenteView = new DocenteHomeCli();

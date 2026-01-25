@@ -37,7 +37,7 @@ public class StartHomeViewCLI {
                         break;
                     case "3":
                         Printer.print("addios");
-                        quit=true;
+                        System.exit(0);
                         break;
                     default:
                         Printer.print("scelta non valida");

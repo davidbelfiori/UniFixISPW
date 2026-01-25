@@ -10,10 +10,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.ing.ispw.unifix.Driver;
-import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdmin;
+import org.ing.ispw.unifix.bean.NotaSegnalazioneBean;
+import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
-import org.ing.ispw.unifix.model.NotaSegnalazione;
-import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,13 +38,13 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         mostraSegnalazioni();
     }
 
-    private final GestisciSegnalazioniAdmin gs;
+    private final GestisciSegnalazioniAdminController gs;
     private final InserisciNotaSegnalazioneController isnsc = new InserisciNotaSegnalazioneController();
 
     PopUp popUp = new PopUp();
 
     public ControllerGraficoDashboardSegnalazioniAdmin() {
-        gs = new GestisciSegnalazioniAdmin();
+        gs = new GestisciSegnalazioniAdminController();
     }
 
     private String getNumeroSegnalazioniRisolte() {
@@ -79,15 +79,15 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
     }
 
     public void mostraSegnalazioni(){
-        List<Segnalazione> segnalazioneList = gs.getAllSegnalazioni();
-        for (Segnalazione segnalazione : segnalazioneList) {
+        List<SegnalazioneBean> segnalazioneList = gs.getAllSegnalazioni();
+        for (SegnalazioneBean segnalazione : segnalazioneList) {
             segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
         }
 
     }
 
 
-    private HBox creaBoxSegnalazione(Segnalazione segnalazione) {
+    private HBox creaBoxSegnalazione(SegnalazioneBean segnalazione) {
         HBox hbox = new HBox(10);
         hbox.setSpacing(15);
         hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -106,7 +106,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
                     "\nOggetto: " + segnalazione.getOggettoGuasto() +
                     "\nDescrizione: " + segnalazione.getDescrizione() +
                     "\nStato: " + segnalazione.getStato() +
-                    "\nDocente: " + segnalazione.getDocente().getNome() + " " + segnalazione.getDocente().getCognome()+
+                    "\nDocente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()+
                     "\nTecnico: " + segnalazione.getTecnico().getNome() + " " + segnalazione.getTecnico().getCognome()
                     );
 
@@ -131,7 +131,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
     }
 
 
-    private void mostraNote(Segnalazione segnalazione) {
+    private void mostraNote(SegnalazioneBean segnalazione) {
         Dialog<String> dialog = new javafx.scene.control.Dialog<>();
         dialog.setTitle("Note Segnalazione");
         dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() + "  in  " + segnalazione.getEdificio() + "  aula  " + segnalazione.getAula());
@@ -148,15 +148,15 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         noteEsistentiArea.setWrapText(true);
 
         // Carica le note esistenti (adatta al tuo model)
-        List<NotaSegnalazione> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
+        List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
         StringBuilder noteTesto = new StringBuilder();
         if (noteAttuali.isEmpty()) {
             noteTesto.append("Non ci sono note presenti.");
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            for (NotaSegnalazione nota : noteAttuali) {
+            for (NotaSegnalazioneBean nota : noteAttuali) {
                 noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
-                        .append(": ").append(nota.getTesto()).append("\n");
+                        .append(": ").append(nota.getTestoNota()).append("\n");
             }
         }
         noteEsistentiArea.setText(noteTesto.toString());
@@ -182,7 +182,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
 
 
     @NotNull
-    private static VBox getVBox(Segnalazione segnalazione) {
+    private static VBox getVBox(SegnalazioneBean segnalazione) {
         Label testoLabel = new Label("Edificio: " + segnalazione.getEdificio() +
                 "       Aula: " + segnalazione.getAula()+ "  Stato: " + segnalazione.getStato());
         testoLabel.setStyle("-fx-text-fill: black; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font: Segoe UI");

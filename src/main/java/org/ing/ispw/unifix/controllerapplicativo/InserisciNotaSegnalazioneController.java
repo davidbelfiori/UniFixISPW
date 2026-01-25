@@ -8,6 +8,7 @@ import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,13 +37,19 @@ public class InserisciNotaSegnalazioneController {
      * @return lista delle note, può essere vuota se non ci sono note
      * @throws IllegalArgumentException se l'ID è null o vuoto
      */
-    public List<NotaSegnalazione> getNoteForSegnalazione(String idSegnalazione) {
+    public List<NotaSegnalazioneBean> getNoteForSegnalazione(String idSegnalazione) {
         if (idSegnalazione == null || idSegnalazione.trim().isEmpty()) {
             throw new IllegalArgumentException("L'ID della segnalazione non può essere vuoto");
         }
 
         NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
-        return notaSegnalazioneDao.getAllNotaSegnalazioneById(idSegnalazione);
+        List<NotaSegnalazione> note = notaSegnalazioneDao.getAllNotaSegnalazioneById(idSegnalazione);
+        List<NotaSegnalazioneBean> notaSegnalazioneBeanList = new ArrayList<>();
+        for (NotaSegnalazione ns : note) {
+            NotaSegnalazioneBean bean = new NotaSegnalazioneBean(idSegnalazione, ns.getDataCreazione(), ns.getTesto());
+            notaSegnalazioneBeanList.add(bean);
+        }
+        return notaSegnalazioneBeanList;
     }
 
 }
