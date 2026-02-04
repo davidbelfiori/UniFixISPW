@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.ing.ispw.unifix.Driver;
-import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
-import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
+import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
+import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.observer.Observer;
@@ -39,28 +39,29 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
 
     PopUp popUp = new PopUp();
-    private final GestisciSegnalazioniAdminController gs;
-    private final SysAdminController sac;
+
+    private final GestioneAuleController sac;
+    private final DashboardKpiController dkc;
     public ControllerGraficoHomeAdmin() {
-        sac = new  SysAdminController();
+        sac = new GestioneAuleController();
         sac.attach(this);
-        gs = new GestisciSegnalazioniAdminController();
+        dkc = new DashboardKpiController();
     }
 
     private String getAuleGestite() {
-        return gs.visualizzaNumeroaule();
+        return dkc.visualizzaNumeroaule();
     }
 
     private String getNumeroSegnalazioniRisolte() {
-        return gs.visualizzaSegnalazioniRisolteAdmin();
+        return dkc.visualizzaSegnalazioniRisolteAdmin();
     }
 
     private String getNumeroSegnalazioniAttive() {
-        return gs.visualizzaSegnalazioniAttiveAdmin();
+        return dkc.visualizzaSegnalazioniAttiveAdmin();
     }
 
     private String getEdificiGestiti() {
-        return gs.visualizzaEdificiGestiti();
+        return dkc.visualizzaEdificiGestiti();
     }
 
     @FXML

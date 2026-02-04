@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.NotaSegnalazioneBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -39,20 +40,23 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
     }
 
     private final GestisciSegnalazioniAdminController gs;
-    private final InserisciNotaSegnalazioneController isnsc = new InserisciNotaSegnalazioneController();
+    private final InserisciNotaSegnalazioneController isnsc;
+    private final DashboardKpiController dkc;
 
     PopUp popUp = new PopUp();
 
     public ControllerGraficoDashboardSegnalazioniAdmin() {
         gs = new GestisciSegnalazioniAdminController();
+        isnsc = new InserisciNotaSegnalazioneController();
+        dkc = new DashboardKpiController();
     }
 
     private String getNumeroSegnalazioniRisolte() {
-        return gs.visualizzaSegnalazioniRisolteAdmin();
+        return dkc.visualizzaSegnalazioniRisolteAdmin();
     }
 
     private String getNumeroSegnalazioniAttive() {
-        return gs.visualizzaSegnalazioniAttiveAdmin();
+        return dkc.visualizzaSegnalazioniAttiveAdmin();
     }
 
     @FXML

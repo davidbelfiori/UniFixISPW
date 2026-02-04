@@ -36,7 +36,7 @@ public class Driver extends Application {
         primaryStage.show();
     }
 
-    private static void setPersistenceProvider(String provider) {
+    public static void setPersistenceProvider(String provider) {
         for (PersistenceProvider p : PersistenceProvider.values()) {
             if (p.getName().equals(provider)) {
                 try {

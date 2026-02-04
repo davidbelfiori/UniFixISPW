@@ -1,7 +1,7 @@
 package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.AulaBean;
-import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
+import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
@@ -21,11 +21,11 @@ public class SysAdminHomeCli {
 
     private Boolean quit;
     private final BufferedReader br;
-    private final SysAdminController sc;
+    private final GestioneAuleController sc;
     public SysAdminHomeCli() {
         quit = FALSE;
         br = new BufferedReader(new InputStreamReader(System.in));
-        sc = new SysAdminController();
+        sc = new GestioneAuleController();
     }
 
     public void adminHome() throws IOException {

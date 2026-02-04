@@ -1,0 +1,41 @@
+[ {
+  "idSegnalazione" : "EdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento",
+  "dataCreazione" : 1766833193932,
+  "oggettoGuasto" : "Riscaldamento",
+  "stato" : "IN LAVORAZIONE",
+  "descrizione" : "sdvfcsdcscdsdcsdc",
+  "aula" : "Montalcini",
+  "edificio" : "Medicina",
+  "docenteEmail" : "davide.falessi@uniroma2.eu",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "idSegnalazione" : "EdificioIngegneria_AulaA3_OggettoGuastoImpianto Audio",
+  "dataCreazione" : 1766917519253,
+  "oggettoGuasto" : "Impianto Audio",
+  "stato" : "APERTA",
+  "descrizione" : "jjjjxsjsjsj",
+  "aula" : "A3",
+  "edificio" : "Ingegneria",
+  "docenteEmail" : "davide.falessi@uniroma2.eu",
+  "tecnicoEmail" : "cavo.dragone@tec.uniroma2.eu"
+}, {
+  "idSegnalazione" : "EdificioIngegneria_AulaA1_OggettoGuastoImpianto Audio",
+  "dataCreazione" : 1766917560682,
+  "oggettoGuasto" : "Impianto Audio",
+  "stato" : "APERTA",
+  "descrizione" : "jjjjxsjsjsj",
+  "aula" : "A1",
+  "edificio" : "Ingegneria",
+  "docenteEmail" : "davide.falessi@uniroma2.eu",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "idSegnalazione" : "EdificioIngegneria_Aula2_OggettoGuastoImpianto Audio",
+  "dataCreazione" : 1766917576188,
+  "oggettoGuasto" : "Impianto Audio",
+  "stato" : "APERTA",
+  "descrizione" : "jjjjxsjsjsj",
+  "aula" : "2",
+  "edificio" : "Ingegneria",
+  "docenteEmail" : "davide.falessi@uniroma2.eu",
+  "tecnicoEmail" : "cavo.dragone@tec.uniroma2.eu"
+} ]

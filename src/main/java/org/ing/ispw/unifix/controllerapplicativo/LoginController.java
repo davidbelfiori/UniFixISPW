@@ -104,7 +104,7 @@ public class LoginController {
                         docente.setCognome(extractCognome(rb.getEmail()));
                         docente.setEmail(rb.getEmail());
                         docente.setPassword(rb.getPassword());
-                        docente.setRuolo(extractRuolo(rb.getEmail()));
+                        docente.setRuolo(ruolo);
                         userDao.store(docente);
                         return true;
                     }
@@ -114,7 +114,7 @@ public class LoginController {
                         tec.setCognome(extractCognome(rb.getEmail()));
                         tec.setEmail(rb.getEmail());
                         tec.setPassword(rb.getPassword());
-                        tec.setRuolo(extractRuolo(rb.getEmail()));
+                        tec.setRuolo(ruolo);
                         tec.setNumeroSegnalazioni(0);
                         userDao.store(tec);
                         return true;
@@ -125,7 +125,7 @@ public class LoginController {
                         sysadmin.setCognome(extractCognome(rb.getEmail()));
                         sysadmin.setEmail(rb.getEmail());
                         sysadmin.setPassword(rb.getPassword());
-                        sysadmin.setRuolo(extractRuolo(rb.getEmail()));
+                        sysadmin.setRuolo(ruolo);
                         userDao.store(sysadmin);
                         return true;
                     }

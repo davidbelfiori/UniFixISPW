@@ -46,7 +46,7 @@ public class InserisciNotaSegnalazioneController {
         List<NotaSegnalazione> note = notaSegnalazioneDao.getAllNotaSegnalazioneById(idSegnalazione);
         List<NotaSegnalazioneBean> notaSegnalazioneBeanList = new ArrayList<>();
         for (NotaSegnalazione ns : note) {
-            NotaSegnalazioneBean bean = new NotaSegnalazioneBean(idSegnalazione, ns.getDataCreazione(), ns.getTesto());
+            NotaSegnalazioneBean bean = new NotaSegnalazioneBean(ns.getUuid(),ns.getDataCreazione(),ns.getTesto());
             notaSegnalazioneBeanList.add(bean);
         }
         return notaSegnalazioneBeanList;

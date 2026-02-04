@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.utils;
 
-import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
+import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.model.Docente;
@@ -35,7 +35,7 @@ public class DemoData {
             Printer.print("Creato utente demo: giuseppe.rossi@tec.uniroma2.eu (password: admin)");
         }
 
-        SysAdminController sc = new SysAdminController();
+        GestioneAuleController sc = new GestioneAuleController();
 
         sc.inserisciAule("src/main/resources/utvAule.csv");
 

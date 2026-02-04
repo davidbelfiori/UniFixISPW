@@ -1,0 +1,25 @@
+[ {
+  "uuid" : "IdSegnalazioneEdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento_NotaFromluigi.bianchi@tec.uniroma2.eu_Date1766833278953",
+  "dataCreazione" : 1766833278952,
+  "testo" : "segnalazione aperta ",
+  "idSegnalazione" : "EdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "uuid" : "IdSegnalazioneEdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento_NotaFromluigi.bianchi@tec.uniroma2.eu_Date1766850325012",
+  "dataCreazione" : 1766850325011,
+  "testo" : "palla",
+  "idSegnalazione" : "EdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "uuid" : "IdSegnalazioneEdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento_NotaFromluigi.bianchi@tec.uniroma2.eu_Date1766851469107",
+  "dataCreazione" : 1766851469106,
+  "testo" : "palle",
+  "idSegnalazione" : "EdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "uuid" : "IdSegnalazioneEdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento_NotaFromluigi.bianchi@tec.uniroma2.eu_Date1769344254610",
+  "dataCreazione" : 1769344254608,
+  "testo" : "wefratm",
+  "idSegnalazione" : "EdificioMedicina_AulaMontalcini_OggettoGuastoRiscaldamento",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+} ]

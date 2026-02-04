@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
-import org.ing.ispw.unifix.controllerapplicativo.SysAdminController;
+import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -35,9 +35,9 @@ public class ControllerGraficoGestioneAule {
     PopUp popUp = new PopUp();
 
 
-    SysAdminController sysAdminController;
+    GestioneAuleController gestioneAuleController;
     public ControllerGraficoGestioneAule(){
-        sysAdminController = new SysAdminController();
+        gestioneAuleController = new GestioneAuleController();
     }
 
 
@@ -49,7 +49,7 @@ public class ControllerGraficoGestioneAule {
     public void mostraAule () {
 
         try {
-            List<AulaBean> aule = sysAdminController.visualizzaAule();
+            List<AulaBean> aule = gestioneAuleController.visualizzaAule();
             aulaContainer.getChildren().clear();
 
             // Ordina le aule per edificio
@@ -201,7 +201,7 @@ public class ControllerGraficoGestioneAule {
 
     private void processaAulaAggiunta(AulaBean aulaBean) {
         try {
-            sysAdminController.inserisciAula(aulaBean);
+            gestioneAuleController.inserisciAula(aulaBean);
             mostraAule();
             popUp.showSuccessPopup("Successo", "Aula aggiunta correttamente!");
         } catch (AulaGiaPresenteException _) {

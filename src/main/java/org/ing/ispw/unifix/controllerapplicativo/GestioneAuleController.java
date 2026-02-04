@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class SysAdminController {
+public class GestioneAuleController {
 
 
     private final Subject subject = new Subject();

@@ -1,0 +1,121 @@
+[ {
+  "idAula" : "1",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "Montalcini",
+  "piano" : 0,
+  "edificio" : "Medicina",
+  "oggetti" : [ "Banchi", "AC", "Riscaldamento", "Proiettore", "Altro" ]
+}, {
+  "idAula" : "2",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "3",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "4",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Prese" ]
+}, {
+  "idAula" : "A1",
+  "piano" : -1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "A2",
+  "piano" : -1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "A3",
+  "piano" : -1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "A4",
+  "piano" : -1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "B1",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "B2",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "B3",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "B4",
+  "piano" : 0,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "C1",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "C2",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "Disegno 1",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "Disegno 2",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore Dx", " Proiettore Sx", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "T1",
+  "piano" : 0,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "T2",
+  "piano" : 0,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "T3",
+  "piano" : 0,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "T4",
+  "piano" : 0,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "Magna",
+  "piano" : -1,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "5",
+  "piano" : 1,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Proiettore", " Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "P1",
+  "piano" : 0,
+  "edificio" : "Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+} ]
