@@ -8,6 +8,7 @@ import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.*;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,7 +77,7 @@ public class InviaSegnalazioneController {
         segnalazione.setDocente((Docente) docenteSegnalatore);
         segnalazione.setOggettoGuasto(sb.getOggettoGuasto());
         segnalazione.setTecnico(tecnicoAssegnato);
-        segnalazione.setStato("APERTA");
+        segnalazione.setStato(StatoSegnalazione.APERTA);
         segnalazione.setIdSegnalazione(chiave);
         segnalazione.setDescrizione(sb.getDescrizione());
         segnalazioneDao.store(segnalazione);

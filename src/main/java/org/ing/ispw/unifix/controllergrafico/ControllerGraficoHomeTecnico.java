@@ -21,6 +21,7 @@ import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoCo
 import org.ing.ispw.unifix.exception.*;
 
 import org.ing.ispw.unifix.utils.PopUp;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -37,13 +38,12 @@ public class ControllerGraficoHomeTecnico {
     private VBox segnalazioniContainer;
     @FXML
     private Label welcome;
-    private final LoginController lc;
     private final TecnicoController tc;
     private final InserisciNotaSegnalazioneController isnsc;
     PopUp popUp = new PopUp();
     private final VisualizzaSegnalazioniTecnicoController vstc;
 
-    private static final String ACTION_1 = "IN LAVORAZIONE";
+    private static final StatoSegnalazione ACTION_1 = StatoSegnalazione.IN_LAVORAZIONE;
     private static final String POPUPMESSAGGI_1 = "Errore";
     private static final String POPUPMESSAGGI_2 = "Messaggio: ";
 
@@ -57,8 +57,8 @@ public class ControllerGraficoHomeTecnico {
     }
 
     public void initialize() {
-
-        welcome1.setText(lc.getCurrentUser().getCognome() +"  "+lc.getCurrentUser().getNome()+"  ecco i tuoi interventi");
+        InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
+        welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
         mostraSegnalazioniTecnico();
     }
 
@@ -89,15 +89,7 @@ public class ControllerGraficoHomeTecnico {
         hbox.setPadding(new Insets(10));
         hbox.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-radius: 5; -fx-background-radius: 5;");
         hbox.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setTitle("Dettagli Segnalazione");
-            alert.setHeaderText("Edificio: " + segnalazione.getEdificio() +
-                    "\nAula: " + segnalazione.getAula() +
-                    "\nOggetto: " + segnalazione.getOggettoGuasto() +
-                    "\nDescrizione: " + segnalazione.getDescrizione() +
-                    "\nStato: " + segnalazione.getStato() +
-                    "\nDocente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()+ "\n" +
-                    "Cosa vuoi fare con questa segnalazione? Chiuderla o mettere in lavorazione?");
+            Alert alert = getAlert(segnalazione);
 
             // Bottone "Chiudi segnalazione"
             ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.OK_DONE);
@@ -112,11 +104,11 @@ public class ControllerGraficoHomeTecnico {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
-                    tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato(ACTION_1).build());
+                    tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
-                    tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato("CHIUSA").build());
+                    tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
@@ -138,6 +130,20 @@ public class ControllerGraficoHomeTecnico {
         // Aggiungi tutto all'HBox
         hbox.getChildren().add(dettagli);
         return hbox;
+    }
+
+    @NotNull
+    private static Alert getAlert(SegnalazioneBean segnalazione) {
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("Dettagli Segnalazione");
+        alert.setHeaderText("Edificio: " + segnalazione.getEdificio() +
+                "\nAula: " + segnalazione.getAula() +
+                "\nOggetto: " + segnalazione.getOggettoGuasto() +
+                "\nDescrizione: " + segnalazione.getDescrizione() +
+                "\nStato: " + segnalazione.getStato() +
+                "\nDocente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()+ "\n" +
+                "Cosa vuoi fare con questa segnalazione? Chiuderla o mettere in lavorazione?");
+        return alert;
     }
 
 

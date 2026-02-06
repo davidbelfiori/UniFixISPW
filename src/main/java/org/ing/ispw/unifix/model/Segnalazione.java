@@ -1,6 +1,8 @@
 package org.ing.ispw.unifix.model;
 
 
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
+
 import java.sql.Date;
 
 
@@ -10,7 +12,7 @@ public class Segnalazione {
     private Date dataCreazione;
     private String oggettoGuasto;
     private Docente docente;
-    private String  stato;
+    private StatoSegnalazione stato;
     private String descrizione;
     private String aula;
     private String edificio;
@@ -22,11 +24,11 @@ public class Segnalazione {
     }
 
 
-    public String getStato() {
+    public StatoSegnalazione getStato() {
         return stato;
     }
 
-    public void setStato(String stato) {
+    public void setStato(StatoSegnalazione stato) {
         this.stato = stato;
     }
 
@@ -92,6 +94,20 @@ public class Segnalazione {
 
     public void setAula(String aula) {
         this.aula = aula;
+    }
+
+    public void  inLavorazione() {
+        if (this.stato != StatoSegnalazione.APERTA) {
+            throw new IllegalStateException("Solo segnalazioni aperte possono essere messe in lavorazione");
+        }
+        this.stato = StatoSegnalazione.IN_LAVORAZIONE;
+    }
+
+    public void chiudi() {
+        if (this.stato != StatoSegnalazione.IN_LAVORAZIONE) {
+            throw new IllegalStateException("Solo segnalazioni in lavorazione possono essere chiuse");
+        }
+        this.stato = StatoSegnalazione.CHIUSA;
     }
 
     @Override

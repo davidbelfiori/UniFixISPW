@@ -28,4 +28,11 @@
   "cognome" : "Dragone",
   "ruolo" : "TECNICO",
   "numeroSegnalazioni" : 2
+}, {
+  "_type" : "Docente",
+  "email" : "giuseppe.rossi@uniroma2.eu",
+  "password" : "admin",
+  "nome" : "Giuseppe",
+  "cognome" : "Rossi",
+  "ruolo" : "DOCENTE"
 } ]

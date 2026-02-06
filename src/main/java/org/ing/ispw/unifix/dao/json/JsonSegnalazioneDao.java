@@ -11,6 +11,7 @@ import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,7 +161,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
             node.put(FIELD_DATA_CREAZIONE, s.getDataCreazione().getTime());
         }
         node.put(FIELD_OGGETTO_GUASTO, s.getOggettoGuasto());
-        node.put(FIELD_STATO, s.getStato());
+        node.put(FIELD_STATO, s.getStato().name());
         node.put(FIELD_DESCRIZIONE, s.getDescrizione());
         node.put(FIELD_AULA, s.getAula());
         node.put(FIELD_EDIFICIO, s.getEdificio());
@@ -194,7 +195,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
             segnalazione.setOggettoGuasto(node.get(FIELD_OGGETTO_GUASTO).asText());
         }
         if (hasValidField(node, FIELD_STATO)) {
-            segnalazione.setStato(node.get(FIELD_STATO).asText());
+            segnalazione.setStato(StatoSegnalazione.fromString(node.get(FIELD_STATO).asText()));
         }
         if (hasValidField(node, FIELD_DESCRIZIONE)) {
             segnalazione.setDescrizione(node.get(FIELD_DESCRIZIONE).asText());

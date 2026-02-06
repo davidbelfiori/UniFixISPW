@@ -111,6 +111,24 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
@@ -135,6 +153,22 @@
                 <configuration>
                     <source>23</source>
                     <target>23</target>
+                </configuration>
+            </plugin>
+            <!-- Plugin per eseguire i test con supporto a moduli Java e Mockito -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <argLine>
+                        --add-opens org.ing.ispw.unifix/org.ing.ispw.unifix.dao=ALL-UNNAMED
+                        --add-opens org.ing.ispw.unifix/org.ing.ispw.unifix.controllerapplicativo=ALL-UNNAMED
+                        --add-opens org.ing.ispw.unifix/org.ing.ispw.unifix.model=ALL-UNNAMED
+                        --add-opens org.ing.ispw.unifix/org.ing.ispw.unifix.bean=ALL-UNNAMED
+                        --add-opens org.ing.ispw.unifix/org.ing.ispw.unifix.utils.observer=ALL-UNNAMED
+                        -XX:+EnableDynamicAgentLoading
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>

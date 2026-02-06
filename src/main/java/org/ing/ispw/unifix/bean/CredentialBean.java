@@ -1,10 +1,10 @@
 package org.ing.ispw.unifix.bean;
 
-public class LoginBean {
+public class CredentialBean {
     private String email;
     private String password;
 
-    public LoginBean(String email, String password) {
+    public CredentialBean(String email, String password) {
         this.email = email;
         this.password = password;
     }

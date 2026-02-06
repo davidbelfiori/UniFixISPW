@@ -3,6 +3,7 @@ package org.ing.ispw.unifix.bean;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 
 import java.sql.Date;
@@ -14,7 +15,7 @@ public class SegnalazioneBean {
     private Date dataCreazione;
     private String oggettoGuasto;
     private User user;
-    private String stato;
+    private StatoSegnalazione stato;
     private String descrizione;
     private String aula;
     private String edificio;
@@ -88,11 +89,11 @@ public class SegnalazioneBean {
         this.descrizione = descrizione;
     }
 
-    public String getStato() {
+    public StatoSegnalazione getStato() {
         return stato;
     }
 
-    public void setStato(String statoSegnalazione) {
+    public void setStato(StatoSegnalazione statoSegnalazione) {
         stato = statoSegnalazione;
     }
 
@@ -135,7 +136,7 @@ public class SegnalazioneBean {
         private Date dataCreazione;
         private String oggettoGuasto;
         private User user;
-        private String stato;
+        private StatoSegnalazione stato;
         private String descrizione;
         private String aula;
         private String edificio;
@@ -163,7 +164,7 @@ public class SegnalazioneBean {
             return this;
         }
 
-        public Builder stato(String stato) {
+        public Builder stato(StatoSegnalazione stato) {
             this.stato = stato;
             return this;
         }

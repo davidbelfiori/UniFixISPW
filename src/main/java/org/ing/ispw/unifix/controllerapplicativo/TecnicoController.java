@@ -11,6 +11,7 @@ import org.ing.ispw.unifix.model.Tecnico;
 public class TecnicoController {
 
     private static TecnicoController instance;
+    private final SegnalazioneDao segnalazioneDao ;
 
     public static TecnicoController getInstance() {
         if(instance == null) {
@@ -20,6 +21,7 @@ public class TecnicoController {
     }
 
     private TecnicoController() {
+        segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
 
     }
 
@@ -31,7 +33,6 @@ public class TecnicoController {
     }
 
     public SegnalazioneBean getSegnalazione(String idSegnalazione) {
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         return new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).dataCreazione(segnalazione.getDataCreazione())
                 .oggettoGuasto(segnalazione.getOggettoGuasto())
@@ -45,11 +46,17 @@ public class TecnicoController {
     }
 
 
-    public void updateSegnalazione(SegnalazioneBean segnalazioneBean) {
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        Segnalazione segnalazione= segnalazioneDao.getSegnalazione(segnalazioneBean.getIdSegnalazione());
-        segnalazione.setStato(segnalazioneBean.getStato());
+    public void chiudiSegnalazione(String idSegnalazione) {
+        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
     }
+
+    public void inLavorazioneSegnalazione(String idSegnalazione) {
+        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        segnalazione.inLavorazione();
+        segnalazioneDao.update(segnalazione);
+    }
+
 
 }

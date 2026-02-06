@@ -1,7 +1,7 @@
 package org.ing.ispw.controller.applicativo;
 
 import org.ing.ispw.unifix.Driver;
-import org.ing.ispw.unifix.bean.LoginBean;
+import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
@@ -10,6 +10,8 @@ import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.UserType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,64 +30,57 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     void testLoginUtenteNonEsistente() {
-        LoginBean loginBean = new LoginBean("utente.inesistente@uniroma2.eu", "password123");
+        CredentialBean credentialBean = new CredentialBean("utente.inesistente@uniroma2.eu", "password123");
 
         assertThrows(UtenteNonTrovatoException.class, () -> {
-            loginController.validate(loginBean);
+            loginController.validate(credentialBean);
         });
     }
 
     @Test
     void testLoginPasswordErrata() {
-        LoginBean loginBean = new LoginBean("docente@uniroma2.eu", "password_errata");
+        CredentialBean credentialBean = new CredentialBean("docente@uniroma2.eu", "password_errata");
 
         assertThrows(UtenteNonTrovatoException.class, () -> {
-            loginController.validate(loginBean);
+            loginController.validate(credentialBean);
         });
     }
 
     @Test
     void testLoginUtenteEsistente() throws UtenteNonTrovatoException {
-        LoginBean loginBean = new LoginBean("marco.rizzo@sys.uniroma2.eu", "errata");
-        assertEquals(UserType.UNKNOWN,loginController.validate(loginBean));
+        CredentialBean credentialBean = new CredentialBean("marco.rizzo@sys.uniroma2.eu", "errata");
+        assertEquals(UserType.UNKNOWN,loginController.validate(credentialBean));
 
     }
 
     @Test
     void testLoginRuoloUtenteSys() throws UtenteNonTrovatoException {
-        LoginBean loginBean = new LoginBean("marco.rizzo@sys.uniroma2.eu", "admin");
-        assertEquals(UserType.SYSADMIN,loginController.validate(loginBean));
+        CredentialBean credentialBean = new CredentialBean("marco.rizzo@sys.uniroma2.eu", "admin");
+        assertEquals(UserType.SYSADMIN,loginController.validate(credentialBean));
     }
 
     @Test
     void testLoginRuoloUtenteDocente() throws UtenteNonTrovatoException {
-        LoginBean loginBean = new LoginBean("davide.falessi@uniroma2.eu", "admin");
-        assertEquals(UserType.DOCENTE,loginController.validate(loginBean));
+        CredentialBean credentialBean = new CredentialBean("davide.falessi@uniroma2.eu", "admin");
+        assertEquals(UserType.DOCENTE,loginController.validate(credentialBean));
     }
 
     @Test
     void testLoginRuoloUtenteTecnico() throws UtenteNonTrovatoException {
-        LoginBean loginBean = new LoginBean("giuseppe.rossi@tec.uniroma2.eu", "admin");
-        assertEquals(UserType.TECNICO,loginController.validate(loginBean));
+        CredentialBean credentialBean = new CredentialBean("giuseppe.rossi@tec.uniroma2.eu", "admin");
+        assertEquals(UserType.TECNICO,loginController.validate(credentialBean));
     }
     
     // ---- TEST REGISTRAZIONE ---- //
 
-    @Test
-    void testRegistrazioneDocenteSuccesso() throws RuoloNonTrovatoException {
-        RegistrazioneBean rb = new RegistrazioneBean("mario.rossi@uniroma2.eu", "password");
-        assertTrue(loginController.register(rb));
-    }
-
-    @Test
-    void testRegistrazioneTecnicoSuccesso() throws RuoloNonTrovatoException {
-        RegistrazioneBean rb = new RegistrazioneBean("luigi.verdi@tec.uniroma2.eu", "password");
-        assertTrue(loginController.register(rb));
-    }
-
-    @Test
-    void testRegistrazioneSysadminSuccesso() throws RuoloNonTrovatoException {
-        RegistrazioneBean rb = new RegistrazioneBean("anna.bianchi@sys.uniroma2.eu", "password");
+    @ParameterizedTest(name = "Registrazione {0} con email {1}")
+    @CsvSource({
+            "Docente, mario.rossi@uniroma2.eu, password",
+            "Tecnico, luigi.verdi@tec.uniroma2.eu, password",
+            "Sysadmin, anna.bianchi@sys.uniroma2.eu, password"
+    })
+    void testRegistrazioneSuccesso(String ruolo, String email, String password) throws RuoloNonTrovatoException {
+        RegistrazioneBean rb = new RegistrazioneBean(email, password);
         assertTrue(loginController.register(rb));
     }
 
@@ -95,16 +90,18 @@ import static org.junit.jupiter.api.Assertions.*;
         assertFalse(loginController.register(rb));
     }
 
-    @Test
-    void testRegistrazioneEmailNonValidaNoChiocciola() {
-        RegistrazioneBean rb = new RegistrazioneBean("invalidemail", "password");
-        assertThrows(IllegalArgumentException.class, () -> loginController.register(rb));
-    }
 
-    @Test
-    void testRegistrazioneEmailNonValidaFormatoNome() {
-        RegistrazioneBean rb = new RegistrazioneBean("mario@uniroma2.eu", "password");
-        assertThrows(IllegalArgumentException.class, () -> loginController.register(rb));
+    // ---- TEST REGISTRAZIONE EMAIL NON VALIDA (Mancanza chiocciola, formato nome errato , mail null)---- //
+     @ParameterizedTest(name = "Registrazione {0} con email {1}")
+     @CsvSource({
+             "Docente, mario.rossiuniroma2.eu, password",
+             "Tecnico, luigi@tec.uniroma2.eu, password",
+             "Docente, , password"
+     })
+    void testRegistrazioneEmailNonValidaNo(String ruolo, String email, String password) {
+        RegistrazioneBean rb = new RegistrazioneBean(email, password);
+        assertThrows(IllegalArgumentException.class , () -> loginController.register(rb));
+
     }
 
     @Test
@@ -113,9 +110,4 @@ import static org.junit.jupiter.api.Assertions.*;
         assertThrows(RuoloNonTrovatoException.class, () -> loginController.register(rb));
     }
 
-    @Test
-    void testRegistrazioneEmailNull() {
-        RegistrazioneBean rb = new RegistrazioneBean(null, "password");
-        assertThrows(IllegalArgumentException.class, () -> loginController.register(rb));
-    }
 }

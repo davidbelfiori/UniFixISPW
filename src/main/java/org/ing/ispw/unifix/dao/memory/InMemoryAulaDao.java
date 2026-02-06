@@ -10,7 +10,7 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
 
 
     public String getKey(Aula aula) {
-        return aula.getIdAula().toLowerCase();
+        return aula.getIdAula();
     }
 
     public Aula create(String idAula){

@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import org.ing.ispw.unifix.bean.LoginBean;
+import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -49,7 +49,7 @@ public class ControllerGraficoLogin {
         String email = emailField.getText();
         String password = passwordField.getText();
         try {
-            UserType ruolo=lc.validate(new LoginBean(email,password));
+            UserType ruolo=lc.validate(new CredentialBean(email,password));
             switch (ruolo) {
                 case UNKNOWN:
                     popUp.showErrorPopup("Errore", "", "Utente non trovato");
@@ -71,7 +71,6 @@ public class ControllerGraficoLogin {
             }
         }catch (UtenteNonTrovatoException| IOException e){
             popUp.showErrorPopup("Errore","", e.getMessage());
-            Printer.error(e.getMessage());
         }
     }
 }

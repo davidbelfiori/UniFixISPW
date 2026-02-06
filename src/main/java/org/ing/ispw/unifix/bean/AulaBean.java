@@ -26,8 +26,8 @@ public class AulaBean {
             throw new DatiAulaNonValidiException("Deve essere presente almeno un oggetto");
         }
 
-        this.idAula = idAula.trim();
-        this.edificio = edificio.trim();
+        this.idAula = idAula;
+        this.edificio = edificio;
         this.piano = piano;
         this.oggetti = oggetti;
     }

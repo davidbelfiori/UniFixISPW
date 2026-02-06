@@ -47,7 +47,6 @@ public class ControllerGraficoHomeDocente {
     private Label testoSegnalazioni;
     @FXML
     private Label welcome;
-    private final LoginController lc;
     PopUp popUp = new PopUp();
 
     private final  InviaSegnalazioneController sc;
@@ -64,7 +63,8 @@ public class ControllerGraficoHomeDocente {
     }
 
     public void initialize() {
-        welcome.setText(lc.getCurrentUser().getCognome() +"  "+lc.getCurrentUser().getNome());
+        InfoDocenteBean infoDocente = docenteController.getDocenteInformation();
+        welcome.setText(infoDocente.getCognome() +"  "+ infoDocente.getNome());
         List<String> edifici=sc.getEdifici();
         edificioComboBox.setItems(FXCollections.observableList(edifici));
         edificioComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

@@ -9,6 +9,7 @@ import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoCo
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.utils.Printer;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -143,24 +144,21 @@ public class TecnicoHomeCli {
                 Printer.print("\t2) Chiusa");
                 Printer.print(": ");
                 String statoInput = br.readLine();
-                String nuovoStato;
 
                 switch (statoInput) {
                     case null:
                         Printer.print("Input non valido.");
                         return;
                     case "1":
-                        nuovoStato = "IN LAVORAZIONE";
+                        tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
                         break;
                     case "2":
-                        nuovoStato = "CHIUSA";
+                        tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
                         break;
                     default:
                         Printer.print("Stato non valido.");
                         return;
                 }
-
-                tc.updateSegnalazione(new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).stato(nuovoStato).build());
                 Printer.print("Stato della segnalazione aggiornato con successo.");
             }
 
@@ -201,14 +199,14 @@ public class TecnicoHomeCli {
 
             private void aggiungiNuovaNota(SegnalazioneBean segnalazione) {
                 // Verifica preliminare dello stato della segnalazione
-                String stato = segnalazione.getStato();
+                StatoSegnalazione stato = segnalazione.getStato();
 
-                if (!"IN LAVORAZIONE".equalsIgnoreCase(stato)) {
+                if (stato != StatoSegnalazione.IN_LAVORAZIONE) {
                     Printer.print("\n╔═══════════════════════════════════════════════════════════╗");
                     Printer.print("║    OPERAZIONE NON CONSENTITA                               ║");
                     Printer.print("╠═══════════════════════════════════════════════════════════╣");
                     Printer.print("║                                                            ║");
-                    if ("CHIUSA".equalsIgnoreCase(stato)) {
+                    if (stato == StatoSegnalazione.CHIUSA) {
                         Printer.print("║  La segnalazione è CHIUSA.                                ║");
                         Printer.print("║  Non è possibile aggiungere note a segnalazioni chiuse.  ║");
                     } else {

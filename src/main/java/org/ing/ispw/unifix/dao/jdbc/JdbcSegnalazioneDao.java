@@ -9,6 +9,7 @@ import org.ing.ispw.unifix.exception.UpdateSegnalazioneException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +50,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             stmt.setDate(2,entity.getDataCreazione());
             stmt.setString(3,entity.getOggettoGuasto());
             stmt.setString(4,entity.getDocente().getEmail());
-            stmt.setString(5,entity.getStato());
+            stmt.setString(5,entity.getStato().toString());
             stmt.setString(6,entity.getDescrizione());
             stmt.setString(7,entity.getAula());
             stmt.setString(8,entity.getEdificio());
@@ -91,7 +92,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             stmt.setDate(1, entity.getDataCreazione());
             stmt.setString(2, entity.getOggettoGuasto());
             stmt.setString(3, entity.getDocente().getEmail());
-            stmt.setString(4, entity.getStato());
+            stmt.setString(4, entity.getStato().toString());
             stmt.setString(5, entity.getDescrizione());
             stmt.setString(6, entity.getAula());
             stmt.setString(7, entity.getEdificio());
@@ -136,7 +137,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                 segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
                 segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
                 segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(rs.getString("stato"));
+                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
                 segnalazione.setDescrizione(rs.getString("descrizione"));
                 segnalazione.setAula(rs.getString("aula"));
                 segnalazione.setEdificio(rs.getString("edificio"));
@@ -179,7 +180,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                 segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
                 segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
                 segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(rs.getString("stato"));
+                segnalazione.setStato(StatoSegnalazione.valueOf( rs.getString("stato")));
                 segnalazione.setDescrizione(rs.getString("descrizione"));
                 segnalazione.setAula(rs.getString("aula"));
                 segnalazione.setEdificio(rs.getString("edificio"));

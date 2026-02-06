@@ -3,7 +3,7 @@ package org.ing.ispw.unifix.cli;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.Printer;
-import org.ing.ispw.unifix.bean.LoginBean;
+import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.BufferedReader;
@@ -50,7 +50,7 @@ public class LoginCli {
                 case "3":
 
                     try {
-                        UserType ruolo=lc.validate(new LoginBean(email,password));
+                        UserType ruolo=lc.validate(new CredentialBean(email,password));
                         switch (ruolo) {
                             case DOCENTE:
                                 DocenteHomeCli docenteView = new DocenteHomeCli();
