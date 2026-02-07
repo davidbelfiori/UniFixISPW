@@ -56,7 +56,6 @@ public class ControllerGraficoHomeDocente {
 
 
     public ControllerGraficoHomeDocente() {
-        lc = LoginController.getInstance();
         sc=new InviaSegnalazioneController();
         vsdc = new VisualizzaSegnalazioniDocenteController();
         docenteController = new DocenteController();
@@ -82,7 +81,7 @@ public class ControllerGraficoHomeDocente {
     }
 
     public void mostraSegnalazioni() {
-        List<SegnalazioneBean> segnalazioniDocente = null;
+        List<SegnalazioneBean> segnalazioniDocente;
         try {
             segnalazioniDocente = vsdc.visualizzaSegnalazioniDocente();
             testoSegnalazioni.setText("Le tue segnalazioni inviate:");

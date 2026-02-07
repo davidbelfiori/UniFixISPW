@@ -15,7 +15,6 @@ import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.NotaSegnalazioneBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
-import org.ing.ispw.unifix.controllerapplicativo.LoginController;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.*;
@@ -50,7 +49,6 @@ public class ControllerGraficoHomeTecnico {
 
     public ControllerGraficoHomeTecnico() {
         tc= TecnicoController.getInstance();
-        lc = LoginController.getInstance();
         vstc = new  VisualizzaSegnalazioniTecnicoController();
         isnsc = new InserisciNotaSegnalazioneController();
 
@@ -64,7 +62,7 @@ public class ControllerGraficoHomeTecnico {
 
 
     public void mostraSegnalazioniTecnico(){
-        List<SegnalazioneBean> segnalazioni = null;
+        List<SegnalazioneBean> segnalazioni;
         try{
             segnalazioni = vstc.visualizzaSegnalazioniTecnico();
             testoSegnalazioniTecnico.setText("I tuoi interventi:");

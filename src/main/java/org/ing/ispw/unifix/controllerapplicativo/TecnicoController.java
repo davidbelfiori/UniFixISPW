@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 
@@ -12,6 +13,8 @@ public class TecnicoController {
 
     private static TecnicoController instance;
     private final SegnalazioneDao segnalazioneDao ;
+    private final UserDao userDao;
+
 
     public static TecnicoController getInstance() {
         if(instance == null) {
@@ -22,7 +25,7 @@ public class TecnicoController {
 
     private TecnicoController() {
         segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-
+        userDao = DaoFactory.getInstance().getUserDao();
     }
 
     public InfoTecnicoBean getTecnicoInformation(){
@@ -50,6 +53,12 @@ public class TecnicoController {
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
+
+        //Quando una segnalazione viene chiusa (l'operazione è irreversibile) il numero di interventi del tecnico viene decementato
+        Tecnico currentUser = (Tecnico) LoginController.getInstance().getCurrentUser();
+        currentUser.decrementaSegnalazioni();
+        userDao.update(currentUser);
+
     }
 
     public void inLavorazioneSegnalazione(String idSegnalazione) {
