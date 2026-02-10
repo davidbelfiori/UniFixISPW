@@ -43,109 +43,11 @@ class GestioneAuleControllerTest {
         }
     }
 
-    // ==================== TEST VALIDAZIONE CSV ====================
-
-    @Test
-    @DisplayName("validateCSV - CSV valido con header e dati corretti")
-    void testValidateCSVWithValidFile() throws IOException {
-        tempCsvFile = createTempCsvFile(
-                """
-                        Edificio,IdAula,Piano,Oggetti
-                        Edificio1,A101,1,Proiettore;Lavagna
-                        Edificio2,B202,2,Computer;Sedia;Tavolo
-                        """
-        );
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertTrue(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - CSV con header errato")
-    void testValidateCSVWithInvalidHeader() throws IOException {
-        tempCsvFile = createTempCsvFile(
-                """
-                        Edificio,Aula,Piano,Oggetti
-                        Edificio1,A101,1,Proiettore;Lavagna
-                        """
-        );
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - CSV con numero campi errato")
-    void testValidateCSVWithWrongFieldCount() throws IOException {
-        tempCsvFile = createTempCsvFile(
-
-        """
-                Edificio,IdAula,Piano,Oggetti
-                Edificio1,A101,1
-               """
-        );
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - CSV con piano non numerico")
-    void testValidateCSVWithNonNumericFloor() throws IOException {
-        tempCsvFile = createTempCsvFile(
-                """
-                        Edificio,IdAula,Piano,Oggetti
-                        Edificio1,A101,PrimoP,Proiettore;Lavagna
-                        """
-        );
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - CSV con oggetti senza separatore punto e virgola")
-    void testValidateCSVWithInvalidObjectsSeparator() throws IOException {
-        tempCsvFile = createTempCsvFile(
-                """
-                        Edificio,IdAula,Piano,Oggetti
-                        Edificio1,A101,1,ProiettoreLavagna
-
-                        """
-        );
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - File CSV vuoto")
-    void testValidateCSVWithEmptyFile() throws IOException {
-        tempCsvFile = createTempCsvFile("");
-
-        boolean result = GestioneAuleController.validateCSV(tempCsvFile.getAbsolutePath());
-
-        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("validateCSV - File inesistente")
-    void testValidateCSVWithNonExistentFile() {
-        boolean result = GestioneAuleController.validateCSV("file_inesistente.csv");
-
-        assertFalse(result);
-    }
-
     // ==================== TEST INSERISCI AULE DA CSV ====================
 
     @Test
     @DisplayName("inserisciAule - Inserimento aule da CSV valido")
-    void testInserisciAuleWithValidCsv() throws IOException {
+    void testInserisciAuleFromCsvWithValidCsv() throws IOException {
         tempCsvFile = createTempCsvFile(
                 """
                         Edificio,IdAula,Piano,Oggetti
@@ -155,7 +57,7 @@ class GestioneAuleControllerTest {
                         """
         );
 
-        boolean result = controller.inserisciAule(tempCsvFile.getAbsolutePath());
+        boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
 
         assertTrue(result);
         assertTrue(aulaDao.exists("A101"));
@@ -170,7 +72,7 @@ class GestioneAuleControllerTest {
 
     @Test
     @DisplayName("inserisciAule - Aula già esistente viene saltata")
-    void testInserisciAuleSkipsExistingAula() throws IOException {
+    void testInserisciAuleFromCsvSkipsExistingAula() throws IOException {
         // Prima inserisci un'aula
         Aula existingAula = aulaDao.create("A101");
         existingAula.setEdificio("EdificioOriginale");
@@ -187,7 +89,7 @@ class GestioneAuleControllerTest {
                         """
         );
 
-        boolean result = controller.inserisciAule(tempCsvFile.getAbsolutePath());
+        boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
 
         assertTrue(result); // B202 è stata inserita
 
@@ -199,7 +101,7 @@ class GestioneAuleControllerTest {
 
     @Test
     @DisplayName("inserisciAule - Nessuna aula inserita se tutte esistono")
-    void testInserisciAuleReturnsFalseWhenAllExist() throws IOException {
+    void testInserisciAuleFromCsvReturnsFalseWhenAllExist() throws IOException {
         // Inserisci l'aula prima
         Aula existingAula = aulaDao.create("A101");
         existingAula.setEdificio("EdificioOriginale");
@@ -214,7 +116,7 @@ class GestioneAuleControllerTest {
                         """
 );
 
-    boolean result = controller.inserisciAule(tempCsvFile.getAbsolutePath());
+    boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
 
     assertFalse(result);
 }

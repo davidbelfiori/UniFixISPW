@@ -37,7 +37,7 @@ public class DemoData {
 
         GestioneAuleController sc = new GestioneAuleController();
 
-        sc.inserisciAule("src/main/resources/utvAule.csv");
+        sc.inserisciAuleFromCsv("src/main/resources/utvAule.csv");
 
     }
 }

@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
+import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
+import org.ing.ispw.unifix.exception.CsvInvalidException;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.observer.Observer;
@@ -81,13 +83,16 @@ public class ControllerGraficoHomeAdmin implements Observer {
             File selectedFile = fileChooser.getSelectedFile();
             if (selectedFile.getName().toLowerCase().endsWith(".csv")) {
                 try {
-                    if (sac.inserisciAule(selectedFile.getAbsolutePath())) {
+                    if (sac.inserisciAuleFromCsv(selectedFile.getAbsolutePath())) {
                         popUp.showSuccessPopup(Answer.SUCCESSO.toString(), "Aule inserite correttamente");
                     } else {
                         popUp.showErrorPopup(Answer.ERRORE.toString(), "Nessuna nuova aula inserita", "Le aule potrebbero essere già presenti");
                     }
                 } catch (IllegalArgumentException e){
                     popUp.showErrorPopup(Answer.ERRORE.toString(), "File non valido", e.getMessage());
+                }
+                catch (CsvInvalidException | AulaGiaPresenteException e) {
+                    popUp.showErrorPopup(Answer.ERRORE.toString(), "Errore durante l'inserimento", e.getMessage());
                 }
             }else {
                 popUp.showErrorPopup(Answer.ERRORE.toString(), "", "Il file selezionato non è un file CSV");

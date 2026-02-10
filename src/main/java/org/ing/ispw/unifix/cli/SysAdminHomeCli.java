@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
+import org.ing.ispw.unifix.exception.CsvInvalidException;
 import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -43,7 +44,12 @@ public class SysAdminHomeCli {
 
             switch(action) {
                 case "1":
-                    sc.inserisciAule("src/main/resources/utvAule.csv");
+                    try {
+                        sc.inserisciAuleFromCsv("src/main/resources/utvAule.csv");
+                    } catch (AulaGiaPresenteException | CsvInvalidException e) {
+                        Printer.error("Errore durante l'inserimento delle aule: " + e.getMessage());
+                    }
+
                     break;
                 case "2":
                     inserisciAulaSingola();

@@ -5,8 +5,10 @@ import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
+import org.ing.ispw.unifix.exception.CsvInvalidException;
 import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.utils.CSVParserService;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.utils.observer.Observer;
 import org.ing.ispw.unifix.utils.observer.Subject;
@@ -22,9 +24,6 @@ public class GestioneAuleController {
 
     private final Subject subject = new Subject();
 
-
-
-
     public void attach(Observer observer) {
         subject.attach(observer);
     }
@@ -34,38 +33,12 @@ public class GestioneAuleController {
     }
 
 
-    public static boolean validateCSV(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String header = br.readLine();
-            if (header == null || !header.equals("Edificio,IdAula,Piano,Oggetti")) {
-                return false;
-            }
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-                if (fields.length != 4) {
-                    return false;
-                }
 
-                Integer.parseInt(fields[2].trim());
+    public boolean inserisciAuleFromCsv(String filePath) throws CsvInvalidException {
 
-                if (!fields[3].contains(";") && !fields[3].trim().isEmpty()) {
-                    return false;
-                }
-            }
-            return true;
-        } catch (IOException | NumberFormatException e) {
-            Printer.error("Errore nella lettura del file: " + e.getMessage());
-            return false;
-        }
-    }
+            boolean auleInserite = false;
+           CSVParserService.validateCSV(filePath);
 
-    public boolean inserisciAule(String filePath) throws IllegalArgumentException {
-        boolean auleInserite = false;
-        if (!validateCSV(filePath)) {
-            Printer.error("Il file non è valido");
-            throw new IllegalArgumentException("Il file non è valido");
-        }else {
             AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
             try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
                 String line;
@@ -87,7 +60,7 @@ public class GestioneAuleController {
 
                     //controlla se l'aula esiste già
                     if (aulaDao.exists(idAula)) {
-                        Printer.error("Aula " + idAula + " già esistente");
+                        throw new AulaGiaPresenteException("L'aula con ID " + idAula + " è già presente nel sistema.");
                     }else {
                         Aula aula = aulaDao.create(idAula);
                         aula.setEdificio(edificio);
@@ -102,13 +75,16 @@ public class GestioneAuleController {
                 Printer.error(e.getMessage());
                 return false; // Ritorna false in caso di errore di I/O
             }
+            catch (NumberFormatException e) {
+                throw  new CsvInvalidException(e.getMessage());
+            }
 
             if(auleInserite){
                 subject.notifyObservers();
             }
             return auleInserite;
         }
-    }
+
 
     public List<AulaBean> visualizzaAule() throws AuleNonTrovateException, DatiAulaNonValidiException {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
