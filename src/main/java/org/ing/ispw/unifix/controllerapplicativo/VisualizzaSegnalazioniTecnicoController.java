@@ -19,6 +19,9 @@ public class VisualizzaSegnalazioniTecnicoController {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         LoginController loginController = LoginController.getInstance();
         String tecnico = loginController.getCurrentUser().getEmail();
+        if (tecnico == null) {
+            throw new IllegalStateException("Nessun tecnico loggato");
+        }
         segnalazioniAll = segnalazioneDao.getAllSegnalazioni();
         List<SegnalazioneBean> segnalazioniTecnico = new ArrayList<>();
         //prendi solo quelle assegnate al tecnico

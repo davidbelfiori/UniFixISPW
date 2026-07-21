@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.AbstractCollection;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +54,9 @@ public class ControllerGraficoHomeDocente {
     private final  DocenteController docenteController;
 
 
+    private static final String POPUPMESSAGGI_1 = "Errore";
+    private static final String POPUPMESSAGGI_2 = "Nessun docente loggato";
+    private static final String POPUPMESSAGGI_3 = "Riprova";
 
     public ControllerGraficoHomeDocente() {
         sc=new InviaSegnalazioneController();
@@ -63,26 +65,28 @@ public class ControllerGraficoHomeDocente {
     }
 
     public void initialize() {
-        InfoDocenteBean infoDocente = docenteController.getDocenteInformation();
-        if (infoDocente == null) {
-            popUp.showErrorPopup(ACTION_1, "Nessun docente loggato", "Riprova");
-            return;
+        try {
+            InfoDocenteBean infoDocente = docenteController.getDocenteInformation();
+            welcome.setText(infoDocente.getCognome() +"  "+ infoDocente.getNome());
+            List<String> edifici=sc.getEdifici();
+            edificioComboBox.setItems(FXCollections.observableList(edifici));
+            edificioComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) { // Verifica che ci sia un valore selezionato
+                    aggiornaAule(newValue); // Passa l'edificio selezionato al metodo
+                }
+            });
+            aulaComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, aulaScelta) -> {
+                if (aulaScelta != null) { // Verifica che ci sia un valore selezionato
+                    aggiornaOggetti(aulaScelta); // Passa l'edificio selezionato al metodo
+                }
+            });
+            mostraSegnalazioni();
+        }catch (IllegalArgumentException _){
+            popUp.showErrorPopup(ACTION_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
         }
-        welcome.setText(infoDocente.getCognome() +"  "+ infoDocente.getNome());
-        List<String> edifici=sc.getEdifici();
-        edificioComboBox.setItems(FXCollections.observableList(edifici));
-        edificioComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) { // Verifica che ci sia un valore selezionato
-                aggiornaAule(newValue); // Passa l'edificio selezionato al metodo
-            }
-        });
-       aulaComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, aulaScelta) -> {
-            if (aulaScelta != null) { // Verifica che ci sia un valore selezionato
-                aggiornaOggetti(aulaScelta); // Passa l'edificio selezionato al metodo
-            }
-        });
 
-       mostraSegnalazioni();
+
+
     }
 
     public void mostraSegnalazioni() {
@@ -99,6 +103,9 @@ public class ControllerGraficoHomeDocente {
         catch(NessunaSegnalazioneException | NessunSegnalazioneDocenteException _){
             testoSegnalazioni.setText("Non ci sono segnalazioni");
             testoSegnalazioni.setStyle("-fx-text-fill: white;");
+        }
+        catch(IllegalArgumentException _){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
         }
 
     }
@@ -171,7 +178,7 @@ public class ControllerGraficoHomeDocente {
         String descrizione = descrizioneTextArea.getText();
 
         if (edificio == null || aula == null || oggetto == null || descrizione.isEmpty()) {
-            popUp.showErrorPopup("Si è verificato errore", "Compilare tutti i campi", "Riprova");
+            popUp.showErrorPopup("Si è verificato errore", "Compilare tutti i campi", POPUPMESSAGGI_3);
             return;
         }
 
@@ -208,52 +215,57 @@ public class ControllerGraficoHomeDocente {
     @FXML
     void mostraInfoDocente(MouseEvent event) {
         // 1. Recupera i dati dal controller applicativo
-        InfoDocenteBean info = docenteController.getDocenteInformation();
+        try {
+            InfoDocenteBean info = docenteController.getDocenteInformation();
 
-        if (info == null) return;
 
-        // 2. Crea il layout della Card
-        VBox card = new VBox(10); // 10px di spazio verticale tra gli elementi
-        card.setPadding(new Insets(15));
-        card.setPrefWidth(250);
+            if (info == null) return;
 
-        // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
-        card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-border-color: #cccccc;" +
-                        "-fx-border-width: 1px;" +
-                        "-fx-border-radius: 8px;" +
-                        "-fx-background-radius: 8px;" +
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
-        );
+            // 2. Crea il layout della Card
+            VBox card = new VBox(10); // 10px di spazio verticale tra gli elementi
+            card.setPadding(new Insets(15));
+            card.setPrefWidth(250);
 
-        // 3. Popola la card con i dati
-        Label lblNome = new Label(info.getNome() + " " + info.getCognome());
-        lblNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+            // Stile "Card" (Sfondo bianco, ombra, bordi arrotondati)
+            card.setStyle(
+                    "-fx-background-color: white;" +
+                            "-fx-border-color: #cccccc;" +
+                            "-fx-border-width: 1px;" +
+                            "-fx-border-radius: 8px;" +
+                            "-fx-background-radius: 8px;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+            );
 
-        Label lblEmail = new Label(info.getEmail());
-        lblEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+            // 3. Popola la card con i dati
+            Label lblNome = new Label(info.getNome() + " " + info.getCognome());
+            lblNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
 
-        Label lblRuolo = new Label("Ruolo: Docente");
-        lblRuolo.setStyle("-fx-text-fill: #0056b3; -fx-font-weight: bold;");
+            Label lblEmail = new Label(info.getEmail());
+            lblEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
-        // Aggiungi tutto al contenitore
-        card.getChildren().addAll(lblNome, lblEmail, new Separator(), lblRuolo);
+            Label lblRuolo = new Label("Ruolo: Docente");
+            lblRuolo.setStyle("-fx-text-fill: #0056b3; -fx-font-weight: bold;");
 
-        // 4. Crea il Popup e mostralo
-        Popup popup = new Popup();
-        popup.getContent().add(card);
-        popup.setAutoHide(true); // Si chiude se clicchi fuori
+            // Aggiungi tutto al contenitore
+            card.getChildren().addAll(lblNome, lblEmail, new Separator(), lblRuolo);
 
-        // Posiziona il popup sotto l'icona cliccata
-        Node source = (Node) event.getSource();
-        Window stage = source.getScene().getWindow();
+            // 4. Crea il Popup e mostralo
+            Popup popup = new Popup();
+            popup.getContent().add(card);
+            popup.setAutoHide(true); // Si chiude se clicchi fuori
 
-        // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
-        double anchorX = event.getScreenX() - 200;
-        double anchorY = event.getScreenY() + 20;
+            // Posiziona il popup sotto l'icona cliccata
+            Node source = (Node) event.getSource();
+            Window stage = source.getScene().getWindow();
 
-        popup.show(stage, anchorX, anchorY);
+            // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
+            double anchorX = event.getScreenX() - 200;
+            double anchorY = event.getScreenY() + 20;
+
+            popup.show(stage, anchorX, anchorY);
+        }catch (IllegalStateException _){
+            popUp.showErrorPopup(ACTION_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
+        }
     }
 
 

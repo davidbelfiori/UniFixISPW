@@ -72,7 +72,7 @@ public class TecnicoHomeCli {
             for (SegnalazioneBean segnalazioneBean: segnalazioni){
                  stampaDettagliSegnalazione(segnalazioneBean);
             }
-        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException ex) {
+        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException | IllegalStateException ex) {
             Printer.print(ex.getMessage());
             return;
         }

@@ -12,6 +12,6 @@ public class DocenteController {
         if (currentUser != null) {
             return new InfoDocenteBean(currentUser.getNome(), currentUser.getCognome(), currentUser.getEmail());
         }
-        return null; // O lanciare un'eccezione se l'utente non dovrebbe mai essere null qui
+        throw new IllegalStateException("Nessun docente loggato"); // O lanciare un'eccezione se l'utente non dovrebbe mai essere null qui
     }
 }

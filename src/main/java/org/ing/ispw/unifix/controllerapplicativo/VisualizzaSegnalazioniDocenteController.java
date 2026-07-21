@@ -20,6 +20,9 @@ public class VisualizzaSegnalazioniDocenteController {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         LoginController loginController = LoginController.getInstance();
         String docente = loginController.getCurrentUser().getEmail();
+        if (docente == null) {
+            throw new IllegalStateException("Nessun docente loggato");
+        }
         segnalazioniAll = segnalazioneDao.getAllSegnalazioni();
         List<Segnalazione> segnalazioniDocente = new ArrayList<>();
         //prendi solo quelle inviate dal docente

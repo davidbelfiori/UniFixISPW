@@ -76,7 +76,7 @@ public class DocenteHomeCli {
             for (SegnalazioneBean segnalazione : segnalazioniDocente) {
                 Printer.print(segnalazione.toString());
             }
-        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException e) {
+        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException | IllegalStateException e) {
             Printer.error(e.getMessage());
         }
     }
@@ -87,15 +87,15 @@ public class DocenteHomeCli {
     }
 
     private void visualizzaInfoProfilo() {
-        InfoDocenteBean info = dc.getDocenteInformation();
-        if (info != null) {
-            Printer.print("\n--- I tuoi dati ---");
-            Printer.print("Nome: " + info.getNome());
-            Printer.print("Cognome: " + info.getCognome());
-            Printer.print("Email: " + info.getEmail());
-            Printer.print("--------------------");
-        } else {
-            Printer.error("Impossibile recuperare le informazioni dell'utente.");
+        try {
+            InfoDocenteBean info = dc.getDocenteInformation();
+                Printer.print("\n--- I tuoi dati ---");
+                Printer.print("Nome: " + info.getNome());
+                Printer.print("Cognome: " + info.getCognome());
+                Printer.print("Email: " + info.getEmail());
+                Printer.print("--------------------");
+        }catch (IllegalStateException e){
+            Printer.error(e.getMessage());
         }
     }
 }

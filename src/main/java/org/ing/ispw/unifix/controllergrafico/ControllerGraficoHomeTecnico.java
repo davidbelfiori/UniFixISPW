@@ -45,6 +45,7 @@ public class ControllerGraficoHomeTecnico {
     private static final StatoSegnalazione ACTION_1 = StatoSegnalazione.IN_LAVORAZIONE;
     private static final String POPUPMESSAGGI_1 = "Errore";
     private static final String POPUPMESSAGGI_2 = "Messaggio: ";
+    private static final String POPUPMESSAGGI_3 = "Riprova";
 
 
     public ControllerGraficoHomeTecnico() {
@@ -57,7 +58,7 @@ public class ControllerGraficoHomeTecnico {
     public void initialize() {
         InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
         if (infoTecnico == null) {
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", "Riprova");
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
             return;
         }
         welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
@@ -77,6 +78,9 @@ public class ControllerGraficoHomeTecnico {
         }catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException _){
             testoSegnalazioniTecnico.setText("Non ci sono interventi da visualizzare");
             testoSegnalazioniTecnico.setStyle("-fx-text-fill: white");
+        }
+        catch (IllegalStateException _) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
         }
 
     }
@@ -280,7 +284,7 @@ public class ControllerGraficoHomeTecnico {
         // 1. Recupera i dati dal controller applicativo
         InfoTecnicoBean infoTecnico = TecnicoController.getInstance().getTecnicoInformation();
 
-        if (infoTecnico == null) {popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore","Riprova");
+        if (infoTecnico == null) {popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore", POPUPMESSAGGI_3);
             return;}
 
         // 2. Crea il layout della Card
