@@ -6,7 +6,6 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.CsvInvalidException;
-import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.CSVParserService;
 import org.ing.ispw.unifix.utils.Printer;
@@ -86,7 +85,7 @@ public class GestioneAuleController {
         }
 
 
-    public List<AulaBean> visualizzaAule() throws AuleNonTrovateException, DatiAulaNonValidiException {
+    public List<AulaBean> visualizzaAule() throws AuleNonTrovateException {
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();
         List<AulaBean> auleToBean = new ArrayList<>();
@@ -94,12 +93,11 @@ public class GestioneAuleController {
             throw new AuleNonTrovateException("Non sono state trovate aule");
         }else {
             for (Aula aula : aule) {
-                AulaBean aulaBean =  new AulaBean(
-                        aula.getIdAula(),
-                        aula.getEdificio(),
-                        aula.getPiano(),
-                        aula.getOggetti()
-                );
+                AulaBean aulaBean =  new AulaBean();
+                aulaBean.setIdAula(aula.getIdAula());
+                aulaBean.setEdificio(aula.getEdificio());
+                aulaBean.setPiano(aula.getPiano());
+                aulaBean.setOggetti(aula.getOggetti());
                 auleToBean.add(aulaBean);
             }
         }

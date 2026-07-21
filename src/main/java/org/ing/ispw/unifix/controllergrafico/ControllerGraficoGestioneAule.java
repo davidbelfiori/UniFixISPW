@@ -11,7 +11,6 @@ import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
-import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +57,8 @@ public class ControllerGraficoGestioneAule {
             for (AulaBean a : aule) {
                 aulaContainer.getChildren().add(creaBoxAula(a));
             }
-        }catch (DatiAulaNonValidiException e){
+            //controllo se ci sono errori quando ho caricato le bean
+        }catch (IllegalArgumentException e){
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
         }
 
@@ -189,8 +189,13 @@ public class ControllerGraficoGestioneAule {
 
     private AulaBean creaAulaBean(String idAula, String edificio, String pianoText, List<String> oggetti) {
         try {
-            return new AulaBean(idAula, edificio, Integer.parseInt(pianoText), oggetti);
-        } catch (DatiAulaNonValidiException e) {
+            AulaBean aula = new AulaBean();
+            aula.setIdAula(idAula);
+            aula.setEdificio(edificio);
+            aula.setPiano(Integer.parseInt(pianoText));
+            aula.setOggetti(oggetti);
+            return aula;
+        } catch (IllegalStateException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
             return null;
         } catch (NumberFormatException _) {

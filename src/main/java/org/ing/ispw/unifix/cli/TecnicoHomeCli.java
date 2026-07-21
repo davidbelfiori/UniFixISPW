@@ -236,13 +236,10 @@ public class TecnicoHomeCli {
                     Printer.print(": ");
                     String testoNota = br.readLine();
 
-                    if (testoNota == null || testoNota.trim().isEmpty()) {
-                        Printer.print("\n⚠️  Il testo della nota non può essere vuoto. Operazione annullata.");
-                        return;
-                    }
-
-                    NotaSegnalazioneBean nuovaNota = new NotaSegnalazioneBean(segnalazione.getIdSegnalazione(), testoNota.trim());
-                    insc.inserisciNotaSegnalazione(nuovaNota);
+                    NotaSegnalazioneBean nota = new NotaSegnalazioneBean();
+                    nota.setIdSegnalazione(segnalazione.getIdSegnalazione());
+                    nota.setTestoNota(testoNota);
+                    insc.inserisciNotaSegnalazione(nota);
 
                     Printer.print("\n╔════════════════════════════════════════════════════════════╗");
                     Printer.print("║     NOTA AGGIUNTA CON SUCCESSO!                             ║");

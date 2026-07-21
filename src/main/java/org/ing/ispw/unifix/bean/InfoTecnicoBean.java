@@ -10,13 +10,8 @@ public class InfoTecnicoBean {
     private UserType ruolo;
     private int numeroSegnalazioni;
 
-    public InfoTecnicoBean(String nome, String cognome, String email, String password, UserType ruolo, int numeroSegnalazioni) {
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-        this.ruolo = ruolo;
-        this.numeroSegnalazioni = numeroSegnalazioni;
+    public InfoTecnicoBean() {
+        //empty constructor
     }
 
     public String getNome() {
@@ -41,5 +36,29 @@ public class InfoTecnicoBean {
 
     public int getNumeroSegnalazioni() {
         return numeroSegnalazioni;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRuolo(UserType ruolo) {
+        this.ruolo = ruolo;
+    }
+
+    public void setNumeroSegnalazioni(int numeroSegnalazioni) {
+        this.numeroSegnalazioni = numeroSegnalazioni;
     }
 }

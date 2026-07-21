@@ -1,6 +1,5 @@
 package org.ing.ispw.unifix.bean;
 
-import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 
 import java.util.List;
 
@@ -11,22 +10,9 @@ public class AulaBean {
     private List<String> oggetti;
 
     //costruttore con validazione per input utente
-    public AulaBean(String idAula, String edificio, int piano, List<String> oggetti) throws DatiAulaNonValidiException {
-        //validazione dati
-        if (idAula == null || idAula.trim().isEmpty()) {
-            throw new DatiAulaNonValidiException("ID Aula non può essere vuoto");
-        }
-        if (edificio == null || edificio.trim().isEmpty()) {
-            throw new DatiAulaNonValidiException("Edificio non può essere vuoto");
-        }
-        if (oggetti == null || oggetti.isEmpty()) {
-            throw new DatiAulaNonValidiException("Deve essere presente almeno un oggetto");
-        }
+    public AulaBean() {
+       //empty constructor
 
-        this.idAula = idAula;
-        this.edificio = edificio;
-        this.piano = piano;
-        this.oggetti = oggetti;
     }
 
 
@@ -35,6 +21,9 @@ public class AulaBean {
     }
 
     public void setIdAula(String idAula) {
+        if(idAula == null || idAula.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID Aula non può essere vuoto");
+        }
         this.idAula = idAula;
     }
 
@@ -43,7 +32,10 @@ public class AulaBean {
     }
 
     public void setPiano(int piano) {
-        this.piano = piano;
+        if(piano < -5 || piano > 100) {
+            throw new IllegalArgumentException("Il piano deve essere compreso tra -5 e 100");
+        }
+            this.piano = piano;
     }
 
     public String getEdificio() {
@@ -51,7 +43,11 @@ public class AulaBean {
     }
 
     public void setEdificio(String edificio) {
-        this.edificio = edificio;
+        if(edificio == null || edificio.trim().isEmpty()) {
+            throw new IllegalArgumentException("Edificio non può essere vuoto");
+        } else {
+            this.edificio = edificio;
+        }
     }
 
     public List<String> getOggetti() {
@@ -59,6 +55,10 @@ public class AulaBean {
     }
 
     public void setOggetti(List<String> oggetti) {
-        this.oggetti = oggetti;
+        if (oggetti == null || oggetti.isEmpty()) {
+            throw new IllegalArgumentException("Deve essere presente almeno un oggetto");
+        } else {
+            this.oggetti = oggetti;
+        }
     }
 }

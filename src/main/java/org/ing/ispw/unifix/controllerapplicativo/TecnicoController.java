@@ -35,8 +35,13 @@ public class TecnicoController {
         if (currentUser == null) {
             throw new IllegalStateException("Nessun tecnico loggato.");
         }
-        return new InfoTecnicoBean(currentUser.getNome(), currentUser.getCognome(), currentUser.getEmail(), currentUser.getPassword(),currentUser.getRuolo(), currentUser.getNumeroSegnalazioni());
-
+        InfoTecnicoBean infoTecnico = new InfoTecnicoBean();
+        infoTecnico.setNome(currentUser.getNome());
+        infoTecnico.setCognome(currentUser.getCognome());
+        infoTecnico.setEmail(currentUser.getEmail());
+        infoTecnico.setRuolo(currentUser.getRuolo());
+        infoTecnico.setNumeroSegnalazioni(currentUser.getNumeroSegnalazioni());
+        return infoTecnico;
     }
 
     public SegnalazioneBean getSegnalazione(String idSegnalazione) {

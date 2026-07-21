@@ -266,7 +266,10 @@ public class ControllerGraficoHomeTecnico {
         }
 
         try {
-            isnsc.inserisciNotaSegnalazione(new NotaSegnalazioneBean(segnalazione.getIdSegnalazione(), nuovaNota));
+            NotaSegnalazioneBean notaSegnalazioneBean = new NotaSegnalazioneBean();
+            notaSegnalazioneBean.setIdSegnalazione(segnalazione.getIdSegnalazione());
+            notaSegnalazioneBean.setTestoNota(nuovaNota.trim());
+            isnsc.inserisciNotaSegnalazione(notaSegnalazioneBean);
         } catch (StoreNotaException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore nel salvataggio", POPUPMESSAGGI_2 + e.getMessage());
         } catch (SegnalazioneNonTrovataException e) {

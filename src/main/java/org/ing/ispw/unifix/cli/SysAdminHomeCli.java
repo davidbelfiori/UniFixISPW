@@ -6,7 +6,6 @@ import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.CsvInvalidException;
-import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
@@ -64,7 +63,7 @@ public class SysAdminHomeCli {
                             Printer.print("Oggetti: " + String.join(", ", aula.getOggetti()));
                             Printer.print("-------------------------");
                         }
-                    } catch (AuleNonTrovateException | DatiAulaNonValidiException e) {
+                    } catch (AuleNonTrovateException | IllegalArgumentException e) {
                         Printer.error("Errore"+e.getMessage());
                     }
                     break;
@@ -119,13 +118,16 @@ public class SysAdminHomeCli {
 
 
         try {
-            AulaBean aulaBean = new AulaBean(idAula, edificio, piano, oggetti);
+            AulaBean aulaBean = new AulaBean();
+            aulaBean.setIdAula(idAula);
+            aulaBean.setEdificio(edificio);
+            aulaBean.setPiano(piano);
+            aulaBean.setOggetti(oggetti);
             sc.inserisciAula(aulaBean);
             Printer.print("Aula aggiunta correttamente!");
         } catch (AulaGiaPresenteException _) {
             Printer.error("Errore: Aula già presente");
-        }
-        catch (DatiAulaNonValidiException e) {
+        } catch (IllegalStateException e) {
             Printer.error("Errore: " + e.getMessage());
         }
 

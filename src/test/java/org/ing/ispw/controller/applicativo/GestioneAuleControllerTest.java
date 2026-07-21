@@ -6,16 +6,16 @@ import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
-import org.ing.ispw.unifix.exception.DatiAulaNonValidiException;
 import org.ing.ispw.unifix.model.Aula;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +39,7 @@ class GestioneAuleControllerTest {
     void tearDown() {
         // Pulizia del file temporaneo se esiste
         if (tempCsvFile != null && tempCsvFile.exists()) {
-            tempCsvFile.delete();
+            assertTrue(tempCsvFile.delete());
         }
     }
 
@@ -77,7 +77,7 @@ class GestioneAuleControllerTest {
         Aula existingAula = aulaDao.create("A101");
         existingAula.setEdificio("EdificioOriginale");
         existingAula.setPiano(0);
-        existingAula.setOggetti(Arrays.asList("Oggetto1"));
+        existingAula.setOggetti(List.of("Oggetto1"));
         aulaDao.store(existingAula);
 
         // Prova a inserire da CSV con la stessa aula
@@ -88,10 +88,10 @@ class GestioneAuleControllerTest {
                             Edificio2,B202,2,Computer;Sedia
                         """
         );
+        String filePath = tempCsvFile.getAbsolutePath();
 
-        boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
-
-        assertTrue(result); // B202 è stata inserita
+        assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAuleFromCsv(filePath));
+        // B202 è stata inserita
 
         // Verifica che A101 mantenga i dati originali
         Aula aulaA101 = aulaDao.load("A101");
@@ -106,7 +106,7 @@ class GestioneAuleControllerTest {
         Aula existingAula = aulaDao.create("A101");
         existingAula.setEdificio("EdificioOriginale");
         existingAula.setPiano(0);
-        existingAula.setOggetti(Arrays.asList("Oggetto1"));
+        existingAula.setOggetti(List.of("Oggetto1"));
         aulaDao.store(existingAula);
 
         tempCsvFile = createTempCsvFile(
@@ -116,9 +116,10 @@ class GestioneAuleControllerTest {
                         """
 );
 
-    boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
+        String filePath = tempCsvFile.getAbsolutePath();
 
-    assertFalse(result);
+        assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAuleFromCsv(filePath));
+
 }
 
 
@@ -127,8 +128,12 @@ class GestioneAuleControllerTest {
 
         @Test
         @DisplayName("inserisciAula - Inserimento aula singola con successo")
-        void testInserisciAulaSingola() throws DatiAulaNonValidiException, AulaGiaPresenteException {
-            AulaBean aulaBean = new AulaBean("C303", "Edificio3", 3, Arrays.asList("Monitor", "Webcam"));
+        void testInserisciAulaSingola() throws IllegalStateException, AulaGiaPresenteException {
+            AulaBean aulaBean = new AulaBean();
+            aulaBean.setIdAula("C303");
+            aulaBean.setEdificio("Edificio3");
+            aulaBean.setPiano(3);
+            aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
 
             controller.inserisciAula(aulaBean);
 
@@ -141,7 +146,7 @@ class GestioneAuleControllerTest {
 
             @Test
             @DisplayName("inserisciAula - Aula già esistente lancia eccezione")
-            void testInserisciAulaThrowsExceptionWhenExists() throws DatiAulaNonValidiException {
+            void testInserisciAulaThrowsExceptionWhenExists() throws IllegalStateException {
             // Prima inserisci l'aula
             Aula existingAula = aulaDao.create("C303");
             existingAula.setEdificio("Edificio3");
@@ -149,53 +154,117 @@ class GestioneAuleControllerTest {
             existingAula.setOggetti(List.of("Oggetto1"));
             aulaDao.store(existingAula);
 
-            AulaBean aulaBean = new AulaBean("C303", "EdificioNuovo", 1, Arrays.asList("Monitor", "Webcam"));
+            AulaBean aulaBean = new AulaBean();
+            aulaBean.setIdAula("C303");
+            aulaBean.setEdificio("EdificioNuovo");
+            aulaBean.setPiano(1);
+            aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
 
-            assertThrows(AulaGiaPresenteException.class, () -> {
-                controller.inserisciAula(aulaBean);
-            });
+                assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAula(aulaBean));
         }
 
-// ==================== TEST AULABEAN VALIDAZIONE ====================
-/*
-*  Test per verificare che il costruttore di AulaBean lanci eccezioni
-*  quando i dati forniti non sono validi.
-*/
 
-    //Test eccezione per idAula null, vuoto, edificio vuoto, piano negativo, oggetti vuoti
+        /* AULA BEAN TEST */
+
+    // --- TEST ID AULA ---
+
+    @Test
+    void testSetIdAulaValido() {
+        AulaBean aulaBean = new AulaBean();
+        assertDoesNotThrow(() -> aulaBean.setIdAula("A1"));
+        assertEquals("A1", aulaBean.getIdAula());
+    }
+
     @ParameterizedTest
-    @CsvSource({
-            "'', Edificio1, 1, 'Proiettore;Lavagna'",
-            "A101, '', 1, 'Proiettore;Lavagna'",
-            "A101, Edificio1, -1, 'Proiettore;Lavagna'",
-            "A101, Edificio1, 1, ';'",
-    })
-    void testAulaBeanException(String idAula, String edificio, int piano, String oggettiStr) {
-        assertThrows(DatiAulaNonValidiException.class, () -> {
-            new AulaBean(idAula,edificio, piano, Arrays.asList(oggettiStr.split(";")));
-        });
-    }
-
-
-
-    @Test
-    @DisplayName("AulaBean - Creazione valida con dati corretti")
-    void testAulaBeanValidCreation() throws DatiAulaNonValidiException {
-    AulaBean bean = new AulaBean("A101", "Edificio1", 2, Arrays.asList("Proiettore", "Lavagna"));
-
-    assertEquals("A101", bean.getIdAula());
-    assertEquals("Edificio1", bean.getEdificio());
-    assertEquals(2, bean.getPiano());
-    assertEquals(Arrays.asList("Proiettore", "Lavagna"), bean.getOggetti());
+    @ValueSource(strings = {"", "   ", " \t \n "})
+    void testSetIdAulaVuotoOLimitiLanciaEccezione(String idInvalido) {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setIdAula(idInvalido));
     }
 
     @Test
-    @DisplayName("AulaBean - Piano zero è valido")
-    void testAulaBeanZeroFloorIsValid() throws DatiAulaNonValidiException {
-    AulaBean bean = new AulaBean("A101", "Edificio1", 0, Arrays.asList("Oggetto"));
-
-    assertEquals(0, bean.getPiano());
+    void testSetIdAulaNullLanciaEccezione() {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setIdAula(null));
     }
+
+    // --- TEST PIANO ---
+
+    @Test
+    void testSetPianoValido() {
+        AulaBean aulaBean = new AulaBean();
+        aulaBean.setPiano(2);
+        assertEquals(2, aulaBean.getPiano());
+    }
+
+    @Test
+    void testSetPianoValoriLimiteConsentiti() {
+        AulaBean aulaBean = new AulaBean();
+        assertDoesNotThrow(() -> aulaBean.setPiano(-5));
+        assertEquals(-5, aulaBean.getPiano());
+
+        assertDoesNotThrow(() -> aulaBean.setPiano(100));
+        assertEquals(100, aulaBean.getPiano());
+    }
+
+    @Test
+    void testSetPianoTroppoBassoLanciaEccezione() {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setPiano(-6));
+    }
+
+    @Test
+    void testSetPianoTroppoAltoLanciaEccezione() {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setPiano(101));
+    }
+
+    // --- TEST EDIFICIO ---
+
+    @Test
+    void testSetEdificioValido() {
+        AulaBean aulaBean = new AulaBean();
+        aulaBean.setEdificio("Edificio Didattica");
+        assertEquals("Edificio Didattica", aulaBean.getEdificio());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    void testSetEdificioVuotoLanciaEccezione(String edificioInvalido) {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setEdificio(edificioInvalido));
+    }
+
+    @Test
+    void testSetEdificioNullLanciaEccezione() {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setEdificio(null));
+    }
+
+    // --- TEST OGGETTI ---
+
+    @Test
+    void testSetOggettiValidi() {
+        List<String> oggetti = List.of("Proiettore", "Cattedra");
+        AulaBean aulaBean = new AulaBean();
+        aulaBean.setOggetti(oggetti);
+        assertEquals(2, aulaBean.getOggetti().size());
+        assertTrue(aulaBean.getOggetti().contains("Proiettore"));
+    }
+
+    @Test
+    void testSetOggettiNullLanciaEccezione() {
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setOggetti(null));
+    }
+
+    @Test
+    void testSetOggettiListaVuotaLanciaEccezione() {
+        List<String> listaVuota = new ArrayList<>();
+        AulaBean aulaBean = new AulaBean();
+        assertThrows(IllegalArgumentException.class, () -> aulaBean.setOggetti(listaVuota));
+    }
+
 
 
     // ==================== METODI DI UTILITÀ ====================
@@ -205,7 +274,7 @@ class GestioneAuleControllerTest {
         File tempFile = Files.createTempFile("test_aule", ".csv").toFile();
         tempFile.deleteOnExit();
         try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write(content);
+            writer.write(content.trim());
         }
         return tempFile;
     }

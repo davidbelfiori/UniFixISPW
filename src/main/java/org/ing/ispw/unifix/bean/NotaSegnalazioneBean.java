@@ -7,15 +7,9 @@ public class NotaSegnalazioneBean {
     private String testoNota;
     private Timestamp dataCreazione;
 
-    public NotaSegnalazioneBean(String idSegnalazione, String testoNota) {
-        this.idSegnalazione = idSegnalazione;
-        this.testoNota = testoNota;
-    }
 
-    public NotaSegnalazioneBean(String idSegnalazione, Timestamp dataCreazione, String testoNota) {
-        this.idSegnalazione = idSegnalazione;
-        this.dataCreazione = dataCreazione;
-        this.testoNota = testoNota;
+    public NotaSegnalazioneBean() {
+        //empty constructor
     }
 
     public Timestamp getDataCreazione() {
@@ -23,6 +17,9 @@ public class NotaSegnalazioneBean {
     }
 
     public void setDataCreazione(Timestamp dataCreazione) {
+        if(dataCreazione == null) {
+            throw new IllegalArgumentException("dataCreazione cannot be null");
+        }
         this.dataCreazione = dataCreazione;
     }
 
@@ -31,6 +28,9 @@ public class NotaSegnalazioneBean {
     }
 
     public void setIdSegnalazione(String idSegnalazione) {
+        if(idSegnalazione == null || idSegnalazione.isEmpty()) {
+            throw new IllegalArgumentException("idSegnalazione cannot be null or empty");
+        }
         this.idSegnalazione = idSegnalazione;
     }
 
@@ -39,6 +39,9 @@ public class NotaSegnalazioneBean {
     }
 
     public void setTestoNota(String testoNota) {
+        if(testoNota == null || testoNota.isEmpty()) {
+            throw new IllegalArgumentException("testoNota cannot be null or empty");
+        }
         this.testoNota = testoNota;
     }
 
