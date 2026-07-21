@@ -56,6 +56,10 @@ public class ControllerGraficoHomeTecnico {
 
     public void initialize() {
         InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
+        if (infoTecnico == null) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", "Riprova");
+            return;
+        }
         welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
         mostraSegnalazioniTecnico();
     }

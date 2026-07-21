@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.AbstractCollection;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,10 @@ public class ControllerGraficoHomeDocente {
 
     public void initialize() {
         InfoDocenteBean infoDocente = docenteController.getDocenteInformation();
+        if (infoDocente == null) {
+            popUp.showErrorPopup(ACTION_1, "Nessun docente loggato", "Riprova");
+            return;
+        }
         welcome.setText(infoDocente.getCognome() +"  "+ infoDocente.getNome());
         List<String> edifici=sc.getEdifici();
         edificioComboBox.setItems(FXCollections.observableList(edifici));

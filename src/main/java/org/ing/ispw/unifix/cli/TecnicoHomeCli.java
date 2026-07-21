@@ -94,14 +94,15 @@ public class TecnicoHomeCli {
 
             Printer.print("\t1)Modifica lo stato della segnalazione");
             Printer.print("\t2)Aggiungi una nota (La segnalazione deve essere IN LAVORAZIONE)");
-            String action = br.readLine();
+            String input = br.readLine();
+            String action = (input != null) ? input.trim() : "";
             switch (action){
                 case "1": aggiornaStatoSegnalazione(segnalazione); break;
                 case "2": aggiungiNotaSegnalazione(segnalazione); break;
                 default: Printer.print("Azione non valida.");
             }
 
-        } catch (Exception e) {
+        } catch (NessunaSegnalazioneException | IllegalArgumentException e) {
             Printer.error(e.getMessage());
         }
     }
@@ -176,16 +177,20 @@ public class TecnicoHomeCli {
             }
 
             private void visualizzaInfoProfilo () {
-                InfoTecnicoBean info = tc.getTecnicoInformation();
-                Printer.print("\n--- I tuoi dati ---");
-                Printer.print("Nome: " + info.getNome());
-                Printer.print("Cognome: " + info.getCognome());
-                Printer.print("Email: " + info.getEmail());
-                Printer.print("Password: " + info.getPassword());
-                Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
-                Printer.print("--------------------");
-            }
+                try {
+                    InfoTecnicoBean info = tc.getTecnicoInformation();
+                    Printer.print("\n--- I tuoi dati ---");
+                    Printer.print("Nome: " + info.getNome());
+                    Printer.print("Cognome: " + info.getCognome());
+                    Printer.print("Email: " + info.getEmail());
+                    Printer.print("Password: " + info.getPassword());
+                    Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
+                    Printer.print("--------------------");
+                } catch (IllegalStateException e) {
+                    Printer.error(e.getMessage());
 
+                }
+            }
             private void stampaNoteSegnalazione(SegnalazioneBean segnalazione) {
                 List<NotaSegnalazioneBean> note = insc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
                 for (NotaSegnalazioneBean nota : note) {
