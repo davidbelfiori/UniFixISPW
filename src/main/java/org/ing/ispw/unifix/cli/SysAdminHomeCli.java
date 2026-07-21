@@ -86,15 +86,15 @@ public class SysAdminHomeCli {
         Printer.print("\n--- Inserimento Nuova Aula ---");
 
         Printer.print("Inserisci ID Aula (es. A1): ");
-        String idAula = br.readLine().trim();
+        String idAula = readLineSafe(br);
 
         Printer.print("Inserisci Edificio: ");
-        String edificio = br.readLine().trim();
+        String edificio = readLineSafe(br);
 
         Printer.print("Inserisci Piano (numero): ");
         int piano;
         try {
-            piano = Integer.parseInt(br.readLine().trim());
+            piano = Integer.parseInt(readLineSafe(br));
         } catch (NumberFormatException _) {
             Printer.error("Piano non valido, impostato a 0");
             piano = 0;
@@ -102,14 +102,19 @@ public class SysAdminHomeCli {
 
         List<String> oggetti = new ArrayList<>();
         Printer.print("Inserisci oggetti (invio vuoto per terminare):");
-        String oggetto;
-        do {
-            Printer.print("Oggetto: ");
-            oggetto = br.readLine().trim();
-            if (!oggetto.isEmpty()) {
-                oggetti.add(oggetto);
+
+        String riga;
+        while ((riga = br.readLine()) != null) {
+            String oggetto = riga.trim();
+
+            // Se l'utente ha premuto solo Invio, interrompiamo il ciclo
+            if (oggetto.isEmpty()) {
+                break;
             }
-        } while (!oggetto.isEmpty());
+
+            oggetti.add(oggetto);
+            Printer.print("Oggetto: ");
+        }
 
 
 
@@ -124,5 +129,10 @@ public class SysAdminHomeCli {
             Printer.error("Errore: " + e.getMessage());
         }
 
+    }
+
+    private String readLineSafe(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        return (line != null) ? line.trim() : "";
     }
 }

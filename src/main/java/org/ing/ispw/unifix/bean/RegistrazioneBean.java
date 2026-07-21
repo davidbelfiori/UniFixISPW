@@ -4,7 +4,7 @@ public class RegistrazioneBean {
 
     private String email;
     private String password;
-    private  String confirmPassword;
+    private String confirmPassword;
 
     public RegistrazioneBean() {
       //empty constructor

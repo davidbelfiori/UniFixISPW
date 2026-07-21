@@ -6,6 +6,7 @@ import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.Segnalazione;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class DashboardKpiController {
         segnalazioni= segnalazioneDao.getAllSegnalazioni();
         if (segnalazioni.isEmpty()) return "0";
         for (Segnalazione segnalazione : segnalazioni) {
-            if(segnalazione.getStato().equals("APERTA") || segnalazione.getStato().equals("IN LAVORAZIONE")){
+            if(segnalazione.getStato().equals(StatoSegnalazione.APERTA) || segnalazione.getStato().equals(StatoSegnalazione.IN_LAVORAZIONE)){
                 count++;
             }
         }
@@ -34,7 +35,7 @@ public class DashboardKpiController {
         segnalazioni= segnalazioneDao.getAllSegnalazioni();
         if (segnalazioni.isEmpty()) return "0";
         for (Segnalazione segnalazione : segnalazioni) {
-            if(segnalazione.getStato().equals("CHIUSA")){
+            if(segnalazione.getStato().equals(StatoSegnalazione.CHIUSA)){
                 count++;
             }
         }
