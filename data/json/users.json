@@ -14,7 +14,7 @@
   "ruolo" : "SYSADMIN"
 }, {
   "_type" : "Tecnico",
-  "email" : "luigi.bianchi@tec.uniroma2.eu",
+    "email" : "luigi.bianchi@tec.uniroma2.eu",
   "password" : "admin",
   "nome" : "Luigi",
   "cognome" : "Bianchi",

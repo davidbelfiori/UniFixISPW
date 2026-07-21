@@ -50,7 +50,10 @@ public class LoginCli {
                 case "3":
 
                     try {
-                        UserType ruolo=lc.validate(new CredentialBean(email,password));
+                        CredentialBean cb = new CredentialBean();
+                        cb.setEmail(email);
+                        cb.setPassword(password);
+                        UserType ruolo=lc.validate(cb);
                         switch (ruolo) {
                             case DOCENTE:
                                 DocenteHomeCli docenteView = new DocenteHomeCli();
@@ -67,7 +70,7 @@ public class LoginCli {
                                 break;
                             default: Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
                         }
-                    }catch (UtenteNonTrovatoException e){
+                    }catch (UtenteNonTrovatoException | IllegalArgumentException e){
                         Printer.error("Errore"+e.getMessage());
                         email="";
                         password="";

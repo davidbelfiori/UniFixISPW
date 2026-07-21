@@ -19,9 +19,6 @@ public class AulaBean {
         if (edificio == null || edificio.trim().isEmpty()) {
             throw new DatiAulaNonValidiException("Edificio non può essere vuoto");
         }
-        if (piano < 0) {
-            throw new DatiAulaNonValidiException("Piano non può essere negativo");
-        }
         if (oggetti == null || oggetti.isEmpty()) {
             throw new DatiAulaNonValidiException("Deve essere presente almeno un oggetto");
         }

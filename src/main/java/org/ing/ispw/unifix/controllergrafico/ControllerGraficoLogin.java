@@ -49,7 +49,10 @@ public class ControllerGraficoLogin {
         String email = emailField.getText();
         String password = passwordField.getText();
         try {
-            UserType ruolo=lc.validate(new CredentialBean(email,password));
+            CredentialBean cb = new CredentialBean();
+            cb.setEmail(email);
+            cb.setPassword(password);
+            UserType ruolo=lc.validate(cb);
             switch (ruolo) {
                 case UNKNOWN:
                     popUp.showErrorPopup("Errore", "", "Utente non trovato");
@@ -69,7 +72,7 @@ public class ControllerGraficoLogin {
                 default:
                     break;
             }
-        }catch (UtenteNonTrovatoException| IOException e){
+        }catch (UtenteNonTrovatoException| IOException | IllegalArgumentException e){
             popUp.showErrorPopup("Errore","", e.getMessage());
         }
     }

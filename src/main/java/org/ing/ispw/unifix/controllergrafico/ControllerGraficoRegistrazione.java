@@ -25,6 +25,7 @@ public class ControllerGraficoRegistrazione {
     private PasswordField confirmPasswordField;
 
     private final LoginController lc;
+    private  static final String ERRORE = "Errore";
     PopUp popUp = new PopUp();
     public ControllerGraficoRegistrazione() {
 
@@ -38,21 +39,25 @@ public class ControllerGraficoRegistrazione {
         String confirmPassword = confirmPasswordField.getText();
 
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            popUp.showErrorPopup("Errore", "Dati Mancanti", "Inserire tutti i campi");
+            popUp.showErrorPopup(ERRORE, "Dati Mancanti", "Inserire tutti i campi");
         } else if (!password.equals(confirmPassword)) {
-            popUp.showErrorPopup("Errore", "Password non corrispondenti", "Le password non corrispondono");
+            popUp.showErrorPopup(ERRORE, "Password non corrispondenti", "Le password non corrispondono");
         } else {
             try {
-                if (lc.register(new RegistrazioneBean(email, password))) {
+                RegistrazioneBean bean = new RegistrazioneBean();
+                bean.setEmail(email);
+                bean.setPassword(password);
+                bean.setConfirmPassword(confirmPassword);
+                if (lc.register(bean)) {
                     popUp.showSuccessPopup("Successo", "Registrazione avvenuta con successo");
                     clearFields();
                 } else {
-                    popUp.showErrorPopup("Errore", "Registrazione fallita", "Email già registrata");
+                    popUp.showErrorPopup(ERRORE, "Registrazione fallita", "Email già registrata");
                 }
             } catch (IllegalArgumentException e) {
-                popUp.showErrorPopup("Errore", "Formato email non valido", e.getMessage());
+                popUp.showErrorPopup(ERRORE, "Formato email non valido", e.getMessage());
             } catch (RuoloNonTrovatoException e) {
-                popUp.showErrorPopup("Errore", "Dominio email non riconosciuto", e.getMessage());
+                popUp.showErrorPopup(ERRORE, "Dominio email non riconosciuto", e.getMessage());
             }
         }
 

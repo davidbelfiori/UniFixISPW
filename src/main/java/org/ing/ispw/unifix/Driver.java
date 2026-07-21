@@ -10,7 +10,9 @@ import javafx.stage.Stage;
 import org.ing.ispw.unifix.cli.StartHomeViewCLI;
 
 import org.ing.ispw.unifix.dao.DaoFactory;
-import org.ing.ispw.unifix.dao.PersistenceProvider;
+import org.ing.ispw.unifix.dao.jdbc.PersistenceDaoFactory;
+import org.ing.ispw.unifix.dao.json.JsonDaoFactory;
+import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -20,7 +22,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Driver extends Application {
-
+    private static final String IN_MEM = "in memory";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -37,16 +39,21 @@ public class Driver extends Application {
     }
 
     public static void setPersistenceProvider(String provider) {
-        for (PersistenceProvider p : PersistenceProvider.values()) {
-            if (p.getName().equals(provider)) {
-                try {
-                    DaoFactory.setInstance(p.getDaoFactoryClass().getConstructor().newInstance());
-                } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
-                         | IllegalAccessException _) {
-                    throw new IllegalStateException("Invalid Provider");
-                }
-                return;
-            }
+        switch (provider.toLowerCase()) {
+            case IN_MEM:
+                DaoFactory.setInstance(new InMemoryDaoFactory());
+                break;
+
+            case "persistence":
+                DaoFactory.setInstance(new PersistenceDaoFactory());
+                break;
+
+            case "json":
+                DaoFactory.setInstance(new JsonDaoFactory());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Provider di persistenza non valido: " + provider);
         }
     }
 
@@ -57,7 +64,7 @@ public class Driver extends Application {
         Printer.print("Scegli il tipo di persistenza ('in memory', 'persistence' o 'json'):");
         String persistenceType = scanner.nextLine();
 
-        while (!persistenceType.equalsIgnoreCase("in memory") && !persistenceType.equalsIgnoreCase("persistence") && !persistenceType.equalsIgnoreCase("json")) {
+        while (!persistenceType.equalsIgnoreCase(IN_MEM) && !persistenceType.equalsIgnoreCase("persistence") && !persistenceType.equalsIgnoreCase("json")) {
             Printer.print("Scelta non valida. Per favore, inserisci 'in memory', 'persistence' o 'json':");
             persistenceType = scanner.nextLine();
         }
@@ -66,7 +73,7 @@ public class Driver extends Application {
         Printer.print("Provider di persistenza impostato su: " + persistenceType);
 
         // Se si sceglie "in memory", si potrebbero voler caricare dati di esempio.
-         if (persistenceType.equalsIgnoreCase("in memory")) {
+         if (persistenceType.equalsIgnoreCase(IN_MEM)) {
              DemoData.load();
         }
 

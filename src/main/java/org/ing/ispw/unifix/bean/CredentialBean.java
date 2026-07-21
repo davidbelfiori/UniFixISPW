@@ -4,9 +4,8 @@ public class CredentialBean {
     private String email;
     private String password;
 
-    public CredentialBean(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public CredentialBean() {
+        //empty constructor
     }
 
 
@@ -15,6 +14,9 @@ public class CredentialBean {
     }
 
     public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'email non può essere vuota.");
+        }
         this.email = email;
     }
 
@@ -23,6 +25,9 @@ public class CredentialBean {
     }
 
     public void setPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("La password non può essere vuota.");
+        }
         this.password = password;
     }
 }

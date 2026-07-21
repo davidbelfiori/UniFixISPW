@@ -58,7 +58,11 @@ public class RegistrazioneCli {
                 case "4":
 
                         try {
-                            if (lc.register(new RegistrazioneBean(email,password))&& password.equals(confirmPassword)){
+                            RegistrazioneBean bean = new RegistrazioneBean();
+                            bean.setEmail(email);
+                            bean.setPassword(password);
+                            bean.setConfirmPassword(confirmPassword);
+                            if (lc.register(bean)) {
                                 Printer.print("Registration Successful");
                                 return;
                             }else{ Printer.print("Registration unsuccessful");}
