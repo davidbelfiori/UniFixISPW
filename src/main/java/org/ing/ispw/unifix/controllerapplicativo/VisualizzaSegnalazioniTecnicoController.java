@@ -6,6 +6,7 @@ import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.model.Segnalazione;
+import org.ing.ispw.unifix.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +19,17 @@ public class VisualizzaSegnalazioniTecnicoController {
         List<Segnalazione> segnalazioniAll = null;
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         LoginController loginController = LoginController.getInstance();
-        String tecnico = loginController.getCurrentUser().getEmail();
-        if (tecnico == null) {
-            throw new IllegalStateException("Nessun tecnico loggato");
+        User currentUser = loginController.getCurrentUser();
+        if (currentUser == null) {
+            throw new IllegalStateException("Nessun tecnicoMail loggato");
         }
+        String tecnicoMail = currentUser.getEmail();
         segnalazioniAll = segnalazioneDao.getAllSegnalazioni();
         List<SegnalazioneBean> segnalazioniTecnico = new ArrayList<>();
-        //prendi solo quelle assegnate al tecnico
+        //prendi solo quelle assegnate al tecnicoMail
         if (segnalazioniAll.isEmpty()) throw new NessunaSegnalazioneException("Nessuna segnalazione presente");
         for (Segnalazione segnalazione : segnalazioniAll) {
-            if (segnalazione.getTecnico().getEmail().equals(tecnico)) {
+            if (segnalazione.getTecnico().getEmail().equals(tecnicoMail)) {
                 SegnalazioneBean segnalazioneBean = new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione())
                         .dataCreazione(segnalazione.getDataCreazione())
                         .oggettoGuasto(segnalazione.getOggettoGuasto())
@@ -41,7 +43,7 @@ public class VisualizzaSegnalazioniTecnicoController {
                 segnalazioniTecnico.add(segnalazioneBean);
             }
         }
-        if (segnalazioniTecnico.isEmpty()) throw new NessunaSegnalazioneTecnicoException("Nessuna segnalazione assegnata al tecnico");
+        if (segnalazioniTecnico.isEmpty()) throw new NessunaSegnalazioneTecnicoException("Nessuna segnalazione assegnata al tecnicoMail");
         return segnalazioniTecnico;
 
     }
