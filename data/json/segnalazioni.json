@@ -38,4 +38,14 @@
   "edificio" : "Ingegneria",
   "docenteEmail" : "davide.falessi@uniroma2.eu",
   "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
+}, {
+  "idSegnalazione" : "EdificioIngegneria_AulaAula 6_OggettoGuastoComputer",
+  "dataCreazione" : 1784720405293,
+  "oggettoGuasto" : "Computer",
+  "stato" : "APERTA",
+  "descrizione" : "non funziona il pc della seconda fila",
+  "aula" : "Aula 6",
+  "edificio" : "Ingegneria",
+  "docenteEmail" : "giuseppe.rossi@uniroma2.eu",
+  "tecnicoEmail" : "luigi.bianchi@tec.uniroma2.eu"
 } ]

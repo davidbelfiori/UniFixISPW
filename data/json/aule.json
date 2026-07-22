@@ -118,4 +118,9 @@
   "piano" : 0,
   "edificio" : "Economia",
   "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie" ]
+}, {
+  "idAula" : "Aula 6",
+  "piano" : 2,
+  "edificio" : "Ingegneria",
+  "oggetti" : [ "Computer", "Monitor", "Audio", "Sedie", "AC", "Altro" ]
 } ]
