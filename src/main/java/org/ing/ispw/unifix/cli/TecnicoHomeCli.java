@@ -8,8 +8,8 @@ import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
+import org.ing.ispw.unifix.exception.NotaStatoSegnalazioneLavorazioneException;
 import org.ing.ispw.unifix.utils.Printer;
-import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -203,27 +203,6 @@ public class TecnicoHomeCli {
             }
 
             private void aggiungiNuovaNota(SegnalazioneBean segnalazione) {
-                // Verifica preliminare dello stato della segnalazione
-                StatoSegnalazione stato = segnalazione.getStato();
-
-                if (stato != StatoSegnalazione.IN_LAVORAZIONE) {
-                    Printer.print("\n╔═══════════════════════════════════════════════════════════╗");
-                    Printer.print("║    OPERAZIONE NON CONSENTITA                               ║");
-                    Printer.print("╠═══════════════════════════════════════════════════════════╣");
-                    Printer.print("║                                                            ║");
-                    if (stato == StatoSegnalazione.CHIUSA) {
-                        Printer.print("║  La segnalazione è CHIUSA.                                ║");
-                        Printer.print("║  Non è possibile aggiungere note a segnalazioni chiuse.  ║");
-                    } else {
-                        Printer.print("║  La segnalazione è APERTA.                                ║");
-                        Printer.print("║  Imposta prima lo stato su 'IN LAVORAZIONE'              ║");
-                        Printer.print("║  per poter aggiungere note.                              ║");
-                    }
-                    Printer.print("║                                                           ║");
-                    Printer.print("╚═══════════════════════════════════════════════════════════╝\n");
-                    return;
-                }
-
                 Printer.print("\n╔════════════════════════════════════════════════════════════╗");
                 Printer.print("║             AGGIUNGI NUOVA NOTA                            ║");
                 Printer.print("╠════════════════════════════════════════════════════════════╣");
@@ -249,8 +228,8 @@ public class TecnicoHomeCli {
                     Printer.error("Errore durante l'inserimento della nota: " + e.getMessage());
                 } catch (IllegalArgumentException e) {
                     Printer.error("Dati non validi: " + e.getMessage());
-                } catch (Exception e) {
-                    Printer.error("Errore imprevisto: " + e.getMessage());
+                }  catch (NotaStatoSegnalazioneLavorazioneException e){
+                    Printer.error("Errore: " + e.getMessage());
                 }
             }
 

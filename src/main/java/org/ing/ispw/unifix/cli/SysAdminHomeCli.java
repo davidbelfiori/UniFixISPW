@@ -35,8 +35,11 @@ public class SysAdminHomeCli {
             Printer.print("\t1) Inserisci aule da file CSV");
             Printer.print("\t2) Inserisci aula singola");
             Printer.print("\t3) Visualizza aule inserite");
-            Printer.print("\t4) Log off");
-            Printer.print("\t5) Quit");
+            Printer.print("\t4) Visualizza Statistiche");
+            Printer.print("\t5) Visualizza Segnalazioni");
+            Printer.print("\t6) Torna al menu principale");
+            Printer.print("\t7) Log off");
+            Printer.print("\t8) Quit");
             Printer.print(": ");
 
             String action = br.readLine();
@@ -67,12 +70,15 @@ public class SysAdminHomeCli {
                         Printer.error("Errore"+e.getMessage());
                     }
                     break;
-                case "4":
+                    //CASE LogOut
+                case "7":
                     return;
-                case "5":
+                    //CASE EXIT;
+                case "8":
                     quit=TRUE;
                     break;
                 default:
+                    Printer.error("Si prega di inserire un numero valido\n");
                     return;
             }
         }

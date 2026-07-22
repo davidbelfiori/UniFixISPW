@@ -177,7 +177,7 @@ public class ControllerGraficoHomeTecnico {
         VBox content = creaContenutoDialogo(segnalazione, nuovaNotaArea);
         dialog.getDialogPane().setContent(content);
 
-        configuraBottoniDialogo(dialog, segnalazione, nuovaNotaArea);
+        configuraBottoniDialogo(dialog, nuovaNotaArea);
 
         dialog.showAndWait().ifPresent(nuovaNota -> salvaNuovaNota(segnalazione, nuovaNota));
     }
@@ -238,33 +238,25 @@ public class ControllerGraficoHomeTecnico {
         nuovaNotaArea.setWrapText(true);
     }
 
-    private void configuraBottoniDialogo(Dialog<String> dialog, SegnalazioneBean segnalazione, TextArea nuovaNotaArea) {
+    private void configuraBottoniDialogo(Dialog<String> dialog, TextArea nuovaNotaArea) {
         ButtonType salvaButton = new ButtonType("Salva", ButtonBar.ButtonData.OK_DONE);
         ButtonType annullaButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(salvaButton, annullaButton);
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == salvaButton) {
-                return validaESalva(segnalazione, nuovaNotaArea.getText());
+                return nuovaNotaArea.getText();
             }
             return null;
         });
     }
 
-    private String validaESalva(SegnalazioneBean segnalazione, String testoNota) {
-        if (!Objects.equals(segnalazione.getStato(), ACTION_1)) {
-            popUp.showErrorPopup("Attenzione!", "Operazione non consentita",
-                    "Per aggiungere una nota,\n l'intervento deve essere in lavorazione");
-            return null;
-        }
-        return testoNota;
-    }
 
     private void salvaNuovaNota(SegnalazioneBean segnalazione, String nuovaNota) {
         if (nuovaNota == null || nuovaNota.trim().isEmpty()) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nota non valida", POPUPMESSAGGI_2);
             return;
         }
-
         try {
             NotaSegnalazioneBean notaSegnalazioneBean = new NotaSegnalazioneBean();
             notaSegnalazioneBean.setIdSegnalazione(segnalazione.getIdSegnalazione());
@@ -278,6 +270,8 @@ public class ControllerGraficoHomeTecnico {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Tecnico non assegnato", POPUPMESSAGGI_2 + e.getMessage());
         } catch (IllegalArgumentException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", POPUPMESSAGGI_2 + e.getMessage());
+        }catch (NotaStatoSegnalazioneLavorazioneException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1,"Attenzione",POPUPMESSAGGI_2+e.getMessage());
         }
     }
 

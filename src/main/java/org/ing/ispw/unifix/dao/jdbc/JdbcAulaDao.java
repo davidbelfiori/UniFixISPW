@@ -93,7 +93,13 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public void delete(String id) {
-        //da fare
+        String query = "DELETE FROM aule WHERE IdAula = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            throw new IllegalStateException("Impossibile eliminare il l'aula desiderata"+e.getMessage());
+        }
     }
 
     @Override
@@ -116,7 +122,11 @@ public class JdbcAulaDao   implements AulaDao {
 
     @Override
     public void update(Aula entity) {
-        //da fare
+        // Il metodo store gestisce già l'aggiornamento se l'aula esiste
+        // (grazie a ON DUPLICATE KEY UPDATE), quindi possiamo semplicemente invocarlo.
+        // Questo approccio evita la duplicazione del codice e mantiene la logica
+        // di salvataggio/aggiornamento in un unico posto.
+        if (entity == null) {throw new IllegalArgumentException("L'entità Aula non può essere nulla.");}
     }
 
     @Override

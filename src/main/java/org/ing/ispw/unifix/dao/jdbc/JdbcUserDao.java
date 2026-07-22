@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JdbcUserDao  implements UserDao {
@@ -23,6 +24,8 @@ public class JdbcUserDao  implements UserDao {
     private final Connection connection;
 
     private static final String ACTION_1 = "email";
+    private static final String ACTION_2 = "cognome";
+    private static final String ACTION_3 = "password";
 
     public JdbcUserDao() {
         try {
@@ -41,8 +44,7 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public User create(String email) {
-
-        return null;
+        return new User(email);
     }
 
 
@@ -74,9 +76,9 @@ public class JdbcUserDao  implements UserDao {
                             user.setRuolo(UserType.UNKNOWN);
                             break;
                     }
-                    user.setPassword(rs.getString("password"));
+                    user.setPassword(rs.getString(ACTION_3));
                     user.setNome(rs.getString("nome"));
-                    user.setCognome(rs.getString("cognome"));
+                    user.setCognome(rs.getString(ACTION_2));
                     return user;
                 }
             }
@@ -133,7 +135,25 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public List<User> loadAll() {
-        return List.of();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT email, password, nome, cognome, ruolo FROM user ")){
+
+            try (ResultSet rs = statement.executeQuery()) {
+                List<User> user = new ArrayList<>();
+                while (rs.next()) {
+                    String email = rs.getString(ACTION_1);
+                    String password = rs.getString(ACTION_3);
+                    String nome = rs.getString("nome");
+                    String cognome = rs.getString(ACTION_2);
+                    user.add(new User(email, password, nome, cognome, UserType.valueOf(rs.getString("ruolo"))));
+                }
+                return user;
+            }
+
+        }catch (SQLException e) {
+            Printer.error( "Errore durante il recupero degli utenti"+e.getMessage());
+        }
+        //se non sono riuscito a recuperali torno una lista vuota
+        return Collections.emptyList();
     }
 
     @Override
@@ -177,9 +197,9 @@ public class JdbcUserDao  implements UserDao {
                 List<Tecnico> tecnici = new ArrayList<>();
                 while (rs.next()) {
                     String email = rs.getString(ACTION_1);
-                    String password = rs.getString("password");
+                    String password = rs.getString(ACTION_3);
                     String nome = rs.getString("nome");
-                    String cognome = rs.getString("cognome");
+                    String cognome = rs.getString(ACTION_2);
                     int numeroSegnalazioni = rs.getInt("numeroSegnalazioni");
                     tecnici.add(new Tecnico(email, password, nome, cognome, UserType.TECNICO, numeroSegnalazioni));
                 }
