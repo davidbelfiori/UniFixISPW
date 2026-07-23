@@ -9,7 +9,7 @@ import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.*;
-import org.ing.ispw.unifix.utils.StatoSegnalazione;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;

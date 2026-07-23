@@ -20,7 +20,6 @@ import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
-import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 import org.jetbrains.annotations.NotNull;

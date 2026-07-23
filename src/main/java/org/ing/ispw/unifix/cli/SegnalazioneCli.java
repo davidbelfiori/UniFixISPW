@@ -3,7 +3,6 @@ package org.ing.ispw.unifix.cli;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InviaSegnalazioneController;
-import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;

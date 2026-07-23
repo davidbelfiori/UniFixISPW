@@ -20,13 +20,12 @@ import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoCo
 import org.ing.ispw.unifix.exception.*;
 
 import org.ing.ispw.unifix.utils.PopUp;
-import org.ing.ispw.unifix.utils.StatoSegnalazione;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Objects;
+
 
 public class ControllerGraficoHomeTecnico {
     @FXML
@@ -42,7 +41,6 @@ public class ControllerGraficoHomeTecnico {
     PopUp popUp = new PopUp();
     private final VisualizzaSegnalazioniTecnicoController vstc;
 
-    private static final StatoSegnalazione ACTION_1 = StatoSegnalazione.IN_LAVORAZIONE;
     private static final String POPUPMESSAGGI_1 = "Errore";
     private static final String POPUPMESSAGGI_2 = "Messaggio: ";
     private static final String POPUPMESSAGGI_3 = "Riprova";
@@ -111,8 +109,10 @@ public class ControllerGraficoHomeTecnico {
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
                     try{
-                    tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());}catch (IllegalStateException e){
-                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta",e.getMessage());
+                    tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
+                    }catch (IllegalStateException e){
+                        String messaggio = e.getMessage();
+                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta",  messaggio);
                     }
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
@@ -120,15 +120,13 @@ public class ControllerGraficoHomeTecnico {
                     try{
                         tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
                     }catch (IllegalStateException e){
-                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta",e.getMessage());
+                        String messaggio = e.getMessage();
+                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", messaggio);
                     }
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
-                    if (Objects.equals(segnalazione.getStato(), ACTION_1)){mostraDialogoNote(segnalazione);}
-                    else {
-                        popUp.showErrorPopup("Attenzione!","Riprova più tardi","Per aggiungere una nota , l'intervento deve essere in lavorazione");
-                    }
+                    mostraDialogoNote(segnalazione);
                 } else if (response == ButtonType.CLOSE){
                     mostraSegnalazioniTecnico();
                 }

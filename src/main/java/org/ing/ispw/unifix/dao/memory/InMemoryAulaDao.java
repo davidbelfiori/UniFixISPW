@@ -23,7 +23,7 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
     }
 
     public List<String> getAulaOggetti(String id){
-        List<String> oggetti = new ArrayList<>();
+        List<String> oggetti;
         if(exists(id)){
             oggetti = load(id).getOggetti();
             return oggetti;
