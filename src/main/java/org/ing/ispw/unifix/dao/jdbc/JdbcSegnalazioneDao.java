@@ -64,7 +64,14 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
     @Override
     public void delete(String id) {
-        // Da implementare
+        String query = "DELETE FROM segnalazione WHERE IdSegnalazione = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1,id);
+            stmt.executeUpdate();
+        } catch (SQLException _) {
+            throw new SegnalazioneGiaEsistenteException("Errore durante l'eliminazione della segnalazione");
+        }
+
     }
 
     @Override
