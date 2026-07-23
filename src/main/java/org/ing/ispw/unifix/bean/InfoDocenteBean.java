@@ -9,6 +9,11 @@ public class InfoDocenteBean {
         //empty constructor
     }
 
+    public InfoDocenteBean(String nome, String cognome, String email) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+    }
 
     public String getNome() {
         return nome;

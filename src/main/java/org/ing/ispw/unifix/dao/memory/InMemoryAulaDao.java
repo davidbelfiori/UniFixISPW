@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.model.Aula;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDao {
@@ -22,9 +23,15 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
     }
 
     public List<String> getAulaOggetti(String id){
-        return load(id.toLowerCase()).getOggetti();
-    }
+        List<String> oggetti = new ArrayList<>();
+        if(exists(id)){
+            oggetti = load(id).getOggetti();
+            return oggetti;
+        }else {
+            return Collections.emptyList();
+        }
 
+    }
 
     public List<String> getAllEdifici() {
         List<String> edifici = new ArrayList<>();

@@ -1,6 +1,10 @@
 package org.ing.ispw.unifix.model;
 
 
+import org.ing.ispw.unifix.model.State.StateSegnalazione;
+import org.ing.ispw.unifix.model.State.StatoAperta;
+import org.ing.ispw.unifix.model.State.StatoChiusa;
+import org.ing.ispw.unifix.model.State.StatoInLavorazione;
 import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.sql.Date;
@@ -12,7 +16,7 @@ public class Segnalazione {
     private Date dataCreazione;
     private String oggettoGuasto;
     private Docente docente;
-    private StatoSegnalazione stato;
+    private StateSegnalazione stato;
     private String descrizione;
     private String aula;
     private String edificio;
@@ -21,14 +25,12 @@ public class Segnalazione {
 
     public Segnalazione(String idSegnalazione) {
         this.idSegnalazione =idSegnalazione;
+        this.stato = new StatoAperta();
     }
 
 
-    public StatoSegnalazione getStato() {
-        return stato;
-    }
 
-    public void setStato(StatoSegnalazione stato) {
+    public void setStato(StateSegnalazione stato) {
         this.stato = stato;
     }
 
@@ -96,18 +98,24 @@ public class Segnalazione {
         this.aula = aula;
     }
 
-    public void  inLavorazione() {
-        if (this.stato != StatoSegnalazione.APERTA) {
-            throw new IllegalStateException("Solo segnalazioni aperte possono essere messe in lavorazione");
+    public StatoSegnalazione getStato() {
+        return stato != null ? stato.getStatoEnum() : null;
+    }
+    public void setStato(StatoSegnalazione stato) {
+        if (stato == null) return;
+        switch (stato) {
+            case APERTA -> this.stato = new StatoAperta();
+            case IN_LAVORAZIONE -> this.stato = new StatoInLavorazione();
+            case CHIUSA -> this.stato = new StatoChiusa();
         }
-        this.stato = StatoSegnalazione.IN_LAVORAZIONE;
     }
 
     public void chiudi() {
-        if (this.stato != StatoSegnalazione.IN_LAVORAZIONE) {
-            throw new IllegalStateException("Solo segnalazioni in lavorazione possono essere chiuse");
-        }
-        this.stato = StatoSegnalazione.CHIUSA;
+       this.stato.chiudi(this);
+    }
+
+    public void inLavorazione() {
+        this.stato.inLavorazione(this);
     }
 
     @Override

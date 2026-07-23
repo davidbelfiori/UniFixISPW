@@ -11,6 +11,12 @@ import org.ing.ispw.unifix.utils.StatoSegnalazione;
 import java.util.List;
 
 public class DashboardKpiController {
+
+    /**
+     * Per visualizzare il numero di segnalazioni attive
+     * @return  String con il numero delle segnalazioni attive
+     * @throws NessunaSegnalazioneException se non ci sono segnalazioni
+     */
     public String visualizzaSegnalazioniAttiveAdmin() throws NessunaSegnalazioneException {
         List<Segnalazione> segnalazioni = null;
         int count = 0;
@@ -28,6 +34,11 @@ public class DashboardKpiController {
 
     }
 
+    /**
+     * Per visualizzare il numero di segnalazioni risolte
+     * @return  String con il numero delle segnalazioni risolte
+     * @throws NessunaSegnalazioneException se non ci sono segnalazioni
+     */
     public String  visualizzaSegnalazioniRisolteAdmin() throws NessunaSegnalazioneException {
         List<Segnalazione> segnalazioni = null;
         int count = 0;
@@ -44,12 +55,20 @@ public class DashboardKpiController {
 
     }
 
+    /**
+     * Per visualizzare il numero di edifici gestiti dall'applicativo
+     * @return  String con il numero degli edifici gestiti
+     * */
     public String visualizzaEdificiGestiti (){
         InviaSegnalazioneController inviaSegnalazioneController = new InviaSegnalazioneController();
         List<String> edifici = inviaSegnalazioneController.getEdifici();
         return String.valueOf(edifici.size());
     }
 
+    /**
+     * Per visualizzare il numero di aule presenti nel sistema
+     * @return String con il numero delle aule
+     * */
     public String visualizzaNumeroaule(){
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();

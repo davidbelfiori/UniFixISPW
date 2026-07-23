@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 import org.ing.ispw.unifix.Driver;
+import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.*;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,10 +150,11 @@ public class ControllerGraficoHomeDocente {
 
     @FXML
     private void aggiornaAule(String edificioSelezionato) {
-        List<Aula> auleEdificioSelezionato = sc.getAuleByEdificio(edificioSelezionato);
-        List<String> nomiAule = auleEdificioSelezionato.stream()
-                .map(Aula::getIdAula) // Supponendo che il metodo getNome() restituisca il nome dell'aula
-                .toList();
+        List<AulaBean> auleEdificioSelezionato = sc.getAuleByEdificio(edificioSelezionato);
+        List<String> nomiAule =  new ArrayList<>();
+        for (AulaBean aula : auleEdificioSelezionato) {
+            nomiAule.add(aula.getIdAula());
+        }
         aulaComboBox.setItems(FXCollections.observableList(nomiAule));
     }
     @FXML
@@ -197,7 +200,13 @@ public class ControllerGraficoHomeDocente {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == buttonConferma){
         try {
-                sc.creaSegnalazione(new SegnalazioneBean(new Date(System.currentTimeMillis()), aula, edificio, oggetto, descrizione));
+                SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+                segnalazioneBean.setDataCreazione(new Date(System.currentTimeMillis()));
+                segnalazioneBean.setAula(aula);
+                segnalazioneBean.setEdificio(edificio);
+                segnalazioneBean.setOggettoGuasto(oggetto);
+                segnalazioneBean.setDescrizione(descrizione);
+                sc.creaSegnalazione(segnalazioneBean);
 
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();

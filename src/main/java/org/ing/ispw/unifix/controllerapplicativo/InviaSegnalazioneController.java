@@ -1,5 +1,6 @@
 package org.ing.ispw.unifix.controllerapplicativo;
 
+import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
@@ -32,12 +33,32 @@ public class InviaSegnalazioneController {
        return new ArrayList<>(edificiUnici);
     }
 
-    public List<Aula> getAuleByEdificio(String edificio){
+    public List<AulaBean> getAuleByEdificio(String edificio){
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
+
+        // 1. Recupero la lista delle entità di Dominio dal DAO
         List<Aula> aule = aulaDao.getAllAule();
 
-        return aule.stream()
-                .filter(aula -> aula.getEdificio().equals(edificio)).toList();
+        // 2. Creo una nuova lista vuota che conterrà i Bean per la View
+        List<AulaBean> auleBeanList = new ArrayList<>();
+        // 3. Scorro tutte le aule trovate
+        for (Aula aula : aule) {
+            // Controllo se l'edificio dell'aula corrisponde a quello cercato
+            if (aula.getEdificio() != null && aula.getEdificio().equals(edificio)) {
+
+                // Creo un nuovo oggetto AulaBean
+                AulaBean bean = new AulaBean();
+                bean.setIdAula(aula.getIdAula());
+                bean.setEdificio(aula.getEdificio());
+                bean.setPiano(aula.getPiano());
+                bean.setOggetti(aula.getOggetti());
+
+                // Aggiungo il Bean convertito alla lista
+                auleBeanList.add(bean);
+            }
+        }
+        // 4. Restituisco la lista dei Bean pronti per la View
+        return auleBeanList;
     }
 
     public List<String> getOggettiAula(String idAula){
@@ -77,7 +98,6 @@ public class InviaSegnalazioneController {
         segnalazione.setDocente((Docente) docenteSegnalatore);
         segnalazione.setOggettoGuasto(sb.getOggettoGuasto());
         segnalazione.setTecnico(tecnicoAssegnato);
-        segnalazione.setStato(StatoSegnalazione.APERTA);
         segnalazione.setIdSegnalazione(chiave);
         segnalazione.setDescrizione(sb.getDescrizione());
         segnalazioneDao.store(segnalazione);

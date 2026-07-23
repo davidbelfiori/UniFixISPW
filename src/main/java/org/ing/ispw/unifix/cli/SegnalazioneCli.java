@@ -1,5 +1,6 @@
 package org.ing.ispw.unifix.cli;
 
+import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InviaSegnalazioneController;
 import org.ing.ispw.unifix.model.Aula;
@@ -115,11 +116,13 @@ public class SegnalazioneCli {
             Printer.error("Seleziona prima un edificio.");
             return;
         }
-        List<Aula> aule = sc.getAuleByEdificio(edificioSelezionato);
+        List<AulaBean> aule = sc.getAuleByEdificio(edificioSelezionato);
         if (aule.isEmpty()) {
             Printer.print("Nessuna aula trovata per l'edificio " + edificioSelezionato);
         } else {
-            aule.forEach(a -> Printer.print("Aula: " + a.getIdAula() + " (Piano: " + a.getPiano() + ")"));
+            for (AulaBean aula : aule) {
+                Printer.print("Aula: " + aula.getIdAula() + ", Piano: " + aula.getPiano());
+            }
         }
     }
 
@@ -136,7 +139,13 @@ public class SegnalazioneCli {
             return;
         }
         oggettiAulaCache= sc.getOggettiAula(aulaSelezionata);
-        oggettiAulaCache.forEach(Printer::print);
+        if (oggettiAulaCache.isEmpty()) {
+            Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
+        } else {
+            for (String oggetto : oggettiAulaCache) {
+                Printer.print("Oggetto: " + oggetto);
+            }
+        }
     }
 
     private void selezionaOggetto() throws IOException {
@@ -167,8 +176,13 @@ public class SegnalazioneCli {
         Printer.print("Descrizione: " + descrizioneGuasto);
         Printer.print("******************************************");
 
-        SegnalazioneBean bean = new SegnalazioneBean(new Date(System.currentTimeMillis()), aulaSelezionata, edificioSelezionato, oggettoSelezionato, descrizioneGuasto);
-        if (sc.creaSegnalazione(bean)) {
+        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+        segnalazioneBean.setDataCreazione(new Date(System.currentTimeMillis()));
+        segnalazioneBean.setAula(aulaSelezionata);
+        segnalazioneBean.setEdificio(edificioSelezionato);
+        segnalazioneBean.setOggettoGuasto(oggettoSelezionato);
+        segnalazioneBean.setDescrizione(descrizioneGuasto);
+        if (sc.creaSegnalazione(segnalazioneBean)) {
             Printer.print("Segnalazione inviata con successo!");
             resetForm();
         } else {
@@ -181,7 +195,7 @@ public class SegnalazioneCli {
         aulaSelezionata = "";
         oggettoSelezionato = "";
         descrizioneGuasto = "";
-        edificiUniciCache.clear();
-        oggettiAulaCache.clear();
+        edificiUniciCache = new ArrayList<>();
+        oggettiAulaCache = new ArrayList<>();
     }
 }

@@ -12,6 +12,8 @@ public class PopUp {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
+        alert.setResizable(true);
+        alert.getDialogPane().setPrefSize(500, 250);
         alert.showAndWait();
     }
 
@@ -20,6 +22,8 @@ public class PopUp {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
+        alert.setResizable(true);
+        alert.getDialogPane().setPrefSize(500, 250);
         alert.showAndWait();
     }
 

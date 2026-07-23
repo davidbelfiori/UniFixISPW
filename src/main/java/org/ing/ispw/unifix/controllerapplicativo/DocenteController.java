@@ -6,6 +6,10 @@ import org.ing.ispw.unifix.model.User;
 
 public class DocenteController {
 
+    /*
+        Reupero informazione del docente
+        @return InfoDocenteBean con le sue informazioni
+    * */
 
     public InfoDocenteBean getDocenteInformation() {
         User currentUser = LoginController.getInstance().getCurrentUser();

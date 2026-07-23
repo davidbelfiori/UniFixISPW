@@ -16,7 +16,12 @@ import java.util.List;
 
 public class InserisciNotaSegnalazioneController {
 
-
+/**
+    Add new note for a segnalazione
+    @param nsb che è di tipo NotaSegnalazioneBean
+    @throws NotaStatoSegnalazioneLavorazioneException se l'intervento non è in lavorazione
+    @return void
+* */
     public void inserisciNotaSegnalazione(NotaSegnalazioneBean nsb){
         Date date = new Date();
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();

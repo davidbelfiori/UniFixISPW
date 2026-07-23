@@ -1,8 +1,5 @@
 package org.ing.ispw.unifix.bean;
 
-import org.ing.ispw.unifix.model.Aula;
-import org.ing.ispw.unifix.model.Tecnico;
-import org.ing.ispw.unifix.model.User;
 import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 
@@ -14,23 +11,19 @@ public class SegnalazioneBean {
     private String idSegnalazione;
     private Date dataCreazione;
     private String oggettoGuasto;
-    private User user;
+    private InfoDocenteBean docenteSegnalatore;
     private StatoSegnalazione stato;
     private String descrizione;
     private String aula;
     private String edificio;
-    private Tecnico tecnico;
+    private InfoTecnicoBean tecnico;
+    private List<AulaBean> aule;
 
 
-    private List<Aula> aule;
-
-    public SegnalazioneBean(Date dataCreazione, String aula, String edificio, String oggettoGuasto, String descrizione) {
-        this.dataCreazione = dataCreazione;
-        this.aula = aula;
-        this.edificio = edificio;
-        this.oggettoGuasto = oggettoGuasto;
-        this.descrizione = descrizione;
+    public SegnalazioneBean(){
+        //intentionaly empty
     }
+
 
 
 
@@ -38,7 +31,7 @@ public class SegnalazioneBean {
         this.idSegnalazione = builder.idSegnalazione;
         this.dataCreazione = builder.dataCreazione;
         this.oggettoGuasto = builder.oggettoGuasto;
-        this.user = builder.user;
+        this.docenteSegnalatore = builder.docenteSegnalatore;
         this.stato = builder.stato;
         this.descrizione = builder.descrizione;
         this.aula = builder.aula;
@@ -47,11 +40,11 @@ public class SegnalazioneBean {
     }
 
 
-    public Tecnico getTecnico() {
+    public InfoTecnicoBean getTecnico() {
         return tecnico;
     }
 
-    public void setTecnico(Tecnico tecnico) {
+    public void setTecnico(InfoTecnicoBean tecnico) {
         this.tecnico = tecnico;
     }
 
@@ -65,11 +58,11 @@ public class SegnalazioneBean {
 
 
 
-    public List<Aula> getAule() {
+    public List<AulaBean> getAule() {
         return aule;
     }
 
-    public void setAule(List<Aula> aule) {
+    public void setAule(List<AulaBean> aule) {
         this.aule = aule;
     }
 
@@ -97,12 +90,12 @@ public class SegnalazioneBean {
         stato = statoSegnalazione;
     }
 
-    public User getUser() {
-        return user;
+    public InfoDocenteBean getUser() {
+        return docenteSegnalatore;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(InfoDocenteBean docenteSegnalatore) {
+        this.docenteSegnalatore = docenteSegnalatore;
     }
 
     public String getOggettoGuasto() {
@@ -135,12 +128,12 @@ public class SegnalazioneBean {
         private String idSegnalazione;
         private Date dataCreazione;
         private String oggettoGuasto;
-        private User user;
+        private InfoDocenteBean docenteSegnalatore;
         private StatoSegnalazione stato;
         private String descrizione;
         private String aula;
         private String edificio;
-        private Tecnico tecnico;
+        private InfoTecnicoBean tecnico;
 
         // Costruttore del Builder
         public Builder(String idSegnalazione) {
@@ -159,8 +152,8 @@ public class SegnalazioneBean {
             return this;
         }
 
-        public Builder user(User user) {
-            this.user = user;
+        public Builder user(InfoDocenteBean docenteSegnalatore) {
+            this.docenteSegnalatore = docenteSegnalatore;
             return this;
         }
 
@@ -184,7 +177,7 @@ public class SegnalazioneBean {
             return this;
         }
 
-        public Builder tecnico(Tecnico tecnico) {
+        public Builder tecnico(InfoTecnicoBean tecnico) {
             this.tecnico = tecnico;
             return this;
         }

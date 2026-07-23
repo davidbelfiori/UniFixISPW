@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.controllerapplicativo;
 
 
+import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
@@ -51,17 +52,24 @@ public class TecnicoController {
         }
         return new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione()).dataCreazione(segnalazione.getDataCreazione())
                 .oggettoGuasto(segnalazione.getOggettoGuasto())
-                .user(segnalazione.getDocente())
+                .user(new InfoDocenteBean(
+                        segnalazione.getDocente().getNome(),
+                        segnalazione.getDocente().getCognome(),
+                        segnalazione.getDocente().getEmail()))
                 .stato(segnalazione.getStato())
                 .descrizione(segnalazione.getDescrizione())
                 .aula(segnalazione.getAula())
                 .edificio(segnalazione.getEdificio())
-                .tecnico(segnalazione.getTecnico())
+                .tecnico(new InfoTecnicoBean(
+                        segnalazione.getTecnico().getNumeroSegnalazioni(),
+                        segnalazione.getTecnico().getEmail(),
+                        segnalazione.getTecnico().getCognome(),
+                        segnalazione.getTecnico().getNome()))
                 .build();
     }
 
 
-    public void chiudiSegnalazione(String idSegnalazione) {
+    public void chiudiSegnalazione(String idSegnalazione) throws IllegalStateException{
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);

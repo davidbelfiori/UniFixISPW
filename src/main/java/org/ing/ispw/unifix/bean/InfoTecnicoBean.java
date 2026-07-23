@@ -14,6 +14,13 @@ public class InfoTecnicoBean {
         //empty constructor
     }
 
+    public InfoTecnicoBean(int numeroSegnalazioni, String email, String cognome, String nome) {
+        this.numeroSegnalazioni = numeroSegnalazioni;
+        this.email = email;
+        this.cognome = cognome;
+        this.nome = nome;
+    }
+
     public String getNome() {
         return nome;
     }

@@ -151,10 +151,21 @@ public class TecnicoHomeCli {
                         Printer.print("Input non valido.");
                         return;
                     case "1":
-                        tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
+                        try {
+                            tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
+                            Printer.print("Segnalazione in lavorazione.");
+                        } catch (IllegalStateException e){
+                            Printer.error(e.getMessage());
+                            return;
+                        }
                         break;
                     case "2":
-                        tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
+                        try{
+                            tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
+                        } catch (IllegalStateException e){
+                            Printer.error(e.getMessage());
+                            return;
+                        }
                         break;
                     default:
                         Printer.print("Stato non valido.");
@@ -183,7 +194,6 @@ public class TecnicoHomeCli {
                     Printer.print("Nome: " + info.getNome());
                     Printer.print("Cognome: " + info.getCognome());
                     Printer.print("Email: " + info.getEmail());
-                    Printer.print("Password: " + info.getPassword());
                     Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
                     Printer.print("--------------------");
                 } catch (IllegalStateException e) {
