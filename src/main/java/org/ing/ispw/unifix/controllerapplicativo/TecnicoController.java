@@ -8,6 +8,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
+import org.ing.ispw.unifix.exception.StateExecption;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 
@@ -69,7 +70,7 @@ public class TecnicoController {
     }
 
 
-    public void chiudiSegnalazione(String idSegnalazione) throws IllegalStateException{
+    public void chiudiSegnalazione(String idSegnalazione) throws StateExecption {
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
