@@ -6,11 +6,12 @@ import org.ing.ispw.unifix.model.State.StatoAperta;
 import org.ing.ispw.unifix.model.State.StatoChiusa;
 import org.ing.ispw.unifix.model.State.StatoInLavorazione;
 import org.ing.ispw.unifix.utils.StatoSegnalazione;
+import org.ing.ispw.unifix.utils.observer.Subject;
 
 import java.sql.Date;
 
 
-public class Segnalazione {
+public class Segnalazione extends Subject {
 
     private String idSegnalazione;
     private Date dataCreazione;
@@ -117,6 +118,8 @@ public class Segnalazione {
     public void inLavorazione() {
         this.stato.inLavorazione(this);
     }
+
+
 
     @Override
     public String toString() {

@@ -106,6 +106,10 @@ public class InviaSegnalazioneController {
         tecnicoAssegnato.incrementaSegnalazioni();
         userDao.update(tecnicoAssegnato);
 
+        segnalazione.attach((segnalazione.getDocente()));
+        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.notifyObservers(segnalazione);
+
         return true;
 
 

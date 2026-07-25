@@ -82,12 +82,20 @@ public class TecnicoController {
             userDao.update(currentUser);
         }
 
+        segnalazione.attach((segnalazione.getDocente()));
+        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.notifyObservers(segnalazione);
+
     }
 
     public void inLavorazioneSegnalazione(String idSegnalazione) {
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.inLavorazione();
         segnalazioneDao.update(segnalazione);
+        segnalazione.attach((segnalazione.getDocente()));
+        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.notifyObservers(segnalazione);
+
     }
 
 

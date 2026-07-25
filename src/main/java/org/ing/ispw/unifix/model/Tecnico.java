@@ -1,8 +1,11 @@
 package org.ing.ispw.unifix.model;
 
+import org.ing.ispw.unifix.utils.Printer;
+import org.ing.ispw.unifix.utils.StatoSegnalazione;
 import org.ing.ispw.unifix.utils.UserType;
+import org.ing.ispw.unifix.utils.observer.Observer;
 
-public class Tecnico extends User{
+public class Tecnico extends User implements Observer {
     private int numeroSegnalazioni;
 
     public Tecnico(String email) {
@@ -35,5 +38,21 @@ public class Tecnico extends User{
         if (this.numeroSegnalazioni > 0) {
             this.numeroSegnalazioni--;
         }
+    }
+
+    @Override
+    public void update() {
+        // Vuoto: per le notifiche email usiamo update(Object eventData)
+
+    }
+
+    @Override
+    public void update(Object eventData) {
+        if (eventData instanceof Segnalazione s && s.getStato() == StatoSegnalazione.APERTA && s.getTecnico().equals(this)) {
+                Printer.print("[SIMULAZIONE EMAIL TECNICO -> " + getEmail() + "]: " +
+                        "Ti è stata assegnata una nuova segnalazione #" + s.getIdSegnalazione() +
+                        " per l'aula " + s.getAula());
+            }
+
     }
 }
