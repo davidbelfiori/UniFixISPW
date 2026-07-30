@@ -4,6 +4,7 @@ package org.ing.ispw.unifix.controllerapplicativo;
 import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
@@ -11,6 +12,7 @@ import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.StateExecption;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
+import org.ing.ispw.unifix.sessionmanager.SessionManager;
 
 public class TecnicoController {
 
@@ -32,8 +34,8 @@ public class TecnicoController {
     }
 
     public InfoTecnicoBean getTecnicoInformation(){
-
-        Tecnico currentUser = (Tecnico) LoginController.getInstance().getCurrentUser();
+        UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        Tecnico currentUser = (Tecnico) userDao.load(loggetUser.getEmail());
         if (currentUser == null) {
             throw new IllegalStateException("Nessun tecnico loggato.");
         }
@@ -76,7 +78,8 @@ public class TecnicoController {
         segnalazioneDao.update(segnalazione);
 
         //Quando una segnalazione viene chiusa (l'operazione è irreversibile) il numero di interventi del tecnico viene decementato
-        Tecnico currentUser = (Tecnico) LoginController.getInstance().getCurrentUser();
+        UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        Tecnico currentUser = (Tecnico) userDao.load(loggetUser.getEmail());
         if(currentUser != null) {
             currentUser.decrementaSegnalazioni();
             userDao.update(currentUser);

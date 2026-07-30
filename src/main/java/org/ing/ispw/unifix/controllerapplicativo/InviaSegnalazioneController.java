@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.controllerapplicativo;
 
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
@@ -9,6 +10,7 @@ import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.*;
+import org.ing.ispw.unifix.sessionmanager.SessionManager;
 
 
 import java.util.ArrayList;
@@ -83,7 +85,8 @@ public class InviaSegnalazioneController {
     public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserDao userDao = DaoFactory.getInstance().getUserDao();
-        User docenteSegnalatore = LoginController.getInstance().getCurrentUser();
+        UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        User docenteSegnalatore = userDao.load(loggetUser.getEmail());
 
         String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
 

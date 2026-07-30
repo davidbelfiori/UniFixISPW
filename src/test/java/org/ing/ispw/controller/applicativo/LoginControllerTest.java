@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.DemoData;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
     static void setUp() {
         Driver.setPersistenceProvider("in memory");
         DemoData.load();
-        loginController = LoginController.getInstance();
+        loginController = new LoginController();
     }
 
     // ---- TEST LOGIN ---- //
@@ -45,27 +46,18 @@ import static org.junit.jupiter.api.Assertions.*;
         credentialBean.setEmail("davide.falessi@uniroma2.eu");
         credentialBean.setPassword("password_errata");
 
-        assertThrows(UtenteNonTrovatoException.class, () -> {
+        assertThrows(PasswordErrataExecption.class, () -> {
             loginController.validate(credentialBean);
         });
     }
-
-    @Test
-    void testLoginUtenteEsistente() throws UtenteNonTrovatoException {
-        CredentialBean credentialBean = new CredentialBean();
-        credentialBean.setEmail("marco.rizzo@sys.uniroma2.eu");
-        credentialBean.setPassword("errata");
-
-        assertEquals(UserType.UNKNOWN,loginController.validate(credentialBean));
-
-    }
+    
 
     @Test
     void testLoginRuoloUtenteSys() throws UtenteNonTrovatoException {
         CredentialBean credentialBean = new CredentialBean();
         credentialBean.setEmail("marco.rizzo@sys.uniroma2.eu");
         credentialBean.setPassword("admin");
-        assertEquals(UserType.SYSADMIN,loginController.validate(credentialBean));
+        assertEquals(UserType.SYSADMIN,loginController.validate(credentialBean).getRuolo());
     }
 
     @Test
@@ -73,7 +65,7 @@ import static org.junit.jupiter.api.Assertions.*;
         CredentialBean credentialBean = new CredentialBean();
         credentialBean.setEmail("davide.falessi@uniroma2.eu");
         credentialBean.setPassword("admin");
-        assertEquals(UserType.DOCENTE,loginController.validate(credentialBean));
+        assertEquals(UserType.DOCENTE,loginController.validate(credentialBean).getRuolo());
     }
 
     @Test
@@ -81,7 +73,7 @@ import static org.junit.jupiter.api.Assertions.*;
         CredentialBean credentialBean = new CredentialBean();
         credentialBean.setEmail("giuseppe.rossi@tec.uniroma2.eu");
         credentialBean.setPassword("admin");
-        assertEquals(UserType.TECNICO,loginController.validate(credentialBean));
+        assertEquals(UserType.TECNICO,loginController.validate(credentialBean).getRuolo());
     }
     
     // ---- TEST REGISTRAZIONE ---- //

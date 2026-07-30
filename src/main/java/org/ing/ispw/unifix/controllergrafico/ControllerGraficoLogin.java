@@ -8,11 +8,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.CredentialBean;
+import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
+import org.ing.ispw.unifix.sessionmanager.SessionManager;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
-import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.IOException;
 
@@ -31,7 +33,7 @@ public class ControllerGraficoLogin {
     PopUp popUp = new PopUp();
     private final LoginController lc;
     public ControllerGraficoLogin() {
-        lc= LoginController.getInstance();
+        this.lc= new LoginController();
     }
 
     public void handleToRegistrazione(javafx.scene.input.MouseEvent mouseEvent){
@@ -52,8 +54,10 @@ public class ControllerGraficoLogin {
             CredentialBean cb = new CredentialBean();
             cb.setEmail(email);
             cb.setPassword(password);
-            UserType ruolo=lc.validate(cb);
-            switch (ruolo) {
+            // se la password o l'utente non esiste verrà sollevata un eccezzione
+            UserBean loggedUser = lc.validate(cb);
+            SessionManager.getInstance().setCurrentUser(loggedUser);
+            switch (loggedUser.getRuolo()) {
                 case UNKNOWN:
                     popUp.showErrorPopup("Errore", "", "Utente non trovato");
                     break;
@@ -72,7 +76,7 @@ public class ControllerGraficoLogin {
                 default:
                     break;
             }
-        }catch (UtenteNonTrovatoException| IOException | IllegalArgumentException e){
+        }catch (IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption e){
             popUp.showErrorPopup("Errore","", e.getMessage());
         }
     }

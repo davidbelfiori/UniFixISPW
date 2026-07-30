@@ -1,25 +1,29 @@
 package org.ing.ispw.unifix.cli;
 
+import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
+import org.ing.ispw.unifix.sessionmanager.SessionManager;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.bean.CredentialBean;
-import org.ing.ispw.unifix.utils.UserType;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+
 public class LoginCli {
 
-    boolean quit;
-    BufferedReader br;
-    LoginController lc;
+    private boolean quit;
+    private final BufferedReader br;
+    private final LoginController lc;
 
     public LoginCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        lc= LoginController.getInstance();
+        lc= new LoginController();
     }
 
     public void loginCliHome() throws IOException {
@@ -53,24 +57,26 @@ public class LoginCli {
                         CredentialBean cb = new CredentialBean();
                         cb.setEmail(email);
                         cb.setPassword(password);
-                        UserType ruolo=lc.validate(cb);
-                        switch (ruolo) {
-                            case DOCENTE:
-                                DocenteHomeCli docenteView = new DocenteHomeCli();
-                                docenteView.docenteHome();
-                                break;
-                            case TECNICO:
-                                TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
-                                tecnicoView.tecnicoHome();
-                                break;
+                        UserBean loggedUser=lc.validate(cb);
+                            SessionManager.getInstance().setCurrentUser(loggedUser);
+                            switch (loggedUser.getRuolo()) {
+                                case DOCENTE:
+                                    DocenteHomeCli docenteView = new DocenteHomeCli();
+                                    docenteView.docenteHome();
+                                    break;
+                                case TECNICO:
+                                    TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
+                                    tecnicoView.tecnicoHome();
+                                    break;
 
-                            case SYSADMIN:
-                                SysAdminHomeCli adminView= new SysAdminHomeCli();
-                                adminView.adminHome();
-                                break;
-                            default: Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
-                        }
-                    }catch (UtenteNonTrovatoException | IllegalArgumentException e){
+                                case SYSADMIN:
+                                    SysAdminHomeCli adminView = new SysAdminHomeCli();
+                                    adminView.adminHome();
+                                    break;
+                                default:
+                                    Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
+                            }
+                    }catch (UtenteNonTrovatoException | IllegalArgumentException | PasswordErrataExecption e){
                         Printer.error("Errore"+e.getMessage());
                         email="";
                         password="";

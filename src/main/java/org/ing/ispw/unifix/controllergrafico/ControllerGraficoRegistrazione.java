@@ -29,7 +29,7 @@ public class ControllerGraficoRegistrazione {
     PopUp popUp = new PopUp();
     public ControllerGraficoRegistrazione() {
 
-        lc = LoginController.getInstance();
+        lc = new LoginController();
     }
 
     public void validateRegistrazione() {

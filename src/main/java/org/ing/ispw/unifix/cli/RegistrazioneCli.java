@@ -13,13 +13,13 @@ import java.io.InputStreamReader;
 public class RegistrazioneCli {
 
     boolean quit;
-    BufferedReader br;
-    LoginController lc;
+   private final BufferedReader br;
+   private final LoginController lc;
 
     public RegistrazioneCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        lc = LoginController.getInstance();
+        lc = new LoginController();
     }
 
     public void registrazione() throws IOException {

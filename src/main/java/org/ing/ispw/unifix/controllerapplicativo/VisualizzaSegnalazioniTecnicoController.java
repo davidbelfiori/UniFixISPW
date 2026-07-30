@@ -3,25 +3,33 @@ package org.ing.ispw.unifix.controllerapplicativo;
 import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
+import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.User;
+import org.ing.ispw.unifix.sessionmanager.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VisualizzaSegnalazioniTecnicoController {
+    private  final UserDao userDao;
 
+
+    public VisualizzaSegnalazioniTecnicoController(){
+        this.userDao = DaoFactory.getInstance().getUserDao();
+    }
 
     //visualizza le segnalazioni assegnate al tecnico
     public List<SegnalazioneBean> visualizzaSegnalazioniTecnico() throws NessunaSegnalazioneException, NessunaSegnalazioneTecnicoException {
         List<Segnalazione> segnalazioniAll = null;
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        LoginController loginController = LoginController.getInstance();
-        User currentUser = loginController.getCurrentUser();
+        UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
+        User currentUser = userDao.load(loggedUser.getEmail());
         if (currentUser == null) {
             throw new IllegalStateException("Nessun tecnicoMail loggato");
         }
