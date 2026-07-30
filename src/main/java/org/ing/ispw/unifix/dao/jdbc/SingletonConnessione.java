@@ -40,11 +40,12 @@ public class SingletonConnessione {
         Properties properties = new Properties();
         try (InputStream is = new FileInputStream("application.properties")) {
             properties.load(is);
-        } catch (IOException e) { // Sostituito "Exception" con la più specifica "IOException"
+        } catch (IOException _) { // Sostituito "Exception" con la più specifica "IOException"
             Printer.error("Impossibile leggere il file application.properties, utilizzo password di default");
         }
         return properties.getProperty("password", "");
     }
+
 
     // Chiusura sicura della connessione alla chiusura dell'applicazione
     public static synchronized void closeConnection() {

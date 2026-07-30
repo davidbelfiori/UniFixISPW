@@ -109,17 +109,16 @@ public class ControllerGraficoHomeTecnico {
             alert.showAndWait().ifPresent(response -> {
                 if (response == lavorazioneButton){
                     try{
-                    tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (StateExecption e){
-
-                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta",  e.getMessage());
+                        tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
+                    }catch (StateExecption e){//NOSONAR
+                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
                     }
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
                     try{
                         tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (StateExecption e){
+                    }catch (StateExecption e){ //NOSONAR
                         popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
                     }
                     segnalazioniContainer.getChildren().clear();
