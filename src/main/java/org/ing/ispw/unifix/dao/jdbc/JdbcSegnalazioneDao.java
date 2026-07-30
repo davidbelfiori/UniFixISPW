@@ -21,6 +21,21 @@ import java.util.List;
 public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
     private final Connection connection;
+    private static final String IDSEGNALAZIONE = "IdSegnalazione";
+    private static final String DATA_CREAZIONE = "dataCreazione";
+    private static final String OGGETTO_GUASTO = "oggettoGuasto";
+    private static final String DOCENTEMAIL  = "email_docente";
+    private static final String STATO = "stato";
+    private static final String DESCRIZIONE = "descrizione";
+    private static final String AULA = "aula";
+    private static final String EDIFICIO = "edificio";
+    private static final String TECNICOMAIL = "email_tecnico";
+    private static final String TECNICONOME = "nome_tecnico";
+    private static final String TECNINCOCOGNOME = "cognome_tecnico";
+    private static final String DOCENTENOME = "nome_docente";
+    private static final String DOCENTECOGNOME = "cognome_docente";
+
+
 
 
     public JdbcSegnalazioneDao(){
@@ -140,15 +155,15 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
         try (PreparedStatement stmt = connection.prepareStatement(query)){
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
-                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
-                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
-                segnalazione.setDescrizione(rs.getString("descrizione"));
-                segnalazione.setAula(rs.getString("aula"));
-                segnalazione.setEdificio(rs.getString("edificio"));
-                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                Segnalazione segnalazione = new Segnalazione(rs.getString(IDSEGNALAZIONE));
+                segnalazione.setDataCreazione(rs.getDate(DATA_CREAZIONE));
+                segnalazione.setOggettoGuasto(rs.getString(OGGETTO_GUASTO));
+                segnalazione.setDocente(new Docente(rs.getString(DOCENTEMAIL),rs.getString(DOCENTENOME),rs.getString(DOCENTECOGNOME)));
+                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString(STATO)));
+                segnalazione.setDescrizione(rs.getString(DESCRIZIONE));
+                segnalazione.setAula(rs.getString(AULA));
+                segnalazione.setEdificio(rs.getString(EDIFICIO));
+                segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
         }catch (SQLException _){
@@ -183,15 +198,15 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) { // Check if there's a result before trying to read it
-                segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
-                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
-                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(StatoSegnalazione.valueOf( rs.getString("stato")));
-                segnalazione.setDescrizione(rs.getString("descrizione"));
-                segnalazione.setAula(rs.getString("aula"));
-                segnalazione.setEdificio(rs.getString("edificio"));
-                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                segnalazione = new Segnalazione(rs.getString(IDSEGNALAZIONE));
+                segnalazione.setDataCreazione(rs.getDate(DATA_CREAZIONE));
+                segnalazione.setOggettoGuasto(rs.getString(OGGETTO_GUASTO));
+                segnalazione.setDocente(new Docente(rs.getString(DOCENTEMAIL),rs.getString(DOCENTENOME),rs.getString(DOCENTECOGNOME)));
+                segnalazione.setStato(StatoSegnalazione.valueOf( rs.getString(STATO)));
+                segnalazione.setDescrizione(rs.getString(DESCRIZIONE));
+                segnalazione.setAula(rs.getString(AULA));
+                segnalazione.setEdificio(rs.getString(EDIFICIO));
+                segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
             }else {
                 throw new NessunaSegnalazioneException("Segnalazione non trovata");
             }
@@ -227,15 +242,15 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             stmt.setString(1, docenteEmail);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
-                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
-                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
-                segnalazione.setDescrizione(rs.getString("descrizione"));
-                segnalazione.setAula(rs.getString("aula"));
-                segnalazione.setEdificio(rs.getString("edificio"));
-                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                Segnalazione segnalazione = new Segnalazione(rs.getString(IDSEGNALAZIONE));
+                segnalazione.setDataCreazione(rs.getDate(DATA_CREAZIONE));
+                segnalazione.setOggettoGuasto(rs.getString(OGGETTO_GUASTO));
+                segnalazione.setDocente(new Docente(rs.getString(DOCENTEMAIL),rs.getString(DOCENTENOME),rs.getString(DOCENTECOGNOME)));
+                segnalazione.setStato(StatoSegnalazione.valueOf(rs.getString(STATO)));
+                segnalazione.setDescrizione(rs.getString(DESCRIZIONE));
+                segnalazione.setAula(rs.getString(AULA));
+                segnalazione.setEdificio(rs.getString(EDIFICIO));
+                segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
         }catch (SQLException _){
@@ -269,15 +284,15 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             stmt.setString(1, tecnicoEmail);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
-                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
-                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
-                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
-                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
-                segnalazione.setDescrizione(rs.getString("descrizione"));
-                segnalazione.setAula(rs.getString("aula"));
-                segnalazione.setEdificio(rs.getString("edificio"));
-                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                Segnalazione segnalazione = new Segnalazione(rs.getString(IDSEGNALAZIONE));
+                segnalazione.setDataCreazione(rs.getDate(DATA_CREAZIONE));
+                segnalazione.setOggettoGuasto(rs.getString(OGGETTO_GUASTO));
+                segnalazione.setDocente(new Docente(rs.getString(DOCENTEMAIL),rs.getString(DOCENTENOME),rs.getString(DOCENTECOGNOME)));
+                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString(STATO)));
+                segnalazione.setDescrizione(rs.getString(DESCRIZIONE));
+                segnalazione.setAula(rs.getString(AULA));
+                segnalazione.setEdificio(rs.getString(EDIFICIO));
+                segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
         }catch (SQLException _){
