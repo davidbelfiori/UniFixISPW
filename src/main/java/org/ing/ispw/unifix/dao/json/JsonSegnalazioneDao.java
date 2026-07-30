@@ -138,6 +138,55 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
         return load(idSegnalazione);
     }
 
+    @Override
+    public List<Segnalazione> getSegnalazioniByDocente(String docenteEmail) {
+        List<Segnalazione> allSegnalazioni = loadAll();
+        List<Segnalazione> result = new ArrayList<>();
+        for (Segnalazione s : allSegnalazioni) {
+            if (s.getDocente() != null && s.getDocente().getEmail().equals(docenteEmail)) {
+                result.add(s);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Segnalazione> getSegnalazioniByTecnico(String tecnicoEmail) {
+        List<Segnalazione> allSegnalazioni = loadAll();
+        List<Segnalazione> result = new ArrayList<>();
+        for (Segnalazione s : allSegnalazioni) {
+            if(s.getTecnico() != null && s.getTecnico().getEmail().equals(tecnicoEmail)) {
+                result.add(s);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int countSegnalazioniAttive() {
+        List<Segnalazione> allSegnalazioni = loadAll();
+        int count = 0;
+        for (Segnalazione s : allSegnalazioni) {
+            if (s.getStato() == StatoSegnalazione.APERTA || s.getStato() == StatoSegnalazione.IN_LAVORAZIONE) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public int countSegnalazioniRisolte() {
+        List<Segnalazione> allSegnalazioni = loadAll();
+        int count = 0;
+        for (Segnalazione s : allSegnalazioni) {
+            if (s.getStato() == StatoSegnalazione.CHIUSA) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
     private void saveAll(List<Segnalazione> segnalazioni) {
         try {
             ArrayNode arrayNode = objectMapper.createArrayNode();

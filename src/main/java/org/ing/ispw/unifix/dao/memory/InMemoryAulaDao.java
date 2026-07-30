@@ -33,6 +33,20 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
 
     }
 
+    @Override
+    public int countAule() {
+        return loadAll().size();
+    }
+
+    @Override
+    public int countEdificiGestiti() {
+        List<String> edifici = new ArrayList<>();
+        for (Aula aula : getAllAule())
+            if (!edifici.contains(aula.getEdificio()))
+                edifici.add(aula.getEdificio());
+        return edifici.size();
+    }
+
     public List<String> getAllEdifici() {
         List<String> edifici = new ArrayList<>();
         for (Aula aula : getAllAule())

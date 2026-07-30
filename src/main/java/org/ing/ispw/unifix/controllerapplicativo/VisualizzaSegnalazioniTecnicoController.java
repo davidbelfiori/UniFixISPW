@@ -26,7 +26,7 @@ public class VisualizzaSegnalazioniTecnicoController {
 
     //visualizza le segnalazioni assegnate al tecnico
     public List<SegnalazioneBean> visualizzaSegnalazioniTecnico() throws NessunaSegnalazioneException, NessunaSegnalazioneTecnicoException {
-        List<Segnalazione> segnalazioniAll = null;
+        List<Segnalazione> segnalazioniAll;
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
         User currentUser = userDao.load(loggedUser.getEmail());

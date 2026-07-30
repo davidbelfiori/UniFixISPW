@@ -202,4 +202,111 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
         return segnalazione;
     }
 
-}
+    @Override
+    public List<Segnalazione> getSegnalazioniByDocente(String docenteEmail) {
+        List<Segnalazione> segnalazioni = new ArrayList<>();
+        String query = """
+
+                SELECT
+                    s.*,
+                    d.nome AS nome_docente,
+                    d.cognome AS cognome_docente,
+                    d.email AS email_docente,
+                    t.nome AS nome_tecnico,
+                    t.cognome AS cognome_tecnico,
+                    t.email AS email_tecnico
+                FROM
+                    segnalazione s
+                        JOIN
+                    user d ON d.email= s.docente
+                        LEFT JOIN
+                    user t ON t.email = s.tecnico
+                WHERE s.docente = ?;
+""";
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1, docenteEmail);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
+                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
+                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
+                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
+                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
+                segnalazione.setDescrizione(rs.getString("descrizione"));
+                segnalazione.setAula(rs.getString("aula"));
+                segnalazione.setEdificio(rs.getString("edificio"));
+                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                segnalazioni.add(segnalazione);
+            }
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }
+        return segnalazioni;
+    }
+
+    @Override
+    public List<Segnalazione> getSegnalazioniByTecnico(String tecnicoEmail) {
+        List<Segnalazione> segnalazioni = new ArrayList<>();
+        String query = """
+
+                SELECT
+                    s.*,
+                    d.nome AS nome_docente,
+                    d.cognome AS cognome_docente,
+                    d.email AS email_docente,
+                    t.nome AS nome_tecnico,
+                    t.cognome AS cognome_tecnico,
+                    t.email AS email_tecnico
+                FROM
+                    segnalazione s
+                        JOIN
+                    user d ON d.email= s.docente
+                        LEFT JOIN
+                    user t ON t.email = s.tecnico
+                WHERE s.tecnico = ?;
+""";
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1, tecnicoEmail);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                Segnalazione segnalazione = new Segnalazione(rs.getString("IdSegnalazione"));
+                segnalazione.setDataCreazione(rs.getDate("dataCreazione"));
+                segnalazione.setOggettoGuasto(rs.getString("oggettoGuasto"));
+                segnalazione.setDocente(new Docente(rs.getString("email_docente"),rs.getString("nome_docente"),rs.getString("cognome_docente")));
+                segnalazione.setStato(StatoSegnalazione.fromString(rs.getString("stato")));
+                segnalazione.setDescrizione(rs.getString("descrizione"));
+                segnalazione.setAula(rs.getString("aula"));
+                segnalazione.setEdificio(rs.getString("edificio"));
+                segnalazione.setTecnico(new Tecnico(rs.getString("email_tecnico"),rs.getString("nome_tecnico"),rs.getString("cognome_tecnico")));
+                segnalazioni.add(segnalazione);
+            }
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }
+        return segnalazioni;
+    }
+
+    @Override
+    public int countSegnalazioniAttive() {
+        String query = "SELECT count(*) as numero from segnalazione where stato = 'APERTA' or stato = 'IN_LAVORAZIONE' ";
+        try(PreparedStatement stmt = connection.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt("numero");
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }
+    }
+
+    @Override
+    public int countSegnalazioniRisolte() {
+        String query = "SELECT count(*) as numero from segnalazione where stato = 'CHIUSA' ";
+        try(PreparedStatement stmt = connection.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt("numero");
+        }catch (SQLException _){
+            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }
+    }
+    }

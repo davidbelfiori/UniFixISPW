@@ -13,4 +13,7 @@ public interface AulaDao extends Dao<String, Aula> {
     List<String> getAllEdifici();
 
     List<String> getAulaOggetti(String idAula);
+
+    int countAule();
+    int countEdificiGestiti();
 }

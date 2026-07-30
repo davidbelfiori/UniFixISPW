@@ -12,4 +12,10 @@ public interface SegnalazioneDao extends Dao<String, Segnalazione> {
 
     Segnalazione getSegnalazione(String idSegnalazione);
 
+    List<Segnalazione> getSegnalazioniByDocente(String docenteEmail);
+
+    List<Segnalazione> getSegnalazioniByTecnico(String tecnicoEmail);
+
+    int countSegnalazioniAttive();
+    int countSegnalazioniRisolte();
 }

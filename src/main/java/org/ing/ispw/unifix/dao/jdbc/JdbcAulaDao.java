@@ -206,4 +206,34 @@ public class JdbcAulaDao   implements AulaDao {
         }
     }
 
+    @Override
+    public int countAule() {
+        String query = "SELECT COUNT(*) FROM aule";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new AuleNonTrovateException("Errore durante il conteggio delle aule");
+            }
+        } catch (SQLException e) {
+            throw new AuleNonTrovateException("Errore durante il conteggio delle aule: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public int countEdificiGestiti() {
+        String query = "SELECT COUNT(DISTINCT Edificio) FROM aule";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new EdificiNonTrovatiException("Errore durante il conteggio degli edifici");
+            }
+        } catch (SQLException e) {
+            throw new EdificiNonTrovatiException("Errore durante il conteggio degli edifici: " + e.getMessage());
+        }
+    }
+
 }

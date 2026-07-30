@@ -63,5 +63,22 @@ public class JsonAulaDao extends JsonDao<String, Aula> implements AulaDao {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public int countAule() {
+        return loadAll().size();
+    }
+
+    @Override
+    public int countEdificiGestiti() {
+        List<String> edifici = new ArrayList<>();
+        for (Aula aula : getAllAule()) {
+            String edificio = aula.getEdificio();
+            if (edificio != null && !edifici.contains(edificio)) {
+                edifici.add(edificio);
+            }
+        }
+        return edifici.size();
+    }
 }
 

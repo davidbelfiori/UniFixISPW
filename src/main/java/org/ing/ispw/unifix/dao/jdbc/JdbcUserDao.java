@@ -27,7 +27,7 @@ public class JdbcUserDao  implements UserDao {
     private static final String ACTION_2 = "cognome";
     private static final String ACTION_3 = "password";
 
-    public JdbcUserDao() {
+    private JdbcUserDao() {
         try {
             this.connection =  SingletonConnessione.getInstance();
         } catch (SQLException e) {

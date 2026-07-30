@@ -4,13 +4,19 @@ import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.model.Aula;
-import org.ing.ispw.unifix.model.Segnalazione;
-import org.ing.ispw.unifix.utils.StatoSegnalazione;
-
-import java.util.List;
 
 public class DashboardKpiController {
+
+    // Dichiarazione delle dipendenze come attributi
+    private final SegnalazioneDao segnalazioneDao;
+    private final AulaDao aulaDao;
+
+    // Inizializzazione unica nel costruttore
+    public DashboardKpiController() {
+        DaoFactory factory = DaoFactory.getInstance();
+        this.segnalazioneDao = factory.getSegnalazioneDao();
+        this.aulaDao = factory.getAulaDao();
+    }
 
     /**
      * Per visualizzare il numero di segnalazioni attive
@@ -18,20 +24,8 @@ public class DashboardKpiController {
      * @throws NessunaSegnalazioneException se non ci sono segnalazioni
      */
     public String visualizzaSegnalazioniAttiveAdmin() throws NessunaSegnalazioneException {
-        List<Segnalazione> segnalazioni = null;
-        int count = 0;
-        String result = "";
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        segnalazioni= segnalazioneDao.getAllSegnalazioni();
-        if (segnalazioni.isEmpty()) return "0";
-        for (Segnalazione segnalazione : segnalazioni) {
-            if(segnalazione.getStato().equals(StatoSegnalazione.APERTA) || segnalazione.getStato().equals(StatoSegnalazione.IN_LAVORAZIONE)){
-                count++;
-            }
-        }
-        result = String.valueOf(count);
-        return result;
-
+        int numero = segnalazioneDao.countSegnalazioniAttive();
+        return String.valueOf(numero);
     }
 
     /**
@@ -40,19 +34,8 @@ public class DashboardKpiController {
      * @throws NessunaSegnalazioneException se non ci sono segnalazioni
      */
     public String  visualizzaSegnalazioniRisolteAdmin() throws NessunaSegnalazioneException {
-        List<Segnalazione> segnalazioni = null;
-        int count = 0;
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        segnalazioni= segnalazioneDao.getAllSegnalazioni();
-        if (segnalazioni.isEmpty()) return "0";
-        for (Segnalazione segnalazione : segnalazioni) {
-            if(segnalazione.getStato().equals(StatoSegnalazione.CHIUSA)){
-                count++;
-            }
-        }
-
-        return String.valueOf(count);
-
+       int numero = segnalazioneDao.countSegnalazioniRisolte();
+       return String.valueOf(numero);
     }
 
     /**
@@ -60,9 +43,7 @@ public class DashboardKpiController {
      * @return  String con il numero degli edifici gestiti
      * */
     public String visualizzaEdificiGestiti (){
-        InviaSegnalazioneController inviaSegnalazioneController = new InviaSegnalazioneController();
-        List<String> edifici = inviaSegnalazioneController.getEdifici();
-        return String.valueOf(edifici.size());
+        return String.valueOf(aulaDao.countEdificiGestiti());
     }
 
     /**
@@ -70,8 +51,6 @@ public class DashboardKpiController {
      * @return String con il numero delle aule
      * */
     public String visualizzaNumeroaule(){
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        List<Aula> aule = aulaDao.getAllAule();
-        return String.valueOf(aule.size());
+        return String.valueOf(aulaDao.countAule());
     }
 }

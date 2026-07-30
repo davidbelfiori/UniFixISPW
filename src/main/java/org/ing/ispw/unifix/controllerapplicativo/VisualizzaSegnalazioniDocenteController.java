@@ -26,7 +26,6 @@ public class VisualizzaSegnalazioniDocenteController {
 
     //visualizza le segnalazioni inviate dal docente
     public List<SegnalazioneBean> visualizzaSegnalazioniDocente() throws NessunaSegnalazioneException, NessunSegnalazioneDocenteException {
-        List<Segnalazione> segnalazioniAll = null;
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
         User currentUser = userDao.load(loggetUser.getEmail());
@@ -34,15 +33,8 @@ public class VisualizzaSegnalazioniDocenteController {
             throw new IllegalStateException("Nessun docente loggato");
         }
         String docenteMail = currentUser.getEmail();
-        segnalazioniAll = segnalazioneDao.getAllSegnalazioni();
-        List<Segnalazione> segnalazioniDocente = new ArrayList<>();
-        //prendi solo quelle inviate dal docente
-        if (segnalazioniAll.isEmpty()) throw new NessunaSegnalazioneException("Nessuna segnalazione presente");
-        for (Segnalazione segnalazione : segnalazioniAll) {
-            if (segnalazione.getDocente().getEmail().equals(docenteMail)) {
-                segnalazioniDocente.add(segnalazione);
-            }
-        }
+        List<Segnalazione> segnalazioniDocente = segnalazioneDao.getSegnalazioniByDocente(docenteMail);
+
         if (segnalazioniDocente.isEmpty()) throw new NessunSegnalazioneDocenteException("Nessuna segnalazione inviata dal docente");
 
         //converti le segnalazioni in bean per la view (paradigma MVC)
