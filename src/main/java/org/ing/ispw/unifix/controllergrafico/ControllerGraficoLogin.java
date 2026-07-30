@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
@@ -59,7 +60,7 @@ public class ControllerGraficoLogin {
             SessionManager.getInstance().setCurrentUser(loggedUser);
             switch (loggedUser.getRuolo()) {
                 case UNKNOWN:
-                    popUp.showErrorPopup("Errore", "", "Utente non trovato");
+                    popUp.showErrorPopup("Attenzione", "", "Utente non trovato");
                     break;
                 case DOCENTE:
                     FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
@@ -78,6 +79,8 @@ public class ControllerGraficoLogin {
             }
         }catch (IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption e){
             popUp.showErrorPopup("Errore","", e.getMessage());
+        }catch (DbConnException e){
+            popUp.showErrorPopup("Errore","", "Errore di connessione al database: " + e.getMessage());
         }
     }
 }

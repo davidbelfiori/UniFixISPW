@@ -2,7 +2,6 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
-import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.exception.UpdateSegnalazioneException;
@@ -39,11 +38,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
 
     public JdbcSegnalazioneDao(){
-        try {
-            this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException _) {
-            throw new DbConnException("Impossibile connettersi al database");
-        }
+        this.connection =  SingletonConnessione.getInstance();
     }
 
     @Override

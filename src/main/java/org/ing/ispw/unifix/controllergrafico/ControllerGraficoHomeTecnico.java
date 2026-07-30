@@ -47,7 +47,7 @@ public class ControllerGraficoHomeTecnico {
 
 
     public ControllerGraficoHomeTecnico() {
-        tc= TecnicoController.getInstance();
+        tc= new TecnicoController();
         vstc = new  VisualizzaSegnalazioniTecnicoController();
         isnsc = new InserisciNotaSegnalazioneController();
 
@@ -283,7 +283,7 @@ public class ControllerGraficoHomeTecnico {
     @FXML
     void mostraInfoTecnico(MouseEvent event) {
         // 1. Recupera i dati dal controller applicativo
-        InfoTecnicoBean infoTecnico = TecnicoController.getInstance().getTecnicoInformation();
+        InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
 
         if (infoTecnico == null) {popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore", POPUPMESSAGGI_3);
             return;}

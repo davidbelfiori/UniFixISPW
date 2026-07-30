@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.JsonFileException;
-import org.ing.ispw.unifix.model.Docente;
-import org.ing.ispw.unifix.model.Sysadmin;
-import org.ing.ispw.unifix.model.Tecnico;
-import org.ing.ispw.unifix.model.User;
+import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.File;
@@ -191,38 +188,20 @@ public class JsonUserDao implements UserDao {
     }
 
     private User deserializeUser(ObjectNode node) {
-        String type = node.has(FIELD_TYPE) ? node.get(FIELD_TYPE).asText() : TYPE_USER;
         String email = getStringField(node, FIELD_EMAIL);
         String password = getStringField(node, FIELD_PASSWORD);
         String nome = getStringField(node, FIELD_NOME);
         String cognome = getStringField(node, FIELD_COGNOME);
-        UserType ruolo = null;
 
+        UserType ruolo = null;
         if (node.has(FIELD_RUOLO) && !node.get(FIELD_RUOLO).isNull()) {
             ruolo = UserType.valueOf(node.get(FIELD_RUOLO).asText());
         }
-
-        User user;
-        switch (type) {
-            case TYPE_TECNICO:
-                Tecnico tecnico = new Tecnico(email, password, nome, cognome, ruolo, 0);
-                if (node.has(FIELD_NUMERO_SEGNALAZIONI)) {
-                    tecnico.setNumeroSegnalazioni(node.get(FIELD_NUMERO_SEGNALAZIONI).asInt());
-                }
-                user = tecnico;
-                break;
-            case TYPE_DOCENTE:
-                user = new Docente(email, password, nome, cognome, ruolo);
-                break;
-            case TYPE_SYSADMIN:
-                user = new Sysadmin(email, password, nome, cognome, ruolo);
-                break;
-            default:
-                user = new User(email, password, nome, cognome, ruolo);
-                break;
+        int numeroSegnalazioni = 0;
+        if (node.has(FIELD_NUMERO_SEGNALAZIONI)) {
+            numeroSegnalazioni = node.get(FIELD_NUMERO_SEGNALAZIONI).asInt();
         }
-
-        return user;
+        return UserFactory.createUser(email, password, nome, cognome, ruolo, numeroSegnalazioni);
     }
 
     private String getStringField(ObjectNode node, String field) {

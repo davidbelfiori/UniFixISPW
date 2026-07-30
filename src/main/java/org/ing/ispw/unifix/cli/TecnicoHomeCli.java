@@ -29,7 +29,7 @@ public class TecnicoHomeCli {
     public TecnicoHomeCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        tc = TecnicoController.getInstance();
+        tc = new TecnicoController();
         vstc = new VisualizzaSegnalazioniTecnicoController();
         insc = new InserisciNotaSegnalazioneController();
     }

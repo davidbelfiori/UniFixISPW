@@ -1,12 +1,8 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.UserDao;
-import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.SignUpException;
-import org.ing.ispw.unifix.model.Docente;
-import org.ing.ispw.unifix.model.Sysadmin;
-import org.ing.ispw.unifix.model.Tecnico;
-import org.ing.ispw.unifix.model.User;
+import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.utils.UserType;
 
@@ -20,27 +16,19 @@ import java.util.List;
 
 public class JdbcUserDao  implements UserDao {
 
-    private static JdbcUserDao instance;
-    private final Connection connection;
+   
 
-    private static final String ACTION_1 = "email";
-    private static final String ACTION_2 = "cognome";
-    private static final String ACTION_3 = "password";
+    private static final String EMAIL = "email";
+    private static final String NOME = "nome";
+    private static final String RUOLO = "ruolo";
+    private static final String COGNOME = "cognome";
+    private static final String PASSWORD = "password";
 
-    private JdbcUserDao() {
-        try {
-            this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException e) {
-            throw new DbConnException("Impossibile connettersi al database:"+e.getMessage());
-        }
+
+    private Connection getConnection() {
+        return SingletonConnessione.getInstance();
     }
 
-    public static JdbcUserDao getInstance(){
-        if(instance == null){
-            instance = new JdbcUserDao();
-        }
-        return instance;
-    }
 
     @Override
     public User create(String email) {
@@ -52,34 +40,16 @@ public class JdbcUserDao  implements UserDao {
     @Override
     public User load(String id) {
         String query = "SELECT email, password, nome, cognome, ruolo FROM user WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    String ruolo = rs.getString("ruolo");
-                    User user;
-                    switch (ruolo){
-                        case "DOCENTE":
-                            user = new Docente(rs.getString(ACTION_1));
-                            user.setRuolo(UserType.DOCENTE);
-                            break;
-                        case "TECNICO":
-                            user = new Tecnico(rs.getString(ACTION_1));
-                            user.setRuolo(UserType.TECNICO);
-                            break;
-                        case "SYSADMIN":
-                            user = new Sysadmin(rs.getString(ACTION_1));
-                            user.setRuolo(UserType.SYSADMIN);
-                            break;
-                        default:
-                            user = new User(rs.getString(ACTION_1));
-                            user.setRuolo(UserType.UNKNOWN);
-                            break;
-                    }
-                    user.setPassword(rs.getString(ACTION_3));
-                    user.setNome(rs.getString("nome"));
-                    user.setCognome(rs.getString(ACTION_2));
-                    return user;
+                    String email = rs.getString(EMAIL);
+                    String password = rs.getString(PASSWORD);
+                    String nome = rs.getString(NOME);
+                    String cognome = rs.getString(COGNOME);
+                    UserType ruolo = UserType.valueOf(rs.getString(RUOLO));
+                    return UserFactory.createUser(email, password, nome, cognome, ruolo, 0);
                 }
             }
         }catch (SQLException e) {
@@ -94,7 +64,7 @@ public class JdbcUserDao  implements UserDao {
         if (existsEmail(entity.getEmail())) {
                 throw new SignUpException("Email già registrata");
             }
-            try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stmt = getConnection().prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)")) {
                 stmt.setString(1, entity.getEmail());
                 stmt.setString(2, entity.getPassword());
                 stmt.setString(3, entity.getNome());
@@ -111,7 +81,7 @@ public class JdbcUserDao  implements UserDao {
     @Override
     public void delete(String id) {
         String query = "DELETE FROM user WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -122,7 +92,7 @@ public class JdbcUserDao  implements UserDao {
     @Override
     public boolean exists(String identifier) {
         String query = "SELECT COUNT(*) FROM user WHERE  email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, identifier);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next() && rs.getInt(1) > 0;
@@ -135,16 +105,17 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public List<User> loadAll() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT email, password, nome, cognome, ruolo FROM user ")){
+        try (PreparedStatement statement = getConnection().prepareStatement("SELECT email, password, nome, cognome, ruolo FROM user ")){
 
             try (ResultSet rs = statement.executeQuery()) {
                 List<User> user = new ArrayList<>();
                 while (rs.next()) {
-                    String email = rs.getString(ACTION_1);
-                    String password = rs.getString(ACTION_3);
-                    String nome = rs.getString("nome");
-                    String cognome = rs.getString(ACTION_2);
-                    user.add(new User(email, password, nome, cognome, UserType.valueOf(rs.getString("ruolo"))));
+                    String email = rs.getString(EMAIL);
+                    String password = rs.getString(PASSWORD);
+                    String nome = rs.getString(NOME);
+                    String cognome = rs.getString(COGNOME);
+                    UserType ruolo = UserType.valueOf(rs.getString(RUOLO));
+                    user.add(UserFactory.createUser(email, password, nome, cognome, ruolo, 0));
                 }
                 return user;
             }
@@ -159,7 +130,7 @@ public class JdbcUserDao  implements UserDao {
     @Override
     public void update(User entity) {
         String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ? WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, entity.getPassword());
             stmt.setString(2, entity.getNome());
             stmt.setString(3, entity.getCognome());
@@ -175,7 +146,7 @@ public class JdbcUserDao  implements UserDao {
 
     public void update(Tecnico entity) {
         String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ?, numeroSegnalazioni = ? WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, entity.getPassword());
             stmt.setString(2, entity.getNome());
             stmt.setString(3, entity.getCognome());
@@ -191,15 +162,15 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public List<Tecnico> getAllTecnici() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT email, password, nome, cognome, numeroSegnalazioni FROM user WHERE ruolo = 'TECNICO'")){
+        try (PreparedStatement statement = getConnection().prepareStatement("SELECT email, password, nome, cognome, numeroSegnalazioni FROM user WHERE ruolo = 'TECNICO'")){
 
             try (ResultSet rs = statement.executeQuery()) {
                 List<Tecnico> tecnici = new ArrayList<>();
                 while (rs.next()) {
-                    String email = rs.getString(ACTION_1);
-                    String password = rs.getString(ACTION_3);
-                    String nome = rs.getString("nome");
-                    String cognome = rs.getString(ACTION_2);
+                    String email = rs.getString(EMAIL);
+                    String password = rs.getString(PASSWORD);
+                    String nome = rs.getString(NOME);
+                    String cognome = rs.getString(COGNOME);
                     int numeroSegnalazioni = rs.getInt("numeroSegnalazioni");
                     tecnici.add(new Tecnico(email, password, nome, cognome, UserType.TECNICO, numeroSegnalazioni));
                 }
@@ -213,7 +184,7 @@ public class JdbcUserDao  implements UserDao {
     }
 
     public boolean existsEmail(String email) {
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM user WHERE email = ?")) {
+        try (PreparedStatement stmt = getConnection().prepareStatement("SELECT COUNT(*) FROM user WHERE email = ?")) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next() && rs.getInt(1) > 0;

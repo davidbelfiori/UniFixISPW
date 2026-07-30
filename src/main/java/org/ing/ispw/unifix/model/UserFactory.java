@@ -17,16 +17,22 @@ public class UserFactory {
     public UserFactory(EmailParserService emailParserService) {
         this.emailParserService = emailParserService;
     }
-
+    // Metodo per la registrazione (estrae nome e cognome dall'email)
     public User createUser(String email, String password, UserType ruolo) {
         String nome = emailParserService.extractNome(email);
         String cognome = emailParserService.extractCognome(email);
-
+        return createUser(email, password, nome, cognome, ruolo, 0);
+    }
+    // Overload Per la ricostruzione di utenti da DAO (con tutti i campi già estratti)
+    public static User createUser(String email, String password, String nome, String cognome, UserType ruolo, int numeroSegnalazioni) {
+        if (ruolo == null) {
+            return new User(email, password, nome, cognome, null);
+        }
         return switch (ruolo) {
             case DOCENTE -> new Docente(email, password, nome, cognome, ruolo);
-            case TECNICO -> new Tecnico(email, password, nome, cognome, ruolo, 0);
+            case TECNICO -> new Tecnico(email, password, nome, cognome, ruolo, numeroSegnalazioni);
             case SYSADMIN -> new Sysadmin(email, password, nome, cognome, ruolo);
-            default -> throw new IllegalArgumentException("Ruolo non supportato: " + ruolo);
+            default -> new User(email, password, nome, cognome, ruolo);
         };
     }
 }

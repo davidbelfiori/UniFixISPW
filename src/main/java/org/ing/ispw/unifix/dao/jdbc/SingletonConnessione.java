@@ -1,10 +1,9 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
-import org.ing.ispw.unifix.exception.ErroreLetturaPasswordException;
+import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,49 +11,48 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class SingletonConnessione {
+
     private static Connection connection;
-    private  static final String URL ="jdbc:mariadb://localhost:3306/unifix";
-    private static final String USERNAME="root";
 
+    private static final String URL = "jdbc:mariadb://localhost:3306/unifix";
+    private static final String USERNAME = "root";
 
-    private SingletonConnessione() throws SQLException, IOException {
-        collegatiAlDB();
-    }
+    // Costruttore privato vuoto per impedire l'istanziamento dall'esterno
+    private SingletonConnessione() {}
 
-    private static void collegatiAlDB() throws IOException, SQLException {
-        Properties properties=new Properties();
-
-            try (InputStream is = new FileInputStream("application.properties")) {
-                properties.load(is);
-            } catch (IOException _) {
-                Printer.error("impossibile leggere il file application.properties");
-        }
-        connection= DriverManager.getConnection(URL,USERNAME,(String)properties.get("password"));
-    }
-
-    public static Connection getInstance() throws SQLException, ErroreLetturaPasswordException {
+    // Metodo thread-safe per ottenere la connessione unica
+    public static synchronized Connection getInstance() throws DbConnException {
         try {
-            if (connection == null) {
-                new SingletonConnessione();
+            // Controlla sia se la connessione è null, sia se è stata chiusa/interrotta
+            if (connection == null || connection.isClosed()) {
+                Properties properties = new Properties();
+                try (InputStream is = new FileInputStream("application.properties")) {
+                    properties.load(is);
+                } catch (Exception _) {
+                    Printer.error("Impossibile leggere il file application.properties, utilizzo password di default");
+                }
+
+                String password = properties.getProperty("password", "");
+                connection = DriverManager.getConnection(URL, USERNAME, password);
             }
-        }catch (SQLException _){
-            throw new SQLException("impossibile connettersi al database\nriprova più tardi");
-        } catch (IOException _) {
-            throw new ErroreLetturaPasswordException ("impossibile estrarre la password\ndi connessione al db");
+        } catch (SQLException e) {
+            throw new DbConnException("Impossibile connettersi al database: " + e.getMessage());
         }
         return connection;
     }
 
-    public static void closeConnection()  {
+    // Chiusura sicura della connessione alla chiusura dell'applicazione
+    public static synchronized void closeConnection() {
         if (connection != null) {
             try {
-                connection.close();
-            }catch (SQLException _){
-                //ho provato tutti i casi possibili e non viene mai lanciata un eccezione del tipo sql exception
-                //da questo metodo
-                System.exit(-2);
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                Printer.error("Errore durante la chiusura della connessione: " + e.getMessage());
+            } finally {
+                connection = null;
             }
         }
     }
-
 }

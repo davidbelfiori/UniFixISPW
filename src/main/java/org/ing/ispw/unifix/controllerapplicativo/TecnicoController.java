@@ -16,19 +16,12 @@ import org.ing.ispw.unifix.sessionmanager.SessionManager;
 
 public class TecnicoController {
 
-    private static TecnicoController instance;
     private final SegnalazioneDao segnalazioneDao ;
     private final UserDao userDao;
 
 
-    public static TecnicoController getInstance() {
-        if(instance == null) {
-            instance = new TecnicoController();
-        }
-        return instance;
-    }
 
-    private TecnicoController() {
+    public TecnicoController() {
         segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         userDao = DaoFactory.getInstance().getUserDao();
     }

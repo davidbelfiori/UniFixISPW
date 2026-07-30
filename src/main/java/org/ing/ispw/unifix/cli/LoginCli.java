@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
@@ -32,32 +33,32 @@ public class LoginCli {
         String password = "";
 
         while(!quit) {
+            try {
+                Printer.print("******** Login ***********");
+                Printer.print("\t1) Enter Email [" + email + "]");
+                Printer.print("\t2) Enter Password [" + password + "]");
+                Printer.print("\t3) Login");
+                Printer.print("\t4) Back");
+                String action = br.readLine();
 
-            Printer.print("******** Login ***********");
-            Printer.print("\t1) Enter Email [" + email + "]");
-            Printer.print("\t2) Enter Password [" + password + "]");
-            Printer.print("\t3) Login");
-            Printer.print("\t4) Back");
-            String action = br.readLine();
+                switch (action) {
+                    case "1":
+                        Printer.print("Enter Email");
+                        Printer.print("\t: ");
+                        email = br.readLine();
+                        break;
+                    case "2":
+                        Printer.print("Enter Password");
+                        Printer.print("\t: ");
+                        password = br.readLine();
+                        break;
+                    case "3":
 
-            switch(action) {
-                case "1":
-                    Printer.print("Enter Email");
-                    Printer.print("\t: ");
-                    email = br.readLine();
-                    break;
-                case "2":
-                    Printer.print("Enter Password");
-                    Printer.print("\t: ");
-                    password = br.readLine();
-                    break;
-                case "3":
-
-                    try {
-                        CredentialBean cb = new CredentialBean();
-                        cb.setEmail(email);
-                        cb.setPassword(password);
-                        UserBean loggedUser=lc.validate(cb);
+                        try {
+                            CredentialBean cb = new CredentialBean();
+                            cb.setEmail(email);
+                            cb.setPassword(password);
+                            UserBean loggedUser = lc.validate(cb);
                             SessionManager.getInstance().setCurrentUser(loggedUser);
                             switch (loggedUser.getRuolo()) {
                                 case DOCENTE:
@@ -76,18 +77,23 @@ public class LoginCli {
                                 default:
                                     Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
                             }
-                    }catch (UtenteNonTrovatoException | IllegalArgumentException | PasswordErrataExecption e){
-                        Printer.error("Errore"+e.getMessage());
-                        email="";
-                        password="";
-                    }
-                    break;
-                case "4":
-                    return;
-                default:
-                    break;
+                        } catch (UtenteNonTrovatoException | IllegalArgumentException | PasswordErrataExecption e) {
+                            Printer.error("Errore" + e.getMessage());
+                            email = "";
+                            password = "";
+                        }
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        break;
+                }
+            }catch (DbConnException e){
+                Printer.error("Errore di connessione al database: " + e.getMessage());
             }
-
+            catch (IOException e) {
+                Printer.error("Errore di input/output: " + e.getMessage());
+            }
     }
 
     }

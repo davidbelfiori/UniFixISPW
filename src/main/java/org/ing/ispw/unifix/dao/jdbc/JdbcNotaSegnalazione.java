@@ -1,7 +1,6 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
-import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.ErroreLetturaPasswordException;
 import org.ing.ispw.unifix.exception.NoteNonTrovateException;
 import org.ing.ispw.unifix.exception.StoreNotaException;
@@ -23,11 +22,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
 
     public JdbcNotaSegnalazione() {
-        try {
-            this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException _) {
-            throw new DbConnException("Impossibile connettersi al database");
-        }
+        this.connection =  SingletonConnessione.getInstance();
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.ing.ispw.unifix.dao.*;
 public class PersistenceDaoFactory extends DaoFactory {
 
     public UserDao getUserDao() {
-        return JdbcUserDao.getInstance();
+        return new JdbcUserDao();
     }
 
     @Override

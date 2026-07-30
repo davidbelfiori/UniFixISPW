@@ -17,11 +17,7 @@ public class JdbcAulaDao   implements AulaDao {
 
     private static  final String ACTION_1 ="Oggetto";
     public JdbcAulaDao() {
-        try {
-            this.connection =  SingletonConnessione.getInstance();
-        } catch (SQLException _) {
-            throw new DbConnException("Impossibile connettersi al database");
-        }
+        this.connection =  SingletonConnessione.getInstance();
     }
 
     @Override

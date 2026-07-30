@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
@@ -58,6 +59,8 @@ public class ControllerGraficoRegistrazione {
                 popUp.showErrorPopup(ERRORE, "Formato email non valido", e.getMessage());
             } catch (RuoloNonTrovatoException e) {
                 popUp.showErrorPopup(ERRORE, "Dominio email non riconosciuto", e.getMessage());
+            }catch (DbConnException e){
+                popUp.showErrorPopup(ERRORE,"Errore di connessione al database", e.getMessage());
             }
         }
 
