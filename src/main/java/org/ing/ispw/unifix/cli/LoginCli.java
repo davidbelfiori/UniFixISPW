@@ -24,7 +24,7 @@ public class LoginCli {
     public LoginCli() {
         quit = false;
         br = new BufferedReader(new InputStreamReader(System.in));
-        lc= new LoginController();
+        lc = new LoginController();
     }
 
     public void loginCliHome() throws IOException {
@@ -32,7 +32,7 @@ public class LoginCli {
         String email = "";
         String password = "";
 
-        while(!quit) {
+        while (!quit) {
             try {
                 Printer.print("******** Login ***********");
                 Printer.print("\t1) Enter Email [" + email + "]");
@@ -53,32 +53,9 @@ public class LoginCli {
                         password = br.readLine();
                         break;
                     case "3":
-
-                        try {
-                            CredentialBean cb = new CredentialBean();
-                            cb.setEmail(email);
-                            cb.setPassword(password);
-                            UserBean loggedUser = lc.validate(cb);
-                            SessionManager.getInstance().setCurrentUser(loggedUser);
-                            switch (loggedUser.getRuolo()) {
-                                case DOCENTE:
-                                    DocenteHomeCli docenteView = new DocenteHomeCli();
-                                    docenteView.docenteHome();
-                                    break;
-                                case TECNICO:
-                                    TecnicoHomeCli tecnicoView = new TecnicoHomeCli();
-                                    tecnicoView.tecnicoHome();
-                                    break;
-
-                                case SYSADMIN:
-                                    SysAdminHomeCli adminView = new SysAdminHomeCli();
-                                    adminView.adminHome();
-                                    break;
-                                default:
-                                    Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
-                            }
-                        } catch (UtenteNonTrovatoException | IllegalArgumentException | PasswordErrataExecption e) {
-                            Printer.error("Errore" + e.getMessage());
+                        // Se il login fallisce, resettiamo le variabili
+                        boolean isLoginSuccessful = attemptLogin(email, password);
+                        if (!isLoginSuccessful) {
                             email = "";
                             password = "";
                         }
@@ -88,13 +65,46 @@ public class LoginCli {
                     default:
                         break;
                 }
-            }catch (DbConnException e){
+            } catch (DbConnException e) {
                 Printer.error("Errore di connessione al database: " + e.getMessage());
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Printer.error("Errore di input/output: " + e.getMessage());
             }
+        }
+
+
+    }
+
+    private Boolean attemptLogin (String mail, String password)throws IOException, DbConnException {
+        try {
+            CredentialBean cb = new CredentialBean();
+            cb.setEmail(mail);
+            cb.setPassword(password);
+
+            UserBean loggedUser = lc.validate(cb);
+            SessionManager.getInstance().setCurrentUser(loggedUser);
+
+            // Smistamento viste in base al ruolo
+            switch (loggedUser.getRuolo()) {
+                case DOCENTE:
+                    new DocenteHomeCli().docenteHome();
+                    break;
+                case TECNICO:
+                    new TecnicoHomeCli().tecnicoHome();
+                    break;
+                case SYSADMIN:
+                    new SysAdminHomeCli().adminHome();
+                    break;
+                default:
+                    Printer.error("L'utente non fa parte del dominio o non ha un ruolo");
+                    return false;
+            }
+            return true;
+
+        } catch (UtenteNonTrovatoException | IllegalArgumentException | PasswordErrataExecption e) {
+            Printer.error("Errore: " + e.getMessage());
+            return false;
+        }
     }
 
     }
-}

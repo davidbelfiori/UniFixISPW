@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,20 +26,24 @@ public class SingletonConnessione {
         try {
             // Controlla sia se la connessione è null, sia se è stata chiusa/interrotta
             if (connection == null || connection.isClosed()) {
-                Properties properties = new Properties();
-                try (InputStream is = new FileInputStream("application.properties")) {
-                    properties.load(is);
-                } catch (Exception _) {
-                    Printer.error("Impossibile leggere il file application.properties, utilizzo password di default");
-                }
-
-                String password = properties.getProperty("password", "");
+                String password = loadDatabasePassword();
                 connection = DriverManager.getConnection(URL, USERNAME, password);
             }
         } catch (SQLException e) {
             throw new DbConnException("Impossibile connettersi al database: " + e.getMessage());
         }
         return connection;
+    }
+
+    // Metodo privato estratto per isolare la logica di lettura del file
+    private static String loadDatabasePassword() {
+        Properties properties = new Properties();
+        try (InputStream is = new FileInputStream("application.properties")) {
+            properties.load(is);
+        } catch (IOException e) { // Sostituito "Exception" con la più specifica "IOException"
+            Printer.error("Impossibile leggere il file application.properties, utilizzo password di default");
+        }
+        return properties.getProperty("password", "");
     }
 
     // Chiusura sicura della connessione alla chiusura dell'applicazione
