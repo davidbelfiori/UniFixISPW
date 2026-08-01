@@ -257,7 +257,7 @@ public class ControllerGraficoHomeTecnico {
 
     private void salvaNuovaNota(SegnalazioneBean segnalazione, String nuovaNota) {
         if (nuovaNota == null || nuovaNota.trim().isEmpty()) {
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nota non valida", POPUPMESSAGGI_2);
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nota non valida", "Il contenuto della nota è vuoto. Inserisci del testo prima di salvare.");
             return;
         }
         try {

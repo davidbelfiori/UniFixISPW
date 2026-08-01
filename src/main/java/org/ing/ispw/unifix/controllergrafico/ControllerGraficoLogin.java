@@ -59,9 +59,6 @@ public class ControllerGraficoLogin {
             UserBean loggedUser = lc.validate(cb);
             SessionManager.getInstance().setCurrentUser(loggedUser);
             switch (loggedUser.getRuolo()) {
-                case UNKNOWN:
-                    popUp.showErrorPopup("Attenzione", "", "Utente non trovato");
-                    break;
                 case DOCENTE:
                     FXMLLoader fxmlLoaderr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeDocente.fxml"));
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderr.load());
@@ -75,6 +72,7 @@ public class ControllerGraficoLogin {
                     ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
                     break;
                 default:
+                    popUp.showErrorPopup("Attenzione", "", "Ruolo non valido");
                     break;
             }
         }catch (IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption e){

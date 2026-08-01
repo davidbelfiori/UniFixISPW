@@ -2,7 +2,7 @@ package org.ing.ispw.unifix.model;
 
 import org.ing.ispw.unifix.utils.UserType;
 
-public class User {
+public abstract class User {
 
     private String nome;
     private String cognome;

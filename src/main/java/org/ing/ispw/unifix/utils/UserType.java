@@ -4,5 +4,4 @@ public enum UserType {
     DOCENTE,
     TECNICO,
     SYSADMIN,
-    UNKNOWN;
 }

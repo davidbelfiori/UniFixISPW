@@ -14,25 +14,15 @@ import org.ing.ispw.unifix.sessionmanager.SessionManager;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 public class InviaSegnalazioneController {
 
 
     public List<String> getEdifici(){
         AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-        List<Aula> aule = aulaDao.getAllAule();
-
-        // Usa un Set per eliminare i duplicati
-        Set<String> edificiUnici = new HashSet<>();
-        for (Aula aula : aule) {
-            edificiUnici.add(aula.getEdificio());
-        }
-
-        // Imposta gli edifici unici nel SegnalazioneBean
-       return new ArrayList<>(edificiUnici);
+       return aulaDao.getAllEdifici();
     }
 
     public List<AulaBean> getAuleByEdificio(String edificio){

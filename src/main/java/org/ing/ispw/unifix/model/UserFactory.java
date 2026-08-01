@@ -26,13 +26,13 @@ public class UserFactory {
     // Overload Per la ricostruzione di utenti da DAO (con tutti i campi già estratti)
     public static User createUser(String email, String password, String nome, String cognome, UserType ruolo, int numeroSegnalazioni) {
         if (ruolo == null) {
-            return new User(email, password, nome, cognome, null);
+            throw new IllegalArgumentException("Ruolo utente non specificato");
         }
         return switch (ruolo) {
             case DOCENTE -> new Docente(email, password, nome, cognome, ruolo);
             case TECNICO -> new Tecnico(email, password, nome, cognome, ruolo, numeroSegnalazioni);
             case SYSADMIN -> new Sysadmin(email, password, nome, cognome, ruolo);
-            default -> new User(email, password, nome, cognome, ruolo);
+            default -> throw new IllegalArgumentException("Ruolo non valido: " + ruolo);
         };
     }
 }

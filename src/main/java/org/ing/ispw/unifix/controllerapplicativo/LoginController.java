@@ -37,10 +37,6 @@ public class LoginController {
         }
 
         UserType ruolo = emailParserService.extractRuolo(rb.getEmail());
-        if(ruolo == UserType.UNKNOWN) {
-            return false;
-        }
-
         User user = userFactory.createUser(rb.getEmail(), rb.getPassword(), ruolo);
         userDao.store(user);
         return true;

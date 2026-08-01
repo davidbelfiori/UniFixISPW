@@ -13,7 +13,8 @@ public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDa
     }
 
     public User create(String email){
-        return new User(email);
+        //Poiche User è astratto, la creazione di un utente deve essere gestita da UserFactory
+        throw new UnsupportedOperationException("User è astratto: la creazione è gestita da UserFactory");
     }
 
 

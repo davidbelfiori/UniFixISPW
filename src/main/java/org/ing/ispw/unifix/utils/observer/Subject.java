@@ -23,7 +23,7 @@ public class Subject {
     public void notifyObservers(Object eventdata){
 
         /*
-        * la jvm osserva chi è realmebte l'osservatore al primo giro è Docente quindi l'update che si esegue
+        * la jvm osserva chi è realmente l'osservatore al primo giro è Docente quindi l'update che si esegue
         * è quello nella classe Docente , menttre il secondo giro è l'update nella classe tecnico
         * */
         for (Observer observer : observers) {
