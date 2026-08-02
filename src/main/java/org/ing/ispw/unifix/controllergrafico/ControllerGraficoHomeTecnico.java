@@ -110,7 +110,7 @@ public class ControllerGraficoHomeTecnico {
                 if (response == lavorazioneButton){
                     try{
                         tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (StateExecption e){//NOSONAR
+                    }catch (InvalidStateTransitionException e){//NOSONAR
                         popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
                     }
                     segnalazioniContainer.getChildren().clear();
@@ -118,7 +118,7 @@ public class ControllerGraficoHomeTecnico {
                 } else if (response == chiudiButton){
                     try{
                         tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (StateExecption e){ //NOSONAR
+                    }catch (InvalidStateTransitionException e){ //NOSONAR
                         popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
                     }
                     segnalazioniContainer.getChildren().clear();

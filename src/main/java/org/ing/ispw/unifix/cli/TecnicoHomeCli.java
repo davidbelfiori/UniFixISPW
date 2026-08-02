@@ -9,7 +9,7 @@ import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoCo
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.exception.NotaStatoSegnalazioneLavorazioneException;
-import org.ing.ispw.unifix.exception.StateExecption;
+import org.ing.ispw.unifix.exception.InvalidStateTransitionException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
@@ -155,7 +155,7 @@ public class TecnicoHomeCli {
                         try {
                             tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
                             Printer.print("Segnalazione in lavorazione.");
-                        } catch (StateExecption e){
+                        } catch (InvalidStateTransitionException e){
                             Printer.error(e.getMessage());
                             return;
                         }
@@ -163,7 +163,7 @@ public class TecnicoHomeCli {
                     case "2":
                         try{
                             tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                        } catch (StateExecption e){
+                        } catch (InvalidStateTransitionException e){
                             Printer.error(e.getMessage());
                             return;
                         }

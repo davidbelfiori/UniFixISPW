@@ -9,7 +9,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.exception.StateExecption;
+import org.ing.ispw.unifix.exception.InvalidStateTransitionException;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
@@ -65,7 +65,7 @@ public class TecnicoController {
     }
 
 
-    public void chiudiSegnalazione(String idSegnalazione) throws StateExecption {
+    public void chiudiSegnalazione(String idSegnalazione) throws InvalidStateTransitionException {
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
