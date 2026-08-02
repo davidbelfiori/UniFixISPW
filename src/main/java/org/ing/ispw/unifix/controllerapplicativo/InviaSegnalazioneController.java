@@ -59,7 +59,7 @@ public class InviaSegnalazioneController {
 
     }
 
-    public Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
+    private Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         List<Tecnico> tecnici = userDao.getAllTecnici();
         if (tecnici.isEmpty()) throw new NonCiSonoTecniciException("Non ci sono tecnici disponibili");
