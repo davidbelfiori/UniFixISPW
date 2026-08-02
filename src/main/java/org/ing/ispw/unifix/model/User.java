@@ -10,11 +10,11 @@ public abstract class User {
     private String password;
     private UserType ruolo;
 
-    public User(String email) {
+    protected User(String email) {
         this.email = email;
     }
 
-    public User(String email, String password, String nome, String cognome, UserType ruolo) {
+    protected User(String email, String password, String nome, String cognome, UserType ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -22,7 +22,7 @@ public abstract class User {
         this.ruolo = ruolo;
     }
 
-    public User(String email, String nome, String cognome) {
+    protected User(String email, String nome, String cognome) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
