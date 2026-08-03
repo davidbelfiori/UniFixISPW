@@ -76,6 +76,9 @@ public class InviaSegnalazioneController {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        if (loggetUser == null) {
+            throw new IllegalStateException("Nessun utente loggato");
+        }
         User docenteSegnalatore = userDao.load(loggetUser.getEmail());
 
         String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();

@@ -28,6 +28,9 @@ public class VisualizzaSegnalazioniDocenteController {
     public List<SegnalazioneBean> visualizzaSegnalazioniDocente() throws NessunaSegnalazioneException, NessunSegnalazioneDocenteException {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        if (loggetUser == null) {
+            throw new IllegalStateException("Nessun docente loggato");
+        }
         User currentUser = userDao.load(loggetUser.getEmail());
         if (currentUser == null) {
             throw new IllegalStateException("Nessun docente loggato");

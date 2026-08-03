@@ -23,6 +23,9 @@ public class DocenteController {
 
     public InfoDocenteBean getDocenteInformation() {
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
+        if (loggedUser == null) {
+            throw new IllegalStateException("Nessun docente loggato");
+        }
         User currentUser = userDao.load(loggedUser.getEmail());
         if (currentUser != null) {
             InfoDocenteBean infoDocente = new InfoDocenteBean();

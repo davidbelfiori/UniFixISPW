@@ -20,6 +20,3 @@ public abstract class DaoFactory {
     public abstract SegnalazioneDao getSegnalazioneDao();
     public abstract NotaSegnalazioneDao getNotaSegnalazioneDao();
 }
-
-
-//TODO cambiare la struttura del singleton , cosi che il driver passa il persistence type e la factory crea il dao corretto

@@ -210,7 +210,9 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
             node.put(FIELD_DATA_CREAZIONE, s.getDataCreazione().getTime());
         }
         node.put(FIELD_OGGETTO_GUASTO, s.getOggettoGuasto());
-        node.put(FIELD_STATO, s.getStato().name());
+        if (s.getStato() != null) {
+            node.put(FIELD_STATO, s.getStato().name());
+        }
         node.put(FIELD_DESCRIZIONE, s.getDescrizione());
         node.put(FIELD_AULA, s.getAula());
         node.put(FIELD_EDIFICIO, s.getEdificio());

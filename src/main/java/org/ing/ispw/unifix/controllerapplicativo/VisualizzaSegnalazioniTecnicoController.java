@@ -29,6 +29,9 @@ public class VisualizzaSegnalazioniTecnicoController {
         List<Segnalazione> segnalazioniAll;
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
+        if (loggedUser == null) {
+            throw new IllegalStateException("Nessun tecnico loggato");
+        }
         User currentUser = userDao.load(loggedUser.getEmail());
         if (currentUser == null) {
             throw new IllegalStateException("Nessun tecnicoMail loggato");

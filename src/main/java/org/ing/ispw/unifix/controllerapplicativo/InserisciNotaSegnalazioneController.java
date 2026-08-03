@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.NotaStatoSegnalazioneLavorazioneException;
+import org.ing.ispw.unifix.exception.SegnalazioneNonTrovataException;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.utils.StatoSegnalazione;
@@ -26,8 +27,11 @@ public class InserisciNotaSegnalazioneController {
         Date date = new Date();
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         Segnalazione segnalazione = segnalazioneDao.load(nsb.getIdSegnalazione());
+        if (segnalazione == null) {
+            throw new SegnalazioneNonTrovataException("Segnalazione non trovata con ID: " + nsb.getIdSegnalazione());
+        }
         NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
-        if(!segnalazione.getStato().equals(StatoSegnalazione.IN_LAVORAZIONE)){
+        if (segnalazione.getStato() != StatoSegnalazione.IN_LAVORAZIONE) {
             throw new NotaStatoSegnalazioneLavorazioneException("L'intervento deve essere in lavorazione per aggiungere una nota");
         }
         String chiave = "IdSegnalazione" + nsb.getIdSegnalazione().trim() + "_NotaFrom"+segnalazione.getTecnico().getEmail()+"_Date"+System.currentTimeMillis();

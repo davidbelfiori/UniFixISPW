@@ -28,6 +28,9 @@ public class TecnicoController {
 
     public InfoTecnicoBean getTecnicoInformation(){
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+        if (loggetUser == null) {
+            throw new IllegalStateException("Nessun tecnico loggato.");
+        }
         Tecnico currentUser = (Tecnico) userDao.load(loggetUser.getEmail());
         if (currentUser == null) {
             throw new IllegalStateException("Nessun tecnico loggato.");
@@ -72,10 +75,12 @@ public class TecnicoController {
 
         //Quando una segnalazione viene chiusa (l'operazione è irreversibile) il numero di interventi del tecnico viene decementato
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
-        Tecnico currentUser = (Tecnico) userDao.load(loggetUser.getEmail());
-        if(currentUser != null) {
-            currentUser.decrementaSegnalazioni();
-            userDao.update(currentUser);
+        if (loggetUser != null) {
+            Tecnico currentUser = (Tecnico) userDao.load(loggetUser.getEmail());
+            if(currentUser != null) {
+                currentUser.decrementaSegnalazioni();
+                userDao.update(currentUser);
+            }
         }
 
         segnalazione.attach((segnalazione.getDocente()));
