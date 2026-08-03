@@ -1,9 +1,10 @@
 package org.ing.ispw.controller.applicativo;
 
-import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.bean.RegistrazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
+import org.ing.ispw.unifix.dao.DaoFactory;
+import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
@@ -22,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @BeforeAll
     static void setUp() {
-        Driver.setPersistenceProvider("in memory");
+
+        InMemoryDaoFactory memoryDaoFactory = new InMemoryDaoFactory();
+        DaoFactory.setInstance(memoryDaoFactory);
         DemoData.load();
         loginController = new LoginController();
     }

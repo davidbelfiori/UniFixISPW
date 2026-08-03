@@ -8,12 +8,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.ing.ispw.unifix.cli.StartHomeViewCLI;
-
-import org.ing.ispw.unifix.dao.DaoFactory;
-import org.ing.ispw.unifix.dao.jdbc.PersistenceDaoFactory;
-import org.ing.ispw.unifix.dao.json.JsonDaoFactory;
-import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
-import org.ing.ispw.unifix.utils.DemoData;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.IOException;
@@ -22,8 +16,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Driver extends Application {
-    private static final String IN_MEM = "in memory";
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -38,45 +30,19 @@ public class Driver extends Application {
         primaryStage.show();
     }
 
-    public static void setPersistenceProvider(String provider) {
-        switch (provider.toLowerCase()) {
-            case IN_MEM:
-                DaoFactory.setInstance(new InMemoryDaoFactory());
-                break;
-
-            case "persistence":
-                DaoFactory.setInstance(new PersistenceDaoFactory());
-                break;
-
-            case "json":
-                DaoFactory.setInstance(new JsonDaoFactory());
-                break;
-
-            default:
-                throw new IllegalArgumentException("Provider di persistenza non valido: " + provider);
-        }
-    }
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         Printer.print("Benvenuto in UniFix!");
 
-        Printer.print("Scegli il tipo di persistenza ('in memory', 'persistence' o 'json'):");
-        String persistenceType = scanner.nextLine();
-
-        while (!persistenceType.equalsIgnoreCase(IN_MEM) && !persistenceType.equalsIgnoreCase("persistence") && !persistenceType.equalsIgnoreCase("json")) {
-            Printer.print("Scelta non valida. Per favore, inserisci 'in memory', 'persistence' o 'json':");
-            persistenceType = scanner.nextLine();
-        }
-
-        setPersistenceProvider(persistenceType.toLowerCase());
-        Printer.print("Provider di persistenza impostato su: " + persistenceType);
-
-        // Se si sceglie "in memory", si potrebbero voler caricare dati di esempio.
-         if (persistenceType.equalsIgnoreCase(IN_MEM)) {
-             DemoData.load();
-        }
-
+        /*
+        Per rispettare il principio delle Protected Variations e il disaccoppiamento dei dettagli di deployment,
+        la scelta del meccanismo di persistenza è stata esternalizzata nel file di configurazione
+        application.properties. In questo modo, l'applicazione può essere migrata da un database MariaDB
+         a un file system JSON o a una memoria RAM semplicemente modificando il file di properties,
+         senza modificare né ricompilare il codice sorgente. La DaoFactory agisce come Singleton
+         polimorfico auto-configurante,
+        */
         Printer.print("Scegli l'interfaccia: CLI o GUI");
         String interfaceType = scanner.nextLine();
 

@@ -1,6 +1,5 @@
 package org.ing.ispw.controller.applicativo;
 
-import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.dao.AulaDao;
@@ -29,8 +28,6 @@ class GestioneAuleControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Configura il DaoFactory con InMemoryDaoFactory per i test
-        Driver.setPersistenceProvider("in memory");
         controller = new GestioneAuleController();
         aulaDao = DaoFactory.getInstance().getAulaDao();
     }
