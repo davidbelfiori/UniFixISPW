@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDao {
 
@@ -12,17 +13,15 @@ public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDa
         return user.getEmail();
     }
 
-    public User create(String email){
-        //Poiche User è astratto, la creazione di un utente deve essere gestita da UserFactory
-        throw new UnsupportedOperationException("User è astratto: la creazione è gestita da UserFactory");
-    }
-
-
 
     public List<Tecnico> getAllTecnici() {
-        return loadAll().stream()
-                .filter(Tecnico.class::isInstance)
-                .map(Tecnico.class::cast).toList();
+        List<Tecnico> tecnico = new ArrayList<Tecnico>();
+        for (User user : loadAll()) {
+            if (user instanceof Tecnico tecnicoUser) {
+                tecnico.add(tecnicoUser);
+            }
+        }
+        return tecnico;
     }
 
     @Override

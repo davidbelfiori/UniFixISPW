@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.dao;
 
-import org.ing.ispw.unifix.dao.jdbc.PersistenceDaoFactory;
+import org.ing.ispw.unifix.dao.jdbc.JdbcDaoFactory;
 import org.ing.ispw.unifix.dao.json.JsonDaoFactory;
 import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 import org.ing.ispw.unifix.utils.DemoData;
@@ -27,10 +27,10 @@ public abstract class DaoFactory {
                     yield memoryDaoFactory;
 
                 }
-                case "JDBC", "PERSISTENCE" -> new PersistenceDaoFactory();
+                case "JDBC", "PERSISTENCE" -> new JdbcDaoFactory();
                 default -> {
                     Printer.print("Tipo persistenza non valido o assente, fallback su: JDBC");
-                    yield new PersistenceDaoFactory();
+                    yield new JdbcDaoFactory();
                 }
             };
         }

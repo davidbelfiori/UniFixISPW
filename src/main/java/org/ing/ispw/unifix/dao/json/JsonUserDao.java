@@ -58,11 +58,6 @@ public class JsonUserDao implements UserDao {
         return new File(DATA_DIR, FILE_NAME);
     }
 
-    @Override
-    public User create(String email) {
-        //Poiche User è astratto, la creazione di un utente deve essere gestita da UserFactory
-        throw new UnsupportedOperationException("User è astratto: la creazione è gestita da UserFactory");
-    }
 
     @Override
     public User load(String id) {

@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface UserDao extends Dao<String, User> {
 
-    User create(String email);
-
     List<Tecnico> getAllTecnici();
 
     void update(Tecnico tecnico);

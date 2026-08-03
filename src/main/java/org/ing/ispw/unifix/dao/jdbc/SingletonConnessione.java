@@ -35,6 +35,8 @@ public class SingletonConnessione {
     }
 
     // Metodo privato estratto per isolare la logica di lettura del file
+    //un metodo statico non possiede un riferimento this ad un'istanza e non
+    // può invocare metodi di istanza non statici senza istanziare la classe.
     private static String loadDatabasePassword() {
         Properties properties = new Properties();
         try (InputStream is = new FileInputStream("application.properties")) {
@@ -47,6 +49,9 @@ public class SingletonConnessione {
 
 
     // Chiusura sicura della connessione alla chiusura dell'applicazione
+    /*Rendere closeConnection() static consente a qualunque componente
+    (es. alla chiusura dell'app o in fase di shutdown hook)
+     di invocare SingletonConnessione.closeConnection() senza bisogno di avere un'istanza della classe.*/
     public static synchronized void closeConnection() {
         if (connection != null) {
             try {
