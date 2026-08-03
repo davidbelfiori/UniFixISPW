@@ -25,9 +25,6 @@ public class Tecnico extends User implements Observer {
         return numeroSegnalazioni;
     }
 
-    public void setNumeroSegnalazioni(int numeroSegnalazioni) {
-        this.numeroSegnalazioni = numeroSegnalazioni;
-    }
 
     public void incrementaSegnalazioni() {
         this.numeroSegnalazioni++;

@@ -13,12 +13,12 @@ import java.util.*;
 
 public class JdbcAulaDao   implements AulaDao {
 
-    private final Connection  connection;
+
 
     private static  final String ACTION_1 ="Oggetto";
-    public JdbcAulaDao() {
-        this.connection =  SingletonConnessione.getInstance();
-    }
+
+     private Connection getConnection() { return SingletonConnessione.getInstance(); }
+
 
     @Override
     public Aula create(String idAula) {
@@ -29,7 +29,7 @@ public class JdbcAulaDao   implements AulaDao {
     public Aula load(String id) {
 
         String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)){
             stmt.setString(1, id);
                 ResultSet rs = stmt.executeQuery();
                 Aula aula = new Aula(id);
@@ -47,6 +47,8 @@ public class JdbcAulaDao   implements AulaDao {
 
     }
 
+
+
     @Override
     public void store(Aula entity) {
        if (entity == null) {throw new IllegalArgumentException("Aula non valida");}
@@ -55,8 +57,8 @@ public class JdbcAulaDao   implements AulaDao {
 
         String insertOggettoQuery = "INSERT INTO oggettiaula (IdAula, Oggetto) VALUES (?, ?)";
 
-        try (PreparedStatement aulaStmt = connection.prepareStatement(insertAulaQuery);
-             PreparedStatement oggettoStmt = connection.prepareStatement(insertOggettoQuery)) {
+        try (PreparedStatement aulaStmt = getConnection().prepareStatement(insertAulaQuery);
+             PreparedStatement oggettoStmt = getConnection().prepareStatement(insertOggettoQuery)) {
 
             // Inserimento o aggiornamento dell'aula
             aulaStmt.setString(1, entity.getIdAula());
@@ -65,7 +67,7 @@ public class JdbcAulaDao   implements AulaDao {
             aulaStmt.executeUpdate();
 
             // Eliminare gli oggetti precedenti per l'aula per evitare duplicati
-            try (PreparedStatement deleteStmt = connection.prepareStatement("DELETE FROM oggettiaula WHERE IdAula = ?")) {
+            try (PreparedStatement deleteStmt = getConnection().prepareStatement("DELETE FROM oggettiaula WHERE IdAula = ?")) {
                 deleteStmt.setString(1, entity.getIdAula());
                 deleteStmt.executeUpdate();
             }
@@ -90,7 +92,7 @@ public class JdbcAulaDao   implements AulaDao {
     @Override
     public void delete(String id) {
         String query = "DELETE FROM aule WHERE IdAula = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)){
             stmt.setString(1, id);
             stmt.executeUpdate();
         }catch (SQLException e){
@@ -101,7 +103,7 @@ public class JdbcAulaDao   implements AulaDao {
     @Override
     public boolean exists(String id) {
         String query = "SELECT COUNT(*) FROM aule WHERE IdAula = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, id);
             try (var rs = stmt.executeQuery()) {
                 return rs.next() && rs.getInt(1) > 0;
@@ -136,7 +138,7 @@ public class JdbcAulaDao   implements AulaDao {
                 LEFT JOIN oggettiaula o ON a.IdAula = o.IdAula
                 """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(query);
+        try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -172,7 +174,7 @@ public class JdbcAulaDao   implements AulaDao {
     public List<String> getAllEdifici() {
         List<String> edifici = new ArrayList<>();
         String query = "SELECT DISTINCT Edificio FROM aule";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
+        try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 String edificio = rs.getString("Edificio");
@@ -188,7 +190,7 @@ public class JdbcAulaDao   implements AulaDao {
     public List<String> getAulaOggetti(String idAula) {
         List<String> oggetti = new ArrayList<>();
         String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query);) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query);) {
             stmt.setString(1, idAula);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -205,7 +207,7 @@ public class JdbcAulaDao   implements AulaDao {
     @Override
     public int countAule() {
         String query = "SELECT COUNT(*) FROM aule";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
+        try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -220,7 +222,7 @@ public class JdbcAulaDao   implements AulaDao {
     @Override
     public int countEdificiGestiti() {
         String query = "SELECT COUNT(DISTINCT Edificio) FROM aule";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
+        try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);

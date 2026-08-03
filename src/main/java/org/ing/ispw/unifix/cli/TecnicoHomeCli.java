@@ -6,6 +6,7 @@ import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
 import org.ing.ispw.unifix.controllerapplicativo.TecnicoController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniTecnicoController;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneTecnicoException;
 import org.ing.ispw.unifix.exception.NotaStatoSegnalazioneLavorazioneException;
@@ -73,7 +74,7 @@ public class TecnicoHomeCli {
             for (SegnalazioneBean segnalazioneBean: segnalazioni){
                  stampaDettagliSegnalazione(segnalazioneBean);
             }
-        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException | IllegalStateException ex) {
+        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException | IllegalStateException | PersistenceException ex) {
             Printer.print(ex.getMessage());
             return;
         }
@@ -103,7 +104,7 @@ public class TecnicoHomeCli {
                 default: Printer.print("Azione non valida.");
             }
 
-        } catch (NessunaSegnalazioneException | IllegalArgumentException e) {
+        } catch (NessunaSegnalazioneException | IllegalArgumentException | PersistenceException e) {
             Printer.error(e.getMessage());
         }
     }
@@ -137,6 +138,8 @@ public class TecnicoHomeCli {
                 }
             } catch (IOException e) {
                 Printer.error("Errore di lettura: " + e.getMessage());
+            } catch (PersistenceException e) {
+                Printer.error("Errore di persistenza: " + e.getMessage());
             }
         }
     }
@@ -155,7 +158,7 @@ public class TecnicoHomeCli {
                         try {
                             tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
                             Printer.print("Segnalazione in lavorazione.");
-                        } catch (InvalidStateTransitionException e){
+                        } catch (InvalidStateTransitionException | PersistenceException e){
                             Printer.error(e.getMessage());
                             return;
                         }
@@ -163,7 +166,7 @@ public class TecnicoHomeCli {
                     case "2":
                         try{
                             tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                        } catch (InvalidStateTransitionException e){
+                        } catch (InvalidStateTransitionException | PersistenceException e){
                             Printer.error(e.getMessage());
                             return;
                         }
@@ -197,20 +200,24 @@ public class TecnicoHomeCli {
                     Printer.print("Email: " + info.getEmail());
                     Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
                     Printer.print("--------------------");
-                } catch (IllegalStateException e) {
+                } catch (IllegalStateException | PersistenceException e) {
                     Printer.error(e.getMessage());
 
                 }
             }
             private void stampaNoteSegnalazione(SegnalazioneBean segnalazione) {
-                List<NotaSegnalazioneBean> note = insc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
-                for (NotaSegnalazioneBean nota : note) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                    String dataFormattata = dateFormat.format(nota.getDataCreazione().getTime());
+                try {
+                    List<NotaSegnalazioneBean> note = insc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
+                    for (NotaSegnalazioneBean nota : note) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        String dataFormattata = dateFormat.format(nota.getDataCreazione().getTime());
+                        Printer.print("--------------------------------");
+                        Printer.print(dataFormattata + ": " + nota.getTestoNota());
+                    }
                     Printer.print("--------------------------------");
-                    Printer.print(dataFormattata + ": " + nota.getTestoNota());
+                } catch (PersistenceException e) {
+                    Printer.error("Errore di persistenza: " + e.getMessage());
                 }
-                Printer.print("--------------------------------");
             }
 
             private void aggiungiNuovaNota(SegnalazioneBean segnalazione) {
@@ -239,7 +246,7 @@ public class TecnicoHomeCli {
                     Printer.error("Errore durante l'inserimento della nota: " + e.getMessage());
                 } catch (IllegalArgumentException e) {
                     Printer.error("Dati non validi: " + e.getMessage());
-                }  catch (NotaStatoSegnalazioneLavorazioneException e){
+                }  catch (NotaStatoSegnalazioneLavorazioneException | PersistenceException e){
                     Printer.error("Errore: " + e.getMessage());
                 }
             }

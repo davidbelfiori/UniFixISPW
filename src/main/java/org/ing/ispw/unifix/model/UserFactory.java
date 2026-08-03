@@ -14,13 +14,14 @@ public class UserFactory {
 
     private final EmailParserService emailParserService;
 
-    public UserFactory(EmailParserService emailParserService) {
-        this.emailParserService = emailParserService;
+    public UserFactory() {
+        this.emailParserService = new EmailParserService();
     }
     // Metodo per la registrazione (estrae nome e cognome dall'email)
-    public User createUser(String email, String password, UserType ruolo) {
+    public User createUser(String email, String password) {
         String nome = emailParserService.extractNome(email);
         String cognome = emailParserService.extractCognome(email);
+        UserType ruolo = emailParserService.extractRuolo(email);
         return createUser(email, password, nome, cognome, ruolo, 0);
     }
     // Overload Per la ricostruzione di utenti da DAO (con tutti i campi già estratti)

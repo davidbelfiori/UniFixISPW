@@ -10,14 +10,12 @@ import javafx.scene.input.MouseEvent;
 import org.ing.ispw.unifix.bean.CredentialBean;
 import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
-import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.PasswordErrataExecption;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
-
-import java.io.IOException;
 
 
 public class ControllerGraficoLogin {
@@ -75,10 +73,8 @@ public class ControllerGraficoLogin {
                     popUp.showErrorPopup("Attenzione", "", "Ruolo non valido");
                     break;
             }
-        }catch (IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption e){
+        }catch (java.io.IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption | PersistenceException e){
             popUp.showErrorPopup("Errore","", e.getMessage());
-        }catch (DbConnException e){
-            popUp.showErrorPopup("Errore","", "Errore di connessione al database: " + e.getMessage());
         }
     }
 }

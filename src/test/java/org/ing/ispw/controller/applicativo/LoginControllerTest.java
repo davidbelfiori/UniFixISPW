@@ -120,7 +120,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void testConfirmPassword() {
         RegistrazioneBean rb = new RegistrazioneBean();
-        rb.setEmail("mario.rossi@uniroma2.eu");
+        rb.setEmail("giulia.bianchi@uniroma2.eu");
         rb.setPassword("password");
         rb.setConfirmPassword("password");
         assertTrue(loginController.register(rb));

@@ -4,7 +4,6 @@ import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,7 +39,7 @@ public class SingletonConnessione {
         Properties properties = new Properties();
         try (InputStream is = new FileInputStream("application.properties")) {
             properties.load(is);
-        } catch (IOException _) { // Sostituito "Exception" con la più specifica "IOException"
+        } catch (java.io.IOException _) { // Sostituito "Exception" con la più specifica "IOException"
             Printer.error("Impossibile leggere il file application.properties, utilizzo password di default");
         }
         return properties.getProperty("password", "");

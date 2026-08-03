@@ -1,6 +1,16 @@
 package org.ing.ispw.unifix.utils;
 
 public enum Answer {
-    ERRORE,
-    SUCCESSO;
+    ERRORE("Errore"),
+    SUCCESSO("Successo");
+
+    private final String value;
+
+    Answer(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

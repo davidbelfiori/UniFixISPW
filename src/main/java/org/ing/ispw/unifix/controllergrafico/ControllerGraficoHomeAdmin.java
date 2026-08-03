@@ -12,6 +12,7 @@ import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.CsvInvalidException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.observer.Observer;
@@ -91,9 +92,10 @@ public class ControllerGraficoHomeAdmin implements Observer {
                 } catch (IllegalArgumentException e){
                     popUp.showErrorPopup(Answer.ERRORE.toString(), "File non valido", e.getMessage());
                 }
-                catch (CsvInvalidException | AulaGiaPresenteException e) {
+                catch (CsvInvalidException | AulaGiaPresenteException | PersistenceException e) {
                     popUp.showErrorPopup(Answer.ERRORE.toString(), "Errore durante l'inserimento", e.getMessage());
                 }
+
             }else {
                 popUp.showErrorPopup(Answer.ERRORE.toString(), "", "Il file selezionato non è un file CSV");
             }
@@ -117,10 +119,15 @@ public class ControllerGraficoHomeAdmin implements Observer {
     }
 
     private void updateLabels() {
-        edificiGestitiLabel.setText(getEdificiGestiti());
-        auleGestiteLabel.setText(getAuleGestite());
-        segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
-        segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
+        try {
+            edificiGestitiLabel.setText(getEdificiGestiti());
+            auleGestiteLabel.setText(getAuleGestite());
+            segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
+            segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ",e.getMessage());
+        }
+
     }
 
     public void goToGestioneSegnalazioni(MouseEvent mouseEvent) throws IOException {

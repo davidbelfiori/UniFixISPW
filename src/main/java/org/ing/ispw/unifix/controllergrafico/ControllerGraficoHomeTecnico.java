@@ -44,6 +44,7 @@ public class ControllerGraficoHomeTecnico {
     private static final String POPUPMESSAGGI_1 = "Errore";
     private static final String POPUPMESSAGGI_2 = "Messaggio: ";
     private static final String POPUPMESSAGGI_3 = "Riprova";
+    private static final String POPUPMESSAGGI_4 = "Errore Persistenza";
 
 
     public ControllerGraficoHomeTecnico() {
@@ -54,13 +55,18 @@ public class ControllerGraficoHomeTecnico {
     }
 
     public void initialize() {
-        InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
-        if (infoTecnico == null) {
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
-            return;
+        try {
+            InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
+            if (infoTecnico == null) {
+                popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
+                return;
+            }
+            welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
+            mostraSegnalazioniTecnico();
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_4, e.getMessage());
         }
-        welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
-        mostraSegnalazioniTecnico();
+
     }
 
 
@@ -79,6 +85,8 @@ public class ControllerGraficoHomeTecnico {
         }
         catch (IllegalStateException _) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_4, e.getMessage());
         }
 
     }
@@ -110,17 +118,16 @@ public class ControllerGraficoHomeTecnico {
                 if (response == lavorazioneButton){
                     try{
                         tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (InvalidStateTransitionException e){//NOSONAR
-                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
+                    }catch (InvalidStateTransitionException | PersistenceException e) {//NOSONAR
+                        popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
                     }
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == chiudiButton){
                     try{
                         tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (InvalidStateTransitionException e){ //NOSONAR
-                        popUp.showErrorPopup(POPUPMESSAGGI_1,"Impossibile eseguire la richiesta", e.getMessage());
-                    }
+                    }catch (InvalidStateTransitionException |PersistenceException  e){ //NOSONAR
+                        popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());}
                     segnalazioniContainer.getChildren().clear();
                     mostraSegnalazioniTecnico();
                 } else if (response == noteButton){
@@ -220,19 +227,23 @@ public class ControllerGraficoHomeTecnico {
     }
 
     private String formattaNoteEsistenti(SegnalazioneBean segnalazione) {
-        List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
+        try {
+            List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
 
-        if (noteAttuali.isEmpty()) {
-            return "Non ci sono note presenti.";
-        }
+            if (noteAttuali.isEmpty()) {
+                return "Non ci sono note presenti.";
+            }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        StringBuilder noteTesto = new StringBuilder();
-        for (NotaSegnalazioneBean nota : noteAttuali) {
-            noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
-                    .append(": ").append(nota.getTestoNota()).append("\n");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            StringBuilder noteTesto = new StringBuilder();
+            for (NotaSegnalazioneBean nota : noteAttuali) {
+                noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
+                        .append(": ").append(nota.getTestoNota()).append("\n");
+            }
+            return noteTesto.toString();
+        } catch (PersistenceException e) {
+            return "Errore nel recupero delle note: " + e.getMessage();
         }
-        return noteTesto.toString();
     }
 
     private void configuraNuovaNotaArea(TextArea nuovaNotaArea) {
@@ -275,6 +286,8 @@ public class ControllerGraficoHomeTecnico {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", POPUPMESSAGGI_2 + e.getMessage());
         }catch (NotaStatoSegnalazioneLavorazioneException e){
             popUp.showErrorPopup(POPUPMESSAGGI_1,"Attenzione",POPUPMESSAGGI_2+e.getMessage());
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_4, POPUPMESSAGGI_2+e.getMessage());
         }
     }
 

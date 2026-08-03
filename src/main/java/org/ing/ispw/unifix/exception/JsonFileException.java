@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class JsonFileException extends RuntimeException {
+public class JsonFileException extends PersistenceException {
     public JsonFileException(String message) {
         super(message);
     }

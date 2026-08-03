@@ -11,22 +11,17 @@ import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.model.User;
 import org.ing.ispw.unifix.model.UserFactory;
-import org.ing.ispw.unifix.utils.EmailParserService;
-import org.ing.ispw.unifix.utils.UserType;
-
 
 public class LoginController {
 
 
 
     private final UserDao userDao;
-    private final EmailParserService emailParserService;
     private final UserFactory userFactory;
 
     public LoginController() {
         this.userDao = DaoFactory.getInstance().getUserDao();
-        this.emailParserService = new EmailParserService();
-        this.userFactory = new UserFactory(emailParserService);
+        this.userFactory = new UserFactory();
     }
 
 
@@ -35,9 +30,7 @@ public class LoginController {
         if(userDao.exists(rb.getEmail())){
             return false;
         }
-
-        UserType ruolo = emailParserService.extractRuolo(rb.getEmail());
-        User user = userFactory.createUser(rb.getEmail(), rb.getPassword(), ruolo);
+        User user = userFactory.createUser(rb.getEmail(), rb.getPassword());
         userDao.store(user);
         return true;
     }

@@ -15,6 +15,8 @@ import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
+import org.ing.ispw.unifix.exception.PersistenceException;
+import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +35,10 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
 
     @FXML
     private Label segnalazioRisolteLabel;
+
+
+
+
 
     public void initialize() {
         updateLabels();
@@ -73,8 +79,12 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
 
 
     private void updateLabels() {
+        try{
         segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
         segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
+        }catch (PersistenceException _){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
+        }
     }
 
     public void goToHomeAdmin(MouseEvent mouseEvent) throws IOException {
@@ -83,11 +93,26 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
     }
 
     public void mostraSegnalazioni(){
-        List<SegnalazioneBean> segnalazioneList = gs.getAllSegnalazioni();
-        for (SegnalazioneBean segnalazione : segnalazioneList) {
-            segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
-        }
+        try {
 
+            segnalazioniContainer.getChildren().clear();
+            //potrebbe partire un eccezzione per la connessione con il db
+            List<SegnalazioneBean> segnalazioneList = gs.getAllSegnalazioni();
+
+            // 2. Controllo null-safety e lista vuota
+            if (segnalazioneList == null || segnalazioneList.isEmpty()) {
+                Label emptyLabel = new Label("Nessuna segnalazione presente.");
+                emptyLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #777777; -fx-padding: 20px;");
+                segnalazioniContainer.getChildren().add(emptyLabel);
+                return;
+            }
+
+            for (SegnalazioneBean segnalazione : segnalazioneList) {
+                segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
+            }
+        }catch (PersistenceException _){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
+        }
     }
 
 
@@ -152,16 +177,20 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
         noteEsistentiArea.setWrapText(true);
 
         // Carica le note esistenti (adatta al tuo model)
-        List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
         StringBuilder noteTesto = new StringBuilder();
-        if (noteAttuali.isEmpty()) {
-            noteTesto.append("Non ci sono note presenti.");
-        } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            for (NotaSegnalazioneBean nota : noteAttuali) {
-                noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
-                        .append(": ").append(nota.getTestoNota()).append("\n");
+        try {
+            List<NotaSegnalazioneBean> noteAttuali = isnsc.getNoteForSegnalazione(segnalazione.getIdSegnalazione());
+            if (noteAttuali.isEmpty()) {
+                noteTesto.append("Non ci sono note presenti.");
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                for (NotaSegnalazioneBean nota : noteAttuali) {
+                    noteTesto.append(dateFormat.format(nota.getDataCreazione().getTime()))
+                            .append(": ").append(nota.getTestoNota()).append("\n");
+                }
             }
+        } catch (PersistenceException e) {
+            noteTesto.append("Errore nel recupero delle note: ").append(e.getMessage());
         }
         noteEsistentiArea.setText(noteTesto.toString());
         ButtonType closeButton = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);

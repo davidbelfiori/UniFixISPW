@@ -11,6 +11,7 @@ import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,8 +59,8 @@ public class ControllerGraficoGestioneAule {
                 aulaContainer.getChildren().add(creaBoxAula(a));
             }
             //controllo se ci sono errori quando ho caricato le bean
-        }catch (IllegalArgumentException e){
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
+        }catch (IllegalArgumentException | PersistenceException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, " ", e.getMessage());
         }
 
     }
@@ -211,6 +212,8 @@ public class ControllerGraficoGestioneAule {
             popUp.showSuccessPopup("Successo", "Aula aggiunta correttamente!");
         } catch (AulaGiaPresenteException _) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Aula già presente", "");
+        } catch (PersistenceException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore di persistenza", e.getMessage());
         }
     }
     

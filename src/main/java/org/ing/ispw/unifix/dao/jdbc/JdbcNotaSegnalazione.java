@@ -18,12 +18,7 @@ import java.util.List;
 
 public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
-    private final Connection connection;
-
-
-    public JdbcNotaSegnalazione() {
-        this.connection =  SingletonConnessione.getInstance();
-    }
+    private Connection getConnection() { return SingletonConnessione.getInstance(); }
 
     @Override
     public NotaSegnalazione create(String uuid) {
@@ -34,7 +29,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
     public NotaSegnalazione load(String id) {
         String query = "SELECT uuid, idsegnalazione as id, datacreazione, tecnico as tec, nota FROM nota_segnalazione WHERE UUID = ?";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -61,7 +56,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
         List<NotaSegnalazione> note = new ArrayList<>();
         String query = "SELECT uuid, idsegnalazione, datacreazione as dcreate, tecnico, nota FROM nota_segnalazione WHERE idSegnalazione = ?";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, idSegnalazione);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -87,7 +82,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
     public void store(NotaSegnalazione nota) {
         String query = "INSERT INTO nota_segnalazione (UUID, idSegnalazione, dataCreazione, tecnico, Nota) VALUES (?, ?, ?, ?, ?)";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, nota.getUuid());
                 ps.setString(2, nota.getSegnalazione().getIdSegnalazione());
                 ps.setTimestamp(3, nota.getDataCreazione());
@@ -104,7 +99,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
     public void delete(String id) {
         String query = "DELETE FROM nota_segnalazione WHERE UUID = ?";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, id);
                 ps.executeUpdate();
             }
@@ -117,7 +112,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
     public boolean exists(String id) {
         String query = "SELECT UUID FROM nota_segnalazione WHERE UUID = ?";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     return rs.next();
@@ -133,7 +128,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
         List<NotaSegnalazione> note = new ArrayList<>();
         String query = "SELECT uuid, idsegnalazione, datacreazione, tecnico, nota, email, nome, cognome FROM nota_segnalazione join unifix.user u on u.email = nota_segnalazione.tecnico";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Segnalazione segnalazione = new Segnalazione(rs.getString("idSegnalazione"));
@@ -158,7 +153,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
     public void update(NotaSegnalazione entity) {
         String query = "UPDATE nota_segnalazione SET idSegnalazione = ?, dataCreazione = ?, tecnico = ?, Nota = ? WHERE UUID = ?";
         try {
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
                 ps.setString(1, entity.getSegnalazione().getIdSegnalazione());
                 ps.setTimestamp(2, entity.getDataCreazione());
                 ps.setString(3, entity.getTecnico().getEmail());

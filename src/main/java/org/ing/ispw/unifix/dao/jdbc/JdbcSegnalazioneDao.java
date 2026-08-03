@@ -19,7 +19,7 @@ import java.util.List;
 
 public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
-    private final Connection connection;
+
     private static final String IDSEGNALAZIONE = "IdSegnalazione";
     private static final String DATA_CREAZIONE = "dataCreazione";
     private static final String OGGETTO_GUASTO = "oggettoGuasto";
@@ -36,10 +36,8 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
 
 
+    private Connection getConnection() { return SingletonConnessione.getInstance(); }
 
-    public JdbcSegnalazioneDao(){
-        this.connection =  SingletonConnessione.getInstance();
-    }
 
     @Override
     public Segnalazione create(String idSegnalazione) {
@@ -55,7 +53,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     public void store(Segnalazione entity) {
 
         String query = "INSERT INTO segnalazione (IdSegnalazione, dataCreazione,oggettoGuasto,docente,stato,descrizione,aula,edificio,tecnico) values (?,?,?,?,?,?,?,?,?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1,entity.getIdSegnalazione());
             stmt.setDate(2,entity.getDataCreazione());
             stmt.setString(3,entity.getOggettoGuasto());
@@ -75,7 +73,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     @Override
     public void delete(String id) {
         String query = "DELETE FROM segnalazione WHERE IdSegnalazione = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)){
             stmt.setString(1,id);
             stmt.executeUpdate();
         } catch (SQLException _) {
@@ -88,7 +86,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     public boolean exists(String id) {
         String query = "SELECT COUNT(*) FROM segnalazione WHERE IdSegnalazione = ? and stato <> 'CHIUSA' ";
 
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
             return rs.next() && rs.getInt(1) > 0;
@@ -105,7 +103,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     @Override
     public void update(Segnalazione entity) {
         String query = "UPDATE segnalazione SET dataCreazione = ?, oggettoGuasto = ?, docente = ?, stato = ?, descrizione = ?, aula = ?, edificio = ?, tecnico = ? WHERE IdSegnalazione = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)) {
             stmt.setDate(1, entity.getDataCreazione());
             stmt.setString(2, entity.getOggettoGuasto());
             stmt.setString(3, entity.getDocente().getEmail());
@@ -147,7 +145,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                         LEFT JOIN
                     user t ON t.email = s.tecnico;
 """;
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 Segnalazione segnalazione = new Segnalazione(rs.getString(IDSEGNALAZIONE));
@@ -188,7 +186,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                     user t ON t.email = s.tecnico
                 where idSegnalazione = ?;
 """;
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1,idSegnalazione);
             ResultSet rs = stmt.executeQuery();
 
@@ -233,7 +231,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                     user t ON t.email = s.tecnico
                 WHERE s.docente = ?;
 """;
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1, docenteEmail);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -275,7 +273,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                     user t ON t.email = s.tecnico
                 WHERE s.tecnico = ?;
 """;
-        try (PreparedStatement stmt = connection.prepareStatement(query)){
+        try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1, tecnicoEmail);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -299,7 +297,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     @Override
     public int countSegnalazioniAttive() {
         String query = "SELECT count(*) as numero from segnalazione where stato = 'APERTA' or stato = 'IN_LAVORAZIONE' ";
-        try(PreparedStatement stmt = connection.prepareStatement(query)){
+        try(PreparedStatement stmt = getConnection() .prepareStatement(query)){
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt("numero");
@@ -311,7 +309,7 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
     @Override
     public int countSegnalazioniRisolte() {
         String query = "SELECT count(*) as numero from segnalazione where stato = 'CHIUSA' ";
-        try(PreparedStatement stmt = connection.prepareStatement(query)){
+        try(PreparedStatement stmt = getConnection() .prepareStatement(query)){
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt("numero");

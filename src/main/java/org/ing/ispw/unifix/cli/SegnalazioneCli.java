@@ -3,6 +3,7 @@ package org.ing.ispw.unifix.cli;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InviaSegnalazioneController;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.Printer;
 
 import java.io.BufferedReader;
@@ -88,12 +89,16 @@ public class SegnalazioneCli {
     }
 
     private void visualizzaEdifici() {
-        // Crea una nuova ArrayList modificabile a partire dalla lista restituita dal controller
-        edificiUniciCache = new ArrayList<>(sc.getEdifici());
-        if (edificiUniciCache.isEmpty()) {
-            Printer.print("Nessun edificio trovato.");
-        } else {
-            edificiUniciCache.forEach(edificio -> Printer.print("Edificio: " + edificio));
+        try {
+            // Crea una nuova ArrayList modificabile a partire dalla lista restituita dal controller
+            edificiUniciCache = new ArrayList<>(sc.getEdifici());
+            if (edificiUniciCache.isEmpty()) {
+                Printer.print("Nessun edificio trovato.");
+            } else {
+                edificiUniciCache.forEach(edificio -> Printer.print("Edificio: " + edificio));
+            }
+        } catch (PersistenceException e) {
+            Printer.error("Errore: " + e.getMessage());
         }
     }
 
@@ -115,13 +120,17 @@ public class SegnalazioneCli {
             Printer.error("Seleziona prima un edificio.");
             return;
         }
-        List<AulaBean> aule = sc.getAuleByEdificio(edificioSelezionato);
-        if (aule.isEmpty()) {
-            Printer.print("Nessuna aula trovata per l'edificio " + edificioSelezionato);
-        } else {
-            for (AulaBean aula : aule) {
-                Printer.print("Aula: " + aula.getIdAula() + ", Piano: " + aula.getPiano());
+        try {
+            List<AulaBean> aule = sc.getAuleByEdificio(edificioSelezionato);
+            if (aule.isEmpty()) {
+                Printer.print("Nessuna aula trovata per l'edificio " + edificioSelezionato);
+            } else {
+                for (AulaBean aula : aule) {
+                    Printer.print("Aula: " + aula.getIdAula() + ", Piano: " + aula.getPiano());
+                }
             }
+        } catch (PersistenceException e) {
+            Printer.error("Errore: " + e.getMessage());
         }
     }
 
@@ -137,13 +146,17 @@ public class SegnalazioneCli {
             Printer.error("Seleziona prima un'aula.");
             return;
         }
-        oggettiAulaCache= sc.getOggettiAula(aulaSelezionata);
-        if (oggettiAulaCache.isEmpty()) {
-            Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
-        } else {
-            for (String oggetto : oggettiAulaCache) {
-                Printer.print("Oggetto: " + oggetto);
+        try {
+            oggettiAulaCache= sc.getOggettiAula(aulaSelezionata);
+            if (oggettiAulaCache.isEmpty()) {
+                Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
+            } else {
+                for (String oggetto : oggettiAulaCache) {
+                    Printer.print("Oggetto: " + oggetto);
+                }
             }
+        } catch (PersistenceException e) {
+            Printer.error("Errore di persistenza: " + e.getMessage());
         }
     }
 
@@ -175,17 +188,21 @@ public class SegnalazioneCli {
         Printer.print("Descrizione: " + descrizioneGuasto);
         Printer.print("******************************************");
 
-        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
-        segnalazioneBean.setDataCreazione(new Date(System.currentTimeMillis()));
-        segnalazioneBean.setAula(aulaSelezionata);
-        segnalazioneBean.setEdificio(edificioSelezionato);
-        segnalazioneBean.setOggettoGuasto(oggettoSelezionato);
-        segnalazioneBean.setDescrizione(descrizioneGuasto);
-        if (sc.creaSegnalazione(segnalazioneBean)) {
-            Printer.print("Segnalazione inviata con successo!");
-            resetForm();
-        } else {
-            Printer.error("Errore: la segnalazione potrebbe essere duplicata o si è verificato un problema.");
+        try {
+            SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+            segnalazioneBean.setDataCreazione(new Date(System.currentTimeMillis()));
+            segnalazioneBean.setAula(aulaSelezionata);
+            segnalazioneBean.setEdificio(edificioSelezionato);
+            segnalazioneBean.setOggettoGuasto(oggettoSelezionato);
+            segnalazioneBean.setDescrizione(descrizioneGuasto);
+            if (sc.creaSegnalazione(segnalazioneBean)) {
+                Printer.print("Segnalazione inviata con successo!");
+                resetForm();
+            } else {
+                Printer.error("Errore: la segnalazione potrebbe essere duplicata o si è verificato un problema.");
+            }
+        } catch (PersistenceException e) {
+            Printer.error("Errore di persistenza: " + e.getMessage());
         }
     }
 

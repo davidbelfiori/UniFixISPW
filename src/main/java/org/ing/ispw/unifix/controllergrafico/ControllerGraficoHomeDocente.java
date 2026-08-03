@@ -16,10 +16,8 @@ import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.*;
-import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
-import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
+import org.ing.ispw.unifix.exception.*;
+import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +82,8 @@ public class ControllerGraficoHomeDocente {
             mostraSegnalazioni();
         }catch (IllegalArgumentException _){
             popUp.showErrorPopup(ACTION_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(ACTION_1,"", e.getMessage());
         }
 
 
@@ -107,6 +107,8 @@ public class ControllerGraficoHomeDocente {
         }
         catch(IllegalArgumentException _){
             popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, " ",e.getMessage());
         }
 
     }
@@ -149,21 +151,31 @@ public class ControllerGraficoHomeDocente {
 
     @FXML
     private void aggiornaAule(String edificioSelezionato) {
-        List<AulaBean> auleEdificioSelezionato = sc.getAuleByEdificio(edificioSelezionato);
-        List<String> nomiAule =  new ArrayList<>();
-        for (AulaBean aula : auleEdificioSelezionato) {
-            nomiAule.add(aula.getIdAula());
+        try {
+            List<AulaBean> auleEdificioSelezionato = sc.getAuleByEdificio(edificioSelezionato);
+            List<String> nomiAule =  new ArrayList<>();
+            for (AulaBean aula : auleEdificioSelezionato) {
+                nomiAule.add(aula.getIdAula());
+            }
+            aulaComboBox.setItems(FXCollections.observableList(nomiAule));
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", e.getMessage());
         }
-        aulaComboBox.setItems(FXCollections.observableList(nomiAule));
+
     }
     @FXML
     private void aggiornaOggetti(String aulaScelta) {
-        List<String> oggettiAulaSelezionata = sc.getOggettiAula(aulaScelta);
-        if (oggettiAulaSelezionata == null){
-            Printer.error("Oggetti selezionata non trovata");
-        }else {
-            oggettoComboBox.setItems(FXCollections.observableList(oggettiAulaSelezionata));
+        try {
+            List<String> oggettiAulaSelezionata = sc.getOggettiAula(aulaScelta);
+            if (oggettiAulaSelezionata == null){
+                Printer.error("Oggetti selezionata non trovata");
+            }else {
+                oggettoComboBox.setItems(FXCollections.observableList(oggettiAulaSelezionata));
+            }
+        }catch (PersistenceException _){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
         }
+
 
     }
 
@@ -214,6 +226,8 @@ public class ControllerGraficoHomeDocente {
             }
         catch (SegnalazioneGiaEsistenteException _){
             popUp.showErrorPopup(ACTION_1, "Segnalazione già inviata", "La segnalazione per l'oggetto selezionato è gia stata inviata");
+        }catch (PersistenceException _){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
         }
         }else {
             popUp.showErrorPopup(ACTION_1, "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
@@ -273,6 +287,8 @@ public class ControllerGraficoHomeDocente {
             popup.show(stage, anchorX, anchorY);
         }catch (IllegalStateException _){
             popUp.showErrorPopup(ACTION_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(ACTION_1,"", e.getMessage());
         }
     }
 

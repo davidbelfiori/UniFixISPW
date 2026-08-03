@@ -2,8 +2,8 @@ package org.ing.ispw.unifix.cli;
 
 import org.ing.ispw.unifix.bean.UserBean;
 import org.ing.ispw.unifix.controllerapplicativo.LoginController;
-import org.ing.ispw.unifix.exception.DbConnException;
 import org.ing.ispw.unifix.exception.PasswordErrataExecption;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
 import org.ing.ispw.unifix.utils.Printer;
@@ -65,8 +65,8 @@ public class LoginCli {
                     default:
                         break;
                 }
-            } catch (DbConnException e) {
-                Printer.error("Errore di connessione al database: " + e.getMessage());
+            } catch (PersistenceException e) {
+                Printer.error("Errore di persistenza: " + e.getMessage());
             } catch (IOException e) {
                 Printer.error("Errore di input/output: " + e.getMessage());
             }
@@ -75,7 +75,7 @@ public class LoginCli {
 
     }
 
-    private Boolean attemptLogin (String mail, String password)throws IOException, DbConnException {
+    private Boolean attemptLogin (String mail, String password) throws IOException, PersistenceException {
         try {
             CredentialBean cb = new CredentialBean();
             cb.setEmail(mail);

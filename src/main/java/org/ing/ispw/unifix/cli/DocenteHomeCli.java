@@ -4,6 +4,7 @@ import org.ing.ispw.unifix.bean.InfoDocenteBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.DocenteController;
 import org.ing.ispw.unifix.controllerapplicativo.VisualizzaSegnalazioniDocenteController;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.NessunSegnalazioneDocenteException;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.utils.Printer;
@@ -76,7 +77,7 @@ public class DocenteHomeCli {
             for (SegnalazioneBean segnalazione : segnalazioniDocente) {
                 Printer.print(segnalazione.toString());
             }
-        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException | IllegalStateException e) {
+        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException | IllegalStateException | PersistenceException e) {
             Printer.error(e.getMessage());
         }
     }
@@ -94,7 +95,7 @@ public class DocenteHomeCli {
                 Printer.print("Cognome: " + info.getCognome());
                 Printer.print("Email: " + info.getEmail());
                 Printer.print("--------------------");
-        }catch (IllegalStateException e){
+        }catch (IllegalStateException | PersistenceException e){
             Printer.error(e.getMessage());
         }
     }
