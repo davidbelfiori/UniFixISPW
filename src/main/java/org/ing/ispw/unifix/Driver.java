@@ -46,11 +46,16 @@ public class Driver extends Application {
         Printer.print("Scegli l'interfaccia: CLI o GUI");
         String interfaceType = scanner.nextLine();
 
+        while (!interfaceType.equalsIgnoreCase("CLI") && !interfaceType.equalsIgnoreCase("GUI")) {
+            Printer.print("Scelta interfaccia non valida. Scegli: CLI o GUI");
+            interfaceType = scanner.nextLine();
+        }
+
         if (interfaceType.equalsIgnoreCase("CLI")) {
             // Inizializza la CLI
             StartHomeViewCLI cli = new StartHomeViewCLI();
             cli.start();
-            
+
         } else if (interfaceType.equalsIgnoreCase("GUI")) {
            launch(args);
             System.exit(0);
