@@ -18,16 +18,17 @@ import java.util.List;
 
 public class VisualizzaSegnalazioniTecnicoController {
     private  final UserDao userDao;
+    private final SegnalazioneDao segnalazioneDao;
 
 
     public VisualizzaSegnalazioniTecnicoController(){
         this.userDao = DaoFactory.getInstance().getUserDao();
+        this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
     }
 
     //visualizza le segnalazioni assegnate al tecnico
     public List<SegnalazioneBean> visualizzaSegnalazioniTecnico() throws NessunaSegnalazioneException, NessunaSegnalazioneTecnicoException {
         List<Segnalazione> segnalazioniAll;
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
         if (loggedUser == null) {
             throw new IllegalStateException("Nessun tecnico loggato");
@@ -43,20 +44,20 @@ public class VisualizzaSegnalazioniTecnicoController {
         if (segnalazioniAll.isEmpty()) throw new NessunaSegnalazioneException("Nessuna segnalazione presente");
         for (Segnalazione segnalazione : segnalazioniAll) {
             if (segnalazione.getTecnico().getEmail().equals(tecnicoMail)) {
-                SegnalazioneBean segnalazioneBean = new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione())
-                        .dataCreazione(segnalazione.getDataCreazione())
-                        .oggettoGuasto(segnalazione.getOggettoGuasto())
-                        .user(new InfoDocenteBean(segnalazione.getDocente().getNome(), segnalazione.getDocente().getCognome(), segnalazione.getDocente().getEmail()))
-                        .stato(segnalazione.getStato())
-                        .descrizione(segnalazione.getDescrizione())
-                        .aula(segnalazione.getAula())
-                        .edificio(segnalazione.getEdificio())
-                        .tecnico(new InfoTecnicoBean(
-                                segnalazione.getTecnico().getNumeroSegnalazioni(),
-                                segnalazione.getTecnico().getEmail(),
-                                segnalazione.getTecnico().getCognome(),
-                                segnalazione.getTecnico().getNome()))
-                        .build();
+                SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+                segnalazioneBean.setIdSegnalazione(segnalazione.getIdSegnalazione());
+                segnalazioneBean.setDataCreazione(segnalazione.getDataCreazione());
+                segnalazioneBean.setOggettoGuasto(segnalazione.getOggettoGuasto());
+                segnalazioneBean.setUser(new InfoDocenteBean(segnalazione.getDocente().getNome(), segnalazione.getDocente().getCognome(), segnalazione.getDocente().getEmail()));
+                segnalazioneBean.setStato(segnalazione.getStato());
+                segnalazioneBean.setDescrizione(segnalazione.getDescrizione());
+                segnalazioneBean.setAula(segnalazione.getAula());
+                segnalazioneBean.setEdificio(segnalazione.getEdificio());
+                segnalazioneBean.setTecnico(new InfoTecnicoBean(
+                        segnalazione.getTecnico().getNumeroSegnalazioni(),
+                        segnalazione.getTecnico().getEmail(),
+                        segnalazione.getTecnico().getCognome(),
+                        segnalazione.getTecnico().getNome()));
                 segnalazioniTecnico.add(segnalazioneBean);
             }
         }

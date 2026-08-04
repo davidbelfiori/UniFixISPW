@@ -20,14 +20,21 @@ import java.util.List;
 public class InviaSegnalazioneController {
 
 
+    private final SegnalazioneDao segnalazioneDao;
+    private final UserDao userDao;
+    private final AulaDao aulaDao;
+
+    public InviaSegnalazioneController() {
+        this.userDao = DaoFactory.getInstance().getUserDao();
+        this.aulaDao = DaoFactory.getInstance().getAulaDao();
+        this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
+    }
+
     public List<String> getEdifici(){
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-       return aulaDao.getAllEdifici();
+        return aulaDao.getAllEdifici();
     }
 
     public List<AulaBean> getAuleByEdificio(String edificio){
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
-
         // 1. Recupero la lista delle entità di Dominio dal DAO
         List<Aula> aule = aulaDao.getAllAule();
 
@@ -54,13 +61,10 @@ public class InviaSegnalazioneController {
     }
 
     public List<String> getOggettiAula(String idAula){
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         return  aulaDao.getAulaOggetti(idAula);
-
     }
 
     private Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
         List<Tecnico> tecnici = userDao.getAllTecnici();
         if (tecnici.isEmpty()) throw new NonCiSonoTecniciException("Non ci sono tecnici disponibili");
         //prendi quello con meno segnalazioni
@@ -73,8 +77,6 @@ public class InviaSegnalazioneController {
     }
 
     public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
         if (loggetUser == null) {
             throw new IllegalStateException("Nessun utente loggato");

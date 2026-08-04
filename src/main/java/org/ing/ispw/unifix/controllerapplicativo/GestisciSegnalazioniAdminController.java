@@ -12,35 +12,48 @@ import java.util.List;
 
 public class GestisciSegnalazioniAdminController {
 
-    public List<SegnalazioneBean> getAllSegnalazioni(){
+    private final SegnalazioneDao segnalazioneDao;
 
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
-        List<Segnalazione> segnalazioni = segnalazioneDao.getAllSegnalazioni();
-        List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
-        for (Segnalazione segnalazione : segnalazioni) {
-            SegnalazioneBean bean = new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione())
-                    .dataCreazione(segnalazione.getDataCreazione())
-                    .oggettoGuasto(segnalazione.getOggettoGuasto())
-                    .user(new InfoDocenteBean(
-                            segnalazione.getDocente().getNome(),
-                            segnalazione.getDocente().getCognome(),
-                            segnalazione.getDocente().getEmail()))
-                    .stato(segnalazione.getStato())
-                    .descrizione(segnalazione.getDescrizione())
-                    .aula(segnalazione.getAula())
-                    .edificio(segnalazione.getEdificio())
-                    .tecnico(new InfoTecnicoBean(
-                            segnalazione.getTecnico().getNumeroSegnalazioni(),
-                            segnalazione.getTecnico().getEmail(),
-                            segnalazione.getTecnico().getCognome(),
-                            segnalazione.getTecnico().getNome()))
-                    .build();
-            segnalazioneBeanList.add(bean);
-
-        }
-        return segnalazioneBeanList;
+    public GestisciSegnalazioniAdminController(){
+        this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
     }
 
+
+    public List<SegnalazioneBean> getAllSegnalazioni() {
+        List<Segnalazione> segnalazioni = segnalazioneDao.getAllSegnalazioni();
+        List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
+
+        for (Segnalazione segnalazione : segnalazioni) {
+            SegnalazioneBean bean = new SegnalazioneBean();
+            bean.setIdSegnalazione(segnalazione.getIdSegnalazione());
+            bean.setDataCreazione(segnalazione.getDataCreazione());
+            bean.setOggettoGuasto(segnalazione.getOggettoGuasto());
+
+            if (segnalazione.getDocente() != null) {
+                bean.setUser(new InfoDocenteBean(
+                        segnalazione.getDocente().getNome(),
+                        segnalazione.getDocente().getCognome(),
+                        segnalazione.getDocente().getEmail()));
+            }
+
+            bean.setStato(segnalazione.getStato());
+            bean.setDescrizione(segnalazione.getDescrizione());
+            bean.setAula(segnalazione.getAula());
+            bean.setEdificio(segnalazione.getEdificio());
+
+            if (segnalazione.getTecnico() != null) {
+                bean.setTecnico(new InfoTecnicoBean(
+                        segnalazione.getTecnico().getNumeroSegnalazioni(),
+                        segnalazione.getTecnico().getEmail(),
+                        segnalazione.getTecnico().getCognome(),
+                        segnalazione.getTecnico().getNome()));
+            }
+
+            segnalazioneBeanList.add(bean);
+        }
+
+        return segnalazioneBeanList;
+    }
 
 
 }

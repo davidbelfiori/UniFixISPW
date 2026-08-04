@@ -17,6 +17,15 @@ import java.util.List;
 
 public class InserisciNotaSegnalazioneController {
 
+    private final SegnalazioneDao segnalazioneDao;
+    private final NotaSegnalazioneDao notaSegnalazioneDao;
+
+    public InserisciNotaSegnalazioneController(){
+        this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
+        this.notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
+    }
+
+
 /**
     Add new note for a segnalazione
     @param nsb che è di tipo NotaSegnalazioneBean
@@ -25,12 +34,10 @@ public class InserisciNotaSegnalazioneController {
 * */
     public void inserisciNotaSegnalazione(NotaSegnalazioneBean nsb){
         Date date = new Date();
-        SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         Segnalazione segnalazione = segnalazioneDao.load(nsb.getIdSegnalazione());
         if (segnalazione == null) {
             throw new SegnalazioneNonTrovataException("Segnalazione non trovata con ID: " + nsb.getIdSegnalazione());
         }
-        NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
         if (segnalazione.getStato() != StatoSegnalazione.IN_LAVORAZIONE) {
             throw new NotaStatoSegnalazioneLavorazioneException("L'intervento deve essere in lavorazione per aggiungere una nota");
         }
@@ -56,7 +63,6 @@ public class InserisciNotaSegnalazioneController {
             throw new IllegalArgumentException("L'ID della segnalazione non può essere vuoto");
         }
 
-        NotaSegnalazioneDao notaSegnalazioneDao = DaoFactory.getInstance().getNotaSegnalazioneDao();
         List<NotaSegnalazione> note = notaSegnalazioneDao.getAllNotaSegnalazioneById(idSegnalazione);
         List<NotaSegnalazioneBean> notaSegnalazioneBeanList = new ArrayList<>();
         for (NotaSegnalazione ns : note) {

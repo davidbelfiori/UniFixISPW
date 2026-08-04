@@ -20,6 +20,11 @@ import java.util.*;
 
 public class GestioneAuleController {
 
+    private final AulaDao aulaDao;
+
+    public GestioneAuleController(){
+        this.aulaDao = DaoFactory.getInstance().getAulaDao();
+    }
 
     private final Subject subject = new Subject();
 
@@ -38,7 +43,6 @@ public class GestioneAuleController {
             boolean auleInserite = false;
            CSVParserService.validateCSV(filePath);
 
-            AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
             try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
                 String line;
                 boolean firstLine = true;
@@ -86,7 +90,6 @@ public class GestioneAuleController {
 
 
     public List<AulaBean> visualizzaAule() throws AuleNonTrovateException {
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         List<Aula> aule = aulaDao.getAllAule();
         List<AulaBean> auleToBean = new ArrayList<>();
         if (aule.isEmpty()) {
@@ -110,7 +113,6 @@ public class GestioneAuleController {
 
 
     public void inserisciAula(AulaBean aulaBean) throws AulaGiaPresenteException {
-        AulaDao aulaDao = DaoFactory.getInstance().getAulaDao();
         if (!aulaDao.exists(aulaBean.getIdAula())) {
             Aula aula = aulaDao.create(aulaBean.getIdAula());
             aula.setEdificio(aulaBean.getEdificio());

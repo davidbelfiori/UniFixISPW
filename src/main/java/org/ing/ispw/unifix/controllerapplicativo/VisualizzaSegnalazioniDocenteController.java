@@ -43,25 +43,34 @@ public class VisualizzaSegnalazioniDocenteController {
         //converti le segnalazioni in bean per la view (paradigma MVC)
         List<SegnalazioneBean> segnalazioniBeanList = new ArrayList<>();
         for (Segnalazione segnalazione : segnalazioniDocente) {
-            SegnalazioneBean bean = new SegnalazioneBean.Builder(segnalazione.getIdSegnalazione())
-                    .dataCreazione(segnalazione.getDataCreazione())
-                    .oggettoGuasto(segnalazione.getOggettoGuasto())
-                    .user(new InfoDocenteBean(
-                            segnalazione.getDocente().getNome(),
-                            segnalazione.getDocente().getCognome(),
-                            segnalazione.getDocente().getEmail()))
-                    .stato(segnalazione.getStato())
-                    .descrizione(segnalazione.getDescrizione())
-                    .aula(segnalazione.getAula())
-                    .edificio(segnalazione.getEdificio())
-                    .tecnico(new InfoTecnicoBean(
-                            segnalazione.getTecnico().getNumeroSegnalazioni(),
-                            segnalazione.getTecnico().getEmail(),
-                            segnalazione.getTecnico().getCognome(),
-                            segnalazione.getTecnico().getNome()))
-                    .build();
+            SegnalazioneBean bean = new SegnalazioneBean();
+            bean.setIdSegnalazione(segnalazione.getIdSegnalazione());
+            bean.setDataCreazione(segnalazione.getDataCreazione());
+            bean.setOggettoGuasto(segnalazione.getOggettoGuasto());
+
+            if (segnalazione.getDocente() != null) {
+                bean.setUser(new InfoDocenteBean(
+                        segnalazione.getDocente().getNome(),
+                        segnalazione.getDocente().getCognome(),
+                        segnalazione.getDocente().getEmail()));
+            }
+
+            bean.setStato(segnalazione.getStato());
+            bean.setDescrizione(segnalazione.getDescrizione());
+            bean.setAula(segnalazione.getAula());
+            bean.setEdificio(segnalazione.getEdificio());
+
+            if (segnalazione.getTecnico() != null) {
+                bean.setTecnico(new InfoTecnicoBean(
+                        segnalazione.getTecnico().getNumeroSegnalazioni(),
+                        segnalazione.getTecnico().getEmail(),
+                        segnalazione.getTecnico().getCognome(),
+                        segnalazione.getTecnico().getNome()));
+            }
+
             segnalazioniBeanList.add(bean);
         }
+
         return segnalazioniBeanList;
 
     }
