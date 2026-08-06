@@ -31,7 +31,10 @@ public class GestioneAuleController extends Subject{
         boolean auleInserite = false;
         CSVParserService.validateCSV(filePath);
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            br.readLine(); // Salta l'intestazione CSV
+            String header = br.readLine(); // Salta l'intestazione CSV
+            if (header == null) {
+                return false;
+            }
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {

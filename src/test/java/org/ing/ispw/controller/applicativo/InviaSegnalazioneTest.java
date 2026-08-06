@@ -56,6 +56,10 @@ class InviaSegnalazioneTest {
         SessionManager.getInstance().clearSession();
     }
 
+    /*Simula l'accesso in sessione di un docente (marco.bianchi@uniroma2.eu).
+    Verifica la creazione con successo di una segnalazione (Ingegneria, Aula 1, Proiettore).
+    Controlla la persistenza corretta nel DAO con stato StatoSegnalazione.APERTA, associazione del docente,
+    assegnazione del tecnico e incremento del contatore segnalazioni del tecnico.*/
     @Test
     @DisplayName("Test invio segnalazione con successo")
     void testInviaSegnalazioneSuccesso() throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
@@ -87,6 +91,7 @@ class InviaSegnalazioneTest {
         assertEquals(1, segnalazioneCreata.getTecnico().getNumeroSegnalazioni(), "Il contatore del tecnico deve essere incrementato a 1");
     }
 
+    /*Verifica che l'invio di una segnalazione duplicata (stesso edificio, aula e oggetto guasto) sollevi SegnalazioneGiaEsistenteException.*/
     @Test
     @DisplayName("Test invio segnalazione già esistente lancia SegnalazioneGiaEsistenteException")
     void testInviaSegnalazioneGiaEsistente() throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
@@ -104,6 +109,7 @@ class InviaSegnalazioneTest {
         assertThrows(SegnalazioneGiaEsistenteException.class, () -> controller.creaSegnalazione(segnalazioneBean));
     }
 
+    /*Verifica che il tentativo di invio senza una sessione utente attiva sollevi IllegalStateException.*/
     @Test
     @DisplayName("Test invio segnalazione senza utente loggato lancia IllegalStateException")
     void testInviaSegnalazioneSenzaUtenteLoggato() {
@@ -119,6 +125,8 @@ class InviaSegnalazioneTest {
         assertThrows(IllegalStateException.class, () -> controller.creaSegnalazione(segnalazioneBean));
     }
 
+
+    //Verifica che l'assenza di tecnici registrati nel sistema sollevi NonCiSonoTecniciException.
     @Test
     @DisplayName("Test invio segnalazione senza tecnici disponibili lancia NonCiSonoTecniciException")
     void testInviaSegnalazioneSenzaTecniciDisponibili() {
@@ -141,6 +149,8 @@ class InviaSegnalazioneTest {
         assertThrows(NonCiSonoTecniciException.class, () -> localController.creaSegnalazione(segnalazioneBean));
     }
 
+
+    //Inserisce più tecnici con carichi di lavoro differenti e verifica che la nuova segnalazione venga assegnata automaticamente al tecnico con meno segnalazioni in carico.
     @Test
     @DisplayName("Test assegnazione automatica al tecnico con minor carico di lavoro")
     void testAssegnazioneAlTecnicoConMenoSegnalazioni() throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
@@ -166,6 +176,7 @@ class InviaSegnalazioneTest {
         assertEquals(1, segnalazione.getTecnico().getNumeroSegnalazioni());
     }
 
+    //Verifica il recupero corretto della lista degli edifici censiti.
     @Test
     @DisplayName("Test getEdifici restituisce gli edifici disponibili")
     void testGetEdifici() {
@@ -176,6 +187,7 @@ class InviaSegnalazioneTest {
         assertTrue(edifici.contains("Economia"));
     }
 
+    //Verifica il recupero corretto della lista delle aule per un edificio specifico.
     @Test
     @DisplayName("Test getAuleByEdificio restituisce le aule dell'edificio specificato")
     void testGetAuleByEdificio() {
@@ -188,6 +200,7 @@ class InviaSegnalazioneTest {
         }
     }
 
+    //Verifica il recupero corretto degli oggetti/dotazioni presenti all'interno dell'aula selezionata.
     @Test
     @DisplayName("Test getOggettiAula restituisce la lista di oggetti presenti nell'aula")
     void testGetOggettiAula() {
