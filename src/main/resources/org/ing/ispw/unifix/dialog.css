@@ -73,14 +73,14 @@
 }
 
 /* Pulsante Secondario / Annulla */
-.dialog-pane .button:cancel {
+.dialog-pane .button:cancel {/* NOSONAR */
     -fx-background-color: #f8fafc;
     -fx-text-fill: #64748b;
     -fx-border-color: #e2e8f0;
     -fx-border-width: 1px;
 }
 
-.dialog-pane .button:cancel:hover {
+.dialog-pane .button:cancel:hover {/* NOSONAR */
     -fx-background-color: #e2e8f0;
     -fx-text-fill: #1e293b;
     -fx-border-color: #cbd5e1;
@@ -161,6 +161,6 @@
     -fx-font-size: 13px;
 }
 
-.dialog-pane .text-area:focused {
+.dialog-pane .text-area:focused {/* NOSONAR */
     -fx-border-color: #2563eb;
 }

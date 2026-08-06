@@ -40,7 +40,7 @@
     -fx-text-fill: #1e293b;
 }
 
-.dialog-pane .text-field:focused {
+.dialog-pane .text-field:focused { /* NOSONAR */
     -fx-border-color: #2563eb;
     -fx-border-width: 1.5px;
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.2), 6, 0, 0, 0);
@@ -77,7 +77,7 @@
 }
 
 /* Pulsante "Annulla" */
-.dialog-pane .button-bar .button:cancel {
+.dialog-pane .button-bar .button:cancel {/* NOSONAR */
     -fx-background-color: #f1f5f9;
     -fx-text-fill: #64748b;
     -fx-font-size: 13px;
@@ -86,7 +86,7 @@
     -fx-cursor: hand;
 }
 
-.dialog-pane .button-bar .button:cancel:hover {
+.dialog-pane .button-bar .button:cancel:hover {/* NOSONAR */
     -fx-background-color: #e2e8f0;
     -fx-text-fill: #1e293b;
 }
