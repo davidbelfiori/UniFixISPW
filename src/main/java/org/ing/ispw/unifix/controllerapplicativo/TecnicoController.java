@@ -13,6 +13,7 @@ import org.ing.ispw.unifix.exception.InvalidStateTransitionException;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
+import org.ing.ispw.unifix.utils.observer.EmailNotificationService;
 
 public class TecnicoController {
 
@@ -94,8 +95,7 @@ public class TecnicoController {
             }
         }
 
-        segnalazione.attach((segnalazione.getDocente()));
-        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.attach(new EmailNotificationService());
         segnalazione.notifyObservers(segnalazione);
 
     }
@@ -104,8 +104,7 @@ public class TecnicoController {
         Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
         segnalazione.inLavorazione();
         segnalazioneDao.update(segnalazione);
-        segnalazione.attach((segnalazione.getDocente()));
-        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.attach(new EmailNotificationService());
         segnalazione.notifyObservers(segnalazione);
 
     }

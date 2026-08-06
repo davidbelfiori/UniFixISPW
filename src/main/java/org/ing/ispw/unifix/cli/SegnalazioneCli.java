@@ -147,7 +147,7 @@ public class SegnalazioneCli {
             return;
         }
         try {
-            oggettiAulaCache= sc.getOggettiAula(aulaSelezionata);
+            oggettiAulaCache= sc.getOggettiAula(edificioSelezionato, aulaSelezionata);
             if (oggettiAulaCache.isEmpty()) {
                 Printer.print("Nessun oggetto trovato per l'aula " + aulaSelezionata);
             } else {

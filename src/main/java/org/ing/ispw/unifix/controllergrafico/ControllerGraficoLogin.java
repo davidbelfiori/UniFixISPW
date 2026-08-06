@@ -17,6 +17,8 @@ import org.ing.ispw.unifix.sessionmanager.SessionManager;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.Printer;
 
+import java.io.IOException;
+
 
 public class ControllerGraficoLogin {
 
@@ -73,7 +75,7 @@ public class ControllerGraficoLogin {
                     popUp.showErrorPopup("Attenzione", "", "Ruolo non valido");
                     break;
             }
-        }catch (java.io.IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption | PersistenceException e){
+        }catch (IOException | IllegalArgumentException | UtenteNonTrovatoException | PasswordErrataExecption | PersistenceException e){
             popUp.showErrorPopup("Errore","", e.getMessage());
         }
     }

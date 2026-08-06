@@ -13,14 +13,6 @@
   "cognome" : "Rizzo",
   "ruolo" : "SYSADMIN"
 }, {
-  "_type" : "Tecnico",
-  "email" : "cavo.dragone@tec.uniroma2.eu",
-  "password" : "admin",
-  "nome" : "Cavo",
-  "cognome" : "Dragone",
-  "ruolo" : "TECNICO",
-  "numeroSegnalazioni" : 2
-}, {
   "_type" : "Docente",
   "email" : "giuseppe.rossi@uniroma2.eu",
   "password" : "admin",
@@ -33,6 +25,14 @@
   "password" : "admin",
   "nome" : "Luigi",
   "cognome" : "Bianchi",
+  "ruolo" : "TECNICO",
+  "numeroSegnalazioni" : 3
+}, {
+  "_type" : "Tecnico",
+  "email" : "cavo.dragone@tec.uniroma2.eu",
+  "password" : "admin",
+  "nome" : "Cavo",
+  "cognome" : "Dragone",
   "ruolo" : "TECNICO",
   "numeroSegnalazioni" : 3
 } ]

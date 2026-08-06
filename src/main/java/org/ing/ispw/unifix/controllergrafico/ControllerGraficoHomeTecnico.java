@@ -21,10 +21,13 @@ import org.ing.ispw.unifix.exception.*;
 
 import org.ing.ispw.unifix.utils.PopUp;
 import org.jetbrains.annotations.NotNull;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ControllerGraficoHomeTecnico {
@@ -95,71 +98,177 @@ public class ControllerGraficoHomeTecnico {
         HBox hbox = new HBox(10);
         hbox.setSpacing(15);
         hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
         hbox.setPrefHeight(108);
         hbox.setPrefWidth(1020);
         hbox.setPadding(new Insets(10));
         hbox.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-radius: 5; -fx-background-radius: 5;");
-        hbox.setOnMouseClicked(event -> {
-            Alert alert = getAlert(segnalazione);
+        hbox.setOnMouseClicked(event -> apriDialogoGestioneSegnalazione(segnalazione));
 
-            // Bottone "Chiudi segnalazione"
-            ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.OK_DONE);
-            // Bottone "Metti in lavorazione"
-            ButtonType lavorazioneButton = new ButtonType("lavorazione", ButtonBar.ButtonData.OK_DONE);
-            // Bottone Note
-            ButtonType noteButton = new  ButtonType("Note", ButtonBar.ButtonData.OK_DONE);
-
-            ButtonType cancelButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-            alert.getButtonTypes().setAll(chiudiButton, lavorazioneButton,noteButton,cancelButton);
-
-            alert.showAndWait().ifPresent(response -> {
-                if (response == lavorazioneButton){
-                    try{
-                        tc.inLavorazioneSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (InvalidStateTransitionException | PersistenceException e) {//NOSONAR
-                        popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
-                    }
-                    segnalazioniContainer.getChildren().clear();
-                    mostraSegnalazioniTecnico();
-                } else if (response == chiudiButton){
-                    try{
-                        tc.chiudiSegnalazione(segnalazione.getIdSegnalazione());
-                    }catch (InvalidStateTransitionException |PersistenceException  e){ //NOSONAR
-                        popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());}
-                    segnalazioniContainer.getChildren().clear();
-                    mostraSegnalazioniTecnico();
-                } else if (response == noteButton){
-                    mostraDialogoNote(segnalazione);
-                } else if (response == ButtonType.CLOSE){
-                    mostraSegnalazioniTecnico();
-                }
-            });
-        });
-
-        // Aggiungi le informazioni della segnalazione
         VBox dettagli = getVBox(segnalazione);
         dettagli.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-
-        // Aggiungi tutto all'HBox
         hbox.getChildren().add(dettagli);
         return hbox;
+    }
+
+    private void apriDialogoGestioneSegnalazione(SegnalazioneBean segnalazione) {
+        Alert alert = getAlert(segnalazione);
+
+        ButtonType lavorazioneButton = new ButtonType("In Lavorazione", ButtonBar.ButtonData.LEFT);
+        ButtonType chiudiButton = new ButtonType("Chiudi", ButtonBar.ButtonData.LEFT);
+        ButtonType noteButton = new ButtonType("Note", ButtonBar.ButtonData.LEFT);
+        ButtonType cancelButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(lavorazioneButton, chiudiButton, noteButton, cancelButton);
+        applicaStiliPulsantiDialogo(alert, lavorazioneButton, chiudiButton, noteButton, cancelButton);
+
+        alert.showAndWait().ifPresent(response -> gestisciAzioneSegnalazione(response, segnalazione, lavorazioneButton, chiudiButton, noteButton));
+    }
+
+    private void applicaStiliPulsantiDialogo(Alert alert, ButtonType lavorazione, ButtonType chiudi, ButtonType note, ButtonType cancel) {
+        impostaStilePulsante(alert, lavorazione, "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 6px; -fx-padding: 9px 18px; -fx-cursor: hand;");
+        impostaStilePulsante(alert, chiudi, "-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 6px; -fx-padding: 9px 18px; -fx-cursor: hand;");
+        impostaStilePulsante(alert, note, "-fx-background-color: #475569; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 6px; -fx-padding: 9px 18px; -fx-cursor: hand;");
+        impostaStilePulsante(alert, cancel, "-fx-background-color: #f8fafc; -fx-text-fill: #475569; -fx-border-color: #cbd5e1; -fx-border-radius: 6px; -fx-background-radius: 6px; -fx-font-size: 13px; -fx-padding: 9px 18px; -fx-cursor: hand;");
+    }
+
+    private void impostaStilePulsante(Alert alert, ButtonType buttonType, String style) {
+        Button btn = (Button) alert.getDialogPane().lookupButton(buttonType);
+        if (btn != null) {
+            ButtonBar.setButtonUniformSize(btn, false);
+            btn.setMinWidth(Region.USE_PREF_SIZE);
+            btn.setStyle(style);
+        }
+    }
+
+    private void gestisciAzioneSegnalazione(ButtonType response, SegnalazioneBean segnalazione, ButtonType btnLav, ButtonType btnChiudi, ButtonType btnNote) {
+        if (response == btnLav) {
+            eseguiInLavorazione(segnalazione.getIdSegnalazione());
+        } else if (response == btnChiudi) {
+            eseguiChiusura(segnalazione.getIdSegnalazione());
+        } else if (response == btnNote) {
+            mostraDialogoNote(segnalazione);
+        } else if (response == ButtonType.CLOSE) {
+            mostraSegnalazioniTecnico();
+        }
+    }
+
+    private void eseguiInLavorazione(String idSegnalazione) {
+        try {
+            tc.inLavorazioneSegnalazione(idSegnalazione);
+            popUp.showSuccessPopup("Successo", "Segnalazione presa in lavorazione");
+        } catch (InvalidStateTransitionException | PersistenceException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
+        }
+        ricaricaSegnalazioni();
+    }
+
+    private void eseguiChiusura(String idSegnalazione) {
+        boolean conferma = popUp.showConfirmationPopup(
+                "Conferma Chiusura",
+                "Chiusura Segnalazione",
+                "Sei sicuro di voler chiudere definitivamente questa segnalazione?"
+        );
+        if (conferma) {
+            try {
+                tc.chiudiSegnalazione(idSegnalazione);
+                popUp.showSuccessPopup("Successo", "Segnalazione chiusa correttamente");
+            } catch (InvalidStateTransitionException | PersistenceException e) {
+                popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
+            }
+            ricaricaSegnalazioni();
+        }
+    }
+
+    private void ricaricaSegnalazioni() {
+        segnalazioniContainer.getChildren().clear();
+        mostraSegnalazioniTecnico();
     }
 
     @NotNull
     private static Alert getAlert(SegnalazioneBean segnalazione) {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Dettagli Segnalazione");
-        alert.setHeaderText("Edificio: " + segnalazione.getEdificio() +
-                "\nAula: " + segnalazione.getAula() +
-                "\nOggetto: " + segnalazione.getOggettoGuasto() +
-                "\nDescrizione: " + segnalazione.getDescrizione() +
-                "\nStato: " + segnalazione.getStato() +
-                "\nDocente: " + segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()+ "\n" +
-                "Cosa vuoi fare con questa segnalazione? Chiuderla o mettere in lavorazione?");
+        alert.setHeaderText("Gestione Intervento");
+        alert.setGraphic(null);
+
+        VBox card = new VBox();
+        card.getStyleClass().add("summary-card");
+
+        Label questionLabel = new Label("Cosa vuoi fare con questa segnalazione?");
+        questionLabel.getStyleClass().add("summary-title");
+        card.getChildren().addAll(questionLabel, new Separator());
+
+        GridPane grid = new GridPane();
+        grid.setHgap(15);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(5, 0, 5, 0));
+
+        grid.add(creaLabelChiave("Edificio:"), 0, 0);
+        grid.add(creaLabelValore(segnalazione.getEdificio()), 1, 0);
+
+        grid.add(creaLabelChiave("Aula:"), 0, 1);
+        grid.add(creaLabelValore(segnalazione.getAula()), 1, 1);
+
+        grid.add(creaLabelChiave("Oggetto:"), 0, 2);
+        grid.add(creaLabelValore(segnalazione.getOggettoGuasto()), 1, 2);
+
+        grid.add(creaLabelChiave("Descrizione:"), 0, 3);
+        grid.add(creaLabelValore(segnalazione.getDescrizione()), 1, 3);
+
+        grid.add(creaLabelChiave("Stato:"), 0, 4);
+        HBox badgeContainer = new HBox(creaBadgeStato(String.valueOf(segnalazione.getStato())));
+        badgeContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        grid.add(badgeContainer, 1, 4);
+
+        if (segnalazione.getUser() != null) {
+            grid.add(creaLabelChiave("Docente:"), 0, 5);
+            grid.add(creaLabelValore(segnalazione.getUser().getNome() + " " + segnalazione.getUser().getCognome()), 1, 5);
+        }
+
+        card.getChildren().add(grid);
+        alert.getDialogPane().setContent(card);
+
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setMinHeight(Region.USE_PREF_SIZE);
+        dialogPane.setMinWidth(640);
+        dialogPane.setPrefWidth(660);
+        try {
+            String css = Objects.requireNonNull(ControllerGraficoHomeTecnico.class.getResource("/org/ing/ispw/unifix/dialog.css")).toExternalForm();
+            dialogPane.getStylesheets().add(css);
+        } catch (Exception _) {
+            // Fallback
+        }
+
         return alert;
+    }
+
+    private static Label creaLabelChiave(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("summary-key");
+        label.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        return label;
+    }
+
+    private static Label creaLabelValore(String text) {
+        Label label = new Label(text != null ? text : "-");
+        label.getStyleClass().add("summary-val");
+        label.setWrapText(true);
+        label.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        return label;
+    }
+
+    private static Label creaBadgeStato(String stato) {
+        Label badge = new Label(stato);
+        badge.getStyleClass().add("badge-status");
+        badge.setAlignment(javafx.geometry.Pos.CENTER);
+        if ("APERTA".equalsIgnoreCase(stato)) {
+            badge.getStyleClass().add("badge-aperta");
+        } else if ("IN_LAVORAZIONE".equalsIgnoreCase(stato) || "IN LAVORAZIONE".equalsIgnoreCase(stato)) {
+            badge.getStyleClass().add("badge-in-lavorazione");
+        } else if ("CHIUSA".equalsIgnoreCase(stato)) {
+            badge.getStyleClass().add("badge-chiusa");
+        }
+        return badge;
     }
 
 
@@ -198,6 +307,16 @@ public class ControllerGraficoHomeTecnico {
         dialog.setHeaderText("Gestione note per: " + segnalazione.getOggettoGuasto() +
                            "  in  " + segnalazione.getEdificio() +
                            "  aula  " + segnalazione.getAula());
+
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.setMinHeight(Region.USE_PREF_SIZE);
+        dialogPane.setMinWidth(480);
+        try {
+            String css = Objects.requireNonNull(ControllerGraficoHomeTecnico.class.getResource("/org/ing/ispw/unifix/dialog.css")).toExternalForm();
+            dialogPane.getStylesheets().add(css);
+        } catch (Exception _) {
+            // Fallback
+        }
         return dialog;
     }
 

@@ -28,7 +28,7 @@ public class SingletonConnessione {
                 String password = loadDatabasePassword();
                 connection = DriverManager.getConnection(URL, USERNAME, password);
             }
-        } catch (SQLException e) {
+        } catch (RuntimeException | SQLException e) {
             throw new DbConnException("Impossibile connettersi al database: " + e.getMessage());
         }
         return connection;

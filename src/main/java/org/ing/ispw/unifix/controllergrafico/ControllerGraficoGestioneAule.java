@@ -1,26 +1,32 @@
 package org.ing.ispw.unifix.controllergrafico;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
+import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.PopUp;
+import org.ing.ispw.unifix.utils.observer.Observer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class ControllerGraficoGestioneAule {
+public class ControllerGraficoGestioneAule implements Observer {
 
 
     @FXML
@@ -38,12 +44,18 @@ public class ControllerGraficoGestioneAule {
     GestioneAuleController gestioneAuleController;
     public ControllerGraficoGestioneAule(){
         gestioneAuleController = new GestioneAuleController();
+        gestioneAuleController.attach(this);
     }
 
 
     @FXML
     public void initialize() {
        mostraAule();
+    }
+
+    @Override
+    public void update() {
+        Platform.runLater(this::mostraAule);
     }
 
     public void mostraAule () {
@@ -59,6 +71,8 @@ public class ControllerGraficoGestioneAule {
                 aulaContainer.getChildren().add(creaBoxAula(a));
             }
             //controllo se ci sono errori quando ho caricato le bean
+        }catch (AuleNonTrovateException _){
+            aulaContainer.getChildren().clear();
         }catch (IllegalArgumentException | PersistenceException e){
             popUp.showErrorPopup(POPUPMESSAGGI_1, " ", e.getMessage());
         }
@@ -125,9 +139,42 @@ public class ControllerGraficoGestioneAule {
 
     private Dialog<AulaBean> creaDialogAula() {
         Dialog<AulaBean> dialog = new Dialog<>();
-        dialog.setTitle("Aggiungi Nuova Aula");
+        dialog.setTitle("Nuova Aula");
         dialog.setHeaderText("Inserisci i dettagli della nuova aula");
+        // 1. Icona personalizzata nell'header (puoi usare la tua icona Room.png)
+        try {
+            ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/photo/Room.png"))));
+            icon.setFitHeight(40);
+            icon.setFitWidth(40);
+            dialog.setGraphic(icon);
+        } catch (Exception _) {
+            // Fallback se l'immagine non è trovata
+        }
+        // 2. Applica il foglio di stile CSS
+        String css = Objects.requireNonNull(getClass().getResource("/org/ing/ispw/unifix/dialog-aula.css")).toExternalForm();
+        dialog.getDialogPane().getStylesheets().add(css);
         return dialog;
+    }
+    private GridPane creaGridLayout(TextField idAula, TextField edificio, TextField piano,
+                                    VBox oggettiContainer, Dialog<AulaBean> dialog) {
+        GridPane grid = new GridPane();
+        grid.setHgap(12);
+        grid.setVgap(12);
+        grid.setPadding(new Insets(20, 25, 20, 25)); // padding più armonioso
+        Button btnAddOggetto = new Button("+ Aggiungi Oggetto");
+        btnAddOggetto.getStyleClass().add("btn-add-oggetto");
+        btnAddOggetto.setOnAction(e -> aggiungiCampoOggetto(oggettiContainer, dialog));
+        // Aggiunta campi alla griglia
+        grid.add(new Label("ID Aula:"), 0, 0);
+        grid.add(idAula, 1, 0);
+        grid.add(new Label("Edificio:"), 0, 1);
+        grid.add(edificio, 1, 1);
+        grid.add(new Label("Piano:"), 0, 2);
+        grid.add(piano, 1, 2);
+        grid.add(new Label("Oggetti dotazione:"), 0, 3);
+        grid.add(oggettiContainer, 1, 3);
+        grid.add(btnAddOggetto, 1, 4); // posizionato comodamente sotto la lista oggetti
+        return grid;
     }
 
     private VBox creaOggettiContainer() {
@@ -138,28 +185,7 @@ public class ControllerGraficoGestioneAule {
         return oggettiContainer;
     }
 
-    private GridPane creaGridLayout(TextField idAula, TextField edificio, TextField piano,
-                                     VBox oggettiContainer, Dialog<AulaBean> dialog) {
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
 
-        Button btnAddOggetto = new Button("+");
-        btnAddOggetto.setOnAction(e -> aggiungiCampoOggetto(oggettiContainer, dialog));
-
-        grid.add(new Label("ID Aula:"), 0, 0);
-        grid.add(idAula, 1, 0);
-        grid.add(new Label("Edificio:"), 0, 1);
-        grid.add(edificio, 1, 1);
-        grid.add(new Label("Piano:"), 0, 2);
-        grid.add(piano, 1, 2);
-        grid.add(new Label("Oggetti:"), 0, 3);
-        grid.add(oggettiContainer, 1, 3);
-        grid.add(btnAddOggetto, 2, 3);
-
-        return grid;
-    }
 
     private void aggiungiCampoOggetto(VBox oggettiContainer, Dialog<AulaBean> dialog) {
         TextField nuovoOggetto = new TextField();
@@ -220,17 +246,19 @@ public class ControllerGraficoGestioneAule {
     
     @FXML
     protected void logout(MouseEvent event) throws IOException {
-
+        gestioneAuleController.detach(this);
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("login.fxml"));
         ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
     }
 
     public void goToHomeAdmin(MouseEvent mouseEvent) throws  IOException{
+        gestioneAuleController.detach(this);
         FXMLLoader fxmlLoaderrr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeAdmin.fxml"));
         ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
     }
 
     public void goToSegnalazioni(MouseEvent mouseEvent) throws IOException {
+        gestioneAuleController.detach(this);
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("SegnalazioniAdmin.fxml"));
         ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
     }

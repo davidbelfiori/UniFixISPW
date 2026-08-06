@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void testLoginPasswordErrata() {
         CredentialBean credentialBean = new CredentialBean();
-        credentialBean.setEmail("davide.falessi@uniroma2.eu");
+        credentialBean.setEmail("marco.bianchi@uniroma2.eu");
         credentialBean.setPassword("password_errata");
 
         assertThrows(PasswordErrataExecption.class, () -> {
@@ -66,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void testLoginRuoloUtenteDocente() throws UtenteNonTrovatoException {
         CredentialBean credentialBean = new CredentialBean();
-        credentialBean.setEmail("davide.falessi@uniroma2.eu");
+        credentialBean.setEmail("marco.bianchi@uniroma2.eu");
         credentialBean.setPassword("admin");
         assertEquals(UserType.DOCENTE,loginController.validate(credentialBean).getRuolo());
     }

@@ -11,6 +11,7 @@ import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
+import org.ing.ispw.unifix.utils.observer.EmailNotificationService;
 
 
 import java.util.ArrayList;
@@ -60,8 +61,8 @@ public class InviaSegnalazioneController {
         return auleBeanList;
     }
 
-    public List<String> getOggettiAula(String idAula){
-        return  aulaDao.getAulaOggetti(idAula);
+    public List<String> getOggettiAula(String edificio, String idAula) {
+        return aulaDao.getAulaOggetti(edificio, idAula);
     }
 
     private Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
@@ -104,8 +105,7 @@ public class InviaSegnalazioneController {
         tecnicoAssegnato.incrementaSegnalazioni();
         userDao.update(tecnicoAssegnato);
 
-        segnalazione.attach((segnalazione.getDocente()));
-        segnalazione.attach(segnalazione.getTecnico());
+        segnalazione.attach(new EmailNotificationService());
         segnalazione.notifyObservers(segnalazione);
 
         return true;

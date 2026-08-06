@@ -25,8 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class ControllerGraficoHomeDocente {
 
@@ -166,7 +167,8 @@ public class ControllerGraficoHomeDocente {
     @FXML
     private void aggiornaOggetti(String aulaScelta) {
         try {
-            List<String> oggettiAulaSelezionata = sc.getOggettiAula(aulaScelta);
+            String edificioScelto = edificioComboBox.getValue();
+            List<String> oggettiAulaSelezionata = sc.getOggettiAula(edificioScelto, aulaScelta);
             if (oggettiAulaSelezionata == null){
                 Printer.error("Oggetti selezionata non trovata");
             }else {
@@ -196,21 +198,22 @@ public class ControllerGraficoHomeDocente {
             return;
         }
 
-        // Mostra il popup di conferma
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma Segnalazione");
-        alert.setHeaderText("Sei sicuro di voler inviare questa segnalazione?");
-        alert.setContentText("Edificio: " + edificio + "\n" +
-                "Aula: " + aula + "\n" +
-                "Oggetto: " + oggetto + "\n" +
-                "Descrizione: " + descrizione);
+        // Dettagli ordinati per la card di riepilogo
+        Map<String, String> dettagli = new LinkedHashMap<>();
+        dettagli.put("Edificio", edificio);
+        dettagli.put("Aula", aula);
+        dettagli.put("Oggetto", oggetto);
+        dettagli.put("Descrizione", descrizione);
 
-        ButtonType buttonConferma = new ButtonType("Conferma");
-        ButtonType buttonAnnulla = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonConferma, buttonAnnulla);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == buttonConferma){
-        try {
+        boolean confermato = popUp.showConfirmationPopup(
+                "Conferma Segnalazione",
+                "Riepilogo Segnalazione",
+                "Sei sicuro di voler inviare questa segnalazione?",
+                dettagli
+        );
+
+        if (confermato) {
+            try {
                 SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
                 segnalazioneBean.setDataCreazione(new Date(System.currentTimeMillis()));
                 segnalazioneBean.setAula(aula);
@@ -221,15 +224,15 @@ public class ControllerGraficoHomeDocente {
 
                 popUp.showSuccessPopup("Successo", "Segnalazione inviata");
                 mostraSegnalazioni();
-            }catch (NonCiSonoTecniciException _) {
+
+            } catch (NonCiSonoTecniciException _) {
                 popUp.showErrorPopup(ACTION_1, "Errore tecnici non trovati", "Al momento non ci sono tecnici inseriti nel sistema");
+            } catch (SegnalazioneGiaEsistenteException _) {
+                popUp.showErrorPopup(ACTION_1, "Segnalazione già inviata", "La segnalazione per l'oggetto selezionato è gia stata inviata");
+            } catch (PersistenceException _){
+                popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
             }
-        catch (SegnalazioneGiaEsistenteException _){
-            popUp.showErrorPopup(ACTION_1, "Segnalazione già inviata", "La segnalazione per l'oggetto selezionato è gia stata inviata");
-        }catch (PersistenceException _){
-            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
-        }
-        }else {
+        } else {
             popUp.showErrorPopup(ACTION_1, "Segnalazione non inviata", "L'invio della segnalazione è stato annullato");
         }
     }

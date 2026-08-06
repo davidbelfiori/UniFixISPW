@@ -1,0 +1,166 @@
+/* ==========================================================================
+   UniFix - Modern Dialog Stylesheet
+   ========================================================================== */
+
+/* Sfondo e bordo del popup */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.12), 16, 0, 0, 6);
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-padding: 18px;
+    -fx-min-width: 640px;
+    -fx-max-width: 740px;
+}
+
+/* Titolo / Header */
+.dialog-pane .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 5px 0 12px 0;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+    -fx-wrap-text: true;
+    -fx-max-width: 600px;
+}
+
+/* Testo del messaggio standard */
+.dialog-pane > .content.label,
+.dialog-pane .content .label,
+.dialog-content-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #334155;
+    -fx-padding: 8px 0;
+    -fx-wrap-text: true;
+    -fx-max-width: 600px;
+}
+
+/* Base per tutti i pulsanti */
+.dialog-pane .button {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 9px 18px;
+    -fx-border-radius: 6px;
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #334155;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #0f172a;
+}
+
+/* Pulsante Primario Default (solo quando non ha stili custom) */
+.dialog-pane .button:default {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+}
+
+.dialog-pane .button:default:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+/* Pulsante Secondario / Annulla */
+.dialog-pane .button:cancel {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #64748b;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px;
+}
+
+.dialog-pane .button:cancel:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #1e293b;
+    -fx-border-color: #cbd5e1;
+}
+
+/* Barra dei pulsanti */
+.dialog-pane .button-bar {
+    -fx-padding: 16px 0 0 0;
+}
+
+/* Card di riepilogo per dialog */
+.summary-card {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 16px 20px;
+    -fx-spacing: 12px;
+    -fx-max-width: 620px;
+}
+
+.summary-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #475569;
+    -fx-font-weight: normal;
+    -fx-wrap-text: true;
+}
+
+.summary-key {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+.summary-val {
+    -fx-font-size: 14px;
+    -fx-text-fill: #0f172a;
+    -fx-wrap-text: true;
+}
+
+/* Badge di stato */
+.badge-status {
+    -fx-padding: 3px 10px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.badge-aperta {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+    -fx-border-color: #fcd34d;
+    -fx-border-width: 1px;
+}
+
+.badge-in-lavorazione {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1e40af;
+    -fx-border-color: #93c5fd;
+    -fx-border-width: 1px;
+}
+
+.badge-chiusa {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #166534;
+    -fx-border-color: #86efac;
+    -fx-border-width: 1px;
+}
+
+/* TextArea personalizzata per i dialog (es. Note) */
+.dialog-pane .text-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 13px;
+}
+
+.dialog-pane .text-area:focused {
+    -fx-border-color: #2563eb;
+}

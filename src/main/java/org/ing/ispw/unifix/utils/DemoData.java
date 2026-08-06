@@ -21,10 +21,10 @@ public class DemoData {
             Printer.print("Creato utente demo: marco.rizzo@sys.uniroma2.eu (password: admin)");
         }
 
-        if (!userDao.exists("davide.falessi@uniroma2.eu")) {
-            User docente = UserFactory.createUser("davide.falessi@uniroma2.eu", action, "Davide", "Falessi", UserType.DOCENTE, 0);
+        if (!userDao.exists("marco.bianchi@uniroma2.eu")) {
+            User docente = UserFactory.createUser("marco.bianchi@uniroma2.eu", action, "Marco", "Bianchi", UserType.DOCENTE, 0);
             userDao.store(docente);
-            Printer.print("Creato utente demo: davide.falessi@uniroma2.eu (password: admin)");
+            Printer.print("Creato utente demo: marco.bianchi@uniroma2.eu (password: admin)");
         }
 
         if (!userDao.exists("giuseppe.rossi@tec.uniroma2.eu")) {

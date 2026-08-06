@@ -6,7 +6,6 @@ public class InfoTecnicoBean {
     private String nome;
     private String cognome;
     private String email;
-    private String password;
     private UserType ruolo;
     private int numeroSegnalazioni;
 
@@ -33,9 +32,6 @@ public class InfoTecnicoBean {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public UserType getRuolo() {
         return ruolo;
@@ -55,10 +51,6 @@ public class InfoTecnicoBean {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setRuolo(UserType ruolo) {

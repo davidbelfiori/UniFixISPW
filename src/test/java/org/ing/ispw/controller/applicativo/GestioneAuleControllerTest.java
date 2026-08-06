@@ -28,6 +28,7 @@ class GestioneAuleControllerTest {
 
     @BeforeEach
     void setUp() {
+        DaoFactory.setInstance(new org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory());
         controller = new GestioneAuleController();
         aulaDao = DaoFactory.getInstance().getAulaDao();
     }
@@ -57,10 +58,10 @@ class GestioneAuleControllerTest {
         boolean result = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
 
         assertTrue(result);
-        assertTrue(aulaDao.exists("A101"));
-        assertTrue(aulaDao.exists("B202"));
+        assertTrue(aulaDao.exists("Edificio1", "A101"));
+        assertTrue(aulaDao.exists("Edificio2", "B202"));
 
-        Aula aulaA101 = aulaDao.load("A101");
+        Aula aulaA101 = aulaDao.load("Edificio1", "A101");
         assertEquals("Edificio1", aulaA101.getEdificio());
         assertEquals(1, aulaA101.getPiano());
         assertEquals(Arrays.asList("Proiettore", "Lavagna"), aulaA101.getOggetti());
@@ -77,21 +78,24 @@ class GestioneAuleControllerTest {
         existingAula.setOggetti(List.of("Oggetto1"));
         aulaDao.store(existingAula);
 
-        // Prova a inserire da CSV con la stessa aula
+        // Prova a inserire da CSV con la stessa aula nello stesso edificio
         tempCsvFile = createTempCsvFile(
                 """
                             Edificio,IdAula,Piano,Oggetti
-                            EdificioNuovo,A101,1,Proiettore;Lavagna
+                            EdificioOriginale,A101,1,Proiettore;Lavagna
                             Edificio2,B202,2,Computer;Sedia
                         """
         );
         String filePath = tempCsvFile.getAbsolutePath();
 
-        assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAuleFromCsv(filePath));
+        boolean result = controller.inserisciAuleFromCsv(filePath);
+        assertTrue(result);
+
         // B202 è stata inserita
+        assertTrue(aulaDao.exists("Edificio2", "B202"));
 
         // Verifica che A101 mantenga i dati originali
-        Aula aulaA101 = aulaDao.load("A101");
+        Aula aulaA101 = aulaDao.load("EdificioOriginale", "A101");
         assertEquals("EdificioOriginale", aulaA101.getEdificio());
         assertEquals(0, aulaA101.getPiano());
     }
@@ -109,56 +113,56 @@ class GestioneAuleControllerTest {
         tempCsvFile = createTempCsvFile(
                 """
                         Edificio,IdAula,Piano,Oggetti
-                        EdificioNuovo,A101,1,Proiettore;Lavagna
+                        EdificioOriginale,A101,1,Proiettore;Lavagna
                         """
-);
+        );
 
         String filePath = tempCsvFile.getAbsolutePath();
 
-        assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAuleFromCsv(filePath));
-
-}
+        boolean result = controller.inserisciAuleFromCsv(filePath);
+        assertFalse(result);
+    }
 
 
 
 // ==================== TEST INSERISCI SINGOLA AULA ====================
 
-        @Test
-        @DisplayName("inserisciAula - Inserimento aula singola con successo")
-        void testInserisciAulaSingola() throws IllegalStateException, AulaGiaPresenteException {
-            AulaBean aulaBean = new AulaBean();
-            aulaBean.setIdAula("C303");
-            aulaBean.setEdificio("Edificio3");
-            aulaBean.setPiano(3);
-            aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
+    @Test
+    @DisplayName("inserisciAula - Inserimento aula singola con successo")
+    void testInserisciAulaSingola() throws IllegalStateException, AulaGiaPresenteException {
+        AulaBean aulaBean = new AulaBean();
+        aulaBean.setIdAula("C303");
+        aulaBean.setEdificio("Edificio3");
+        aulaBean.setPiano(3);
+        aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
 
-            controller.inserisciAula(aulaBean);
+        controller.inserisciAula(aulaBean);
 
-            assertTrue(aulaDao.exists("C303"));
-            Aula aulaStored = aulaDao.load("C303");
-            assertEquals("Edificio3", aulaStored.getEdificio());
-            assertEquals(3, aulaStored.getPiano());
-            assertEquals(Arrays.asList("Monitor", "Webcam"), aulaStored.getOggetti());
-            }
+        assertTrue(aulaDao.exists("Edificio3", "C303"));
+        Aula aulaStored = aulaDao.load("Edificio3", "C303");
+        assertEquals("Edificio3", aulaStored.getEdificio());
+        assertEquals(3, aulaStored.getPiano());
+        assertEquals(Arrays.asList("Monitor", "Webcam"), aulaStored.getOggetti());
+    }
 
-            @Test
-            @DisplayName("inserisciAula - Aula già esistente lancia eccezione")
-            void testInserisciAulaThrowsExceptionWhenExists() throws IllegalStateException {
-            // Prima inserisci l'aula
-            Aula existingAula = aulaDao.create("C303");
-            existingAula.setEdificio("Edificio3");
-            existingAula.setPiano(3);
-            existingAula.setOggetti(List.of("Oggetto1"));
-            aulaDao.store(existingAula);
+    @Test
+    @DisplayName("inserisciAula - Aula già esistente lancia eccezione")
+    void testInserisciAulaThrowsExceptionWhenExists() throws IllegalStateException {
+        // Prima inserisci l'aula
+        Aula existingAula = aulaDao.create("C303");
+        existingAula.setEdificio("Edificio3");
+        existingAula.setPiano(3);
+        existingAula.setOggetti(List.of("Oggetto1"));
+        aulaDao.store(existingAula);
 
-            AulaBean aulaBean = new AulaBean();
-            aulaBean.setIdAula("C303");
-            aulaBean.setEdificio("EdificioNuovo");
-            aulaBean.setPiano(1);
-            aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
+        AulaBean aulaBean = new AulaBean();
+        aulaBean.setIdAula("C303");
+        aulaBean.setEdificio("Edificio3");
+        aulaBean.setPiano(1);
+        aulaBean.setOggetti(Arrays.asList("Monitor", "Webcam"));
 
-                assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAula(aulaBean));
-        }
+        assertThrows(AulaGiaPresenteException.class, () -> controller.inserisciAula(aulaBean));
+    }
 
 
         /* AULA BEAN TEST */

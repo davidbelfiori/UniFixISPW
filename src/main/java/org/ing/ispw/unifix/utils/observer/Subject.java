@@ -3,7 +3,7 @@ package org.ing.ispw.unifix.utils.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject {
+public abstract class Subject {
     private final List<Observer> observers = new ArrayList<>();
 
     public void attach(Observer observer) {

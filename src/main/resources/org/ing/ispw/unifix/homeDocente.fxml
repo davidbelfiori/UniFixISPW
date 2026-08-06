@@ -53,7 +53,7 @@
             </AnchorPane>
       <AnchorPane layoutX="868.0" layoutY="198.0" prefHeight="540.0" prefWidth="281.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 60;">
          <children>
-            <Text layoutX="54.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nuova Segnalaione">
+            <Text layoutX="54.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nuova Segnalazione">
                <font>
                   <Font name="Segoe UI" size="21.0" />
                </font>

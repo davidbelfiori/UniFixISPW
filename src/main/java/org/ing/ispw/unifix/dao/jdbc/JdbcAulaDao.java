@@ -16,6 +16,7 @@ public class JdbcAulaDao   implements AulaDao {
 
 
     private static  final String ACTION_1 ="Oggetto";
+    private static  final String ACTION_2 ="Edificio";
 
      private Connection getConnection() { return SingletonConnessione.getInstance(); }
 
@@ -26,36 +27,58 @@ public class JdbcAulaDao   implements AulaDao {
     }
 
     @Override
-    public Aula load(String id) {
+    public Aula load(String edificio, String idAula) {
+        String query = """
+            SELECT a.IdAula, a.Edificio, a.Piano, o.Oggetto 
+            FROM aule a 
+            LEFT JOIN oggettiaula o ON a.IdAula = o.IdAula AND a.Edificio = o.Edificio 
+            WHERE a.IdAula = ? AND a.Edificio = ?
+            """;
 
-        String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)){
-            stmt.setString(1, id);
-                ResultSet rs = stmt.executeQuery();
-                Aula aula = new Aula(id);
-                List<String> oggetti = new ArrayList<>();
-                while (rs.next()){
-                    String oggetto = rs.getString(ACTION_1);
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+            stmt.setString(1, idAula);
+            stmt.setString(2, edificio);
+            ResultSet rs = stmt.executeQuery();
+
+            Aula aula = null;
+            List<String> oggetti = new ArrayList<>();
+
+            while (rs.next()) {
+                if (aula == null) {
+                    aula = new Aula(rs.getString("IdAula"));
+                    aula.setEdificio(rs.getString(ACTION_2));
+                    aula.setPiano(rs.getInt("Piano"));
+                }
+                String oggetto = rs.getString(ACTION_1);
+                if (oggetto != null) {
                     oggetti.add(oggetto);
                 }
+            }
+
+            if (aula != null) {
                 aula.setOggetti(oggetti);
                 return aula;
-
-        }catch (SQLException e){
-            throw new AulaGiaPresenteException("Errore durante il caricamento dell'aula" + e.getMessage());
+            } else {
+                throw new AuleNonTrovateException("Aula " + idAula + " non trovata nell'edificio " + edificio);
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("Errore durante il caricamento dell'aula: " + e.getMessage());
         }
-
     }
 
 
+    @Override
+    public Aula load(String id) {
+        return null;
+    }
 
     @Override
     public void store(Aula entity) {
        if (entity == null) {throw new IllegalArgumentException("Aula non valida");}
         String insertAulaQuery = "INSERT INTO aule (IdAula, Edificio, Piano) VALUES (?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE Edificio = VALUES(Edificio), Piano = VALUES(Piano)";
+                "ON DUPLICATE KEY UPDATE Piano = VALUES(Piano)";
 
-        String insertOggettoQuery = "INSERT INTO oggettiaula (IdAula, Oggetto) VALUES (?, ?)";
+        String insertOggettoQuery = "INSERT INTO oggettiaula (IdAula, Edificio, Oggetto) VALUES (?, ?, ?)";
 
         try (PreparedStatement aulaStmt = getConnection().prepareStatement(insertAulaQuery);
              PreparedStatement oggettoStmt = getConnection().prepareStatement(insertOggettoQuery)) {
@@ -67,8 +90,9 @@ public class JdbcAulaDao   implements AulaDao {
             aulaStmt.executeUpdate();
 
             // Eliminare gli oggetti precedenti per l'aula per evitare duplicati
-            try (PreparedStatement deleteStmt = getConnection().prepareStatement("DELETE FROM oggettiaula WHERE IdAula = ?")) {
+            try (PreparedStatement deleteStmt = getConnection().prepareStatement("DELETE FROM oggettiaula WHERE IdAula = ? AND Edificio = ?")) {
                 deleteStmt.setString(1, entity.getIdAula());
+                deleteStmt.setString(2, entity.getEdificio());
                 deleteStmt.executeUpdate();
             }
 
@@ -77,7 +101,8 @@ public class JdbcAulaDao   implements AulaDao {
             if (oggetti != null) {
                 for (String oggetto : oggetti) {
                     oggettoStmt.setString(1, entity.getIdAula());
-                    oggettoStmt.setString(2, oggetto);
+                    oggettoStmt.setString(2, entity.getEdificio());
+                    oggettoStmt.setString(3, oggetto);
                     oggettoStmt.addBatch();
                 }
                 oggettoStmt.executeBatch();
@@ -135,7 +160,7 @@ public class JdbcAulaDao   implements AulaDao {
         String query = """
                 SELECT a.IdAula, a.Edificio, a.Piano, o.Oggetto 
                 FROM aule a 
-                LEFT JOIN oggettiaula o ON a.IdAula = o.IdAula
+                LEFT JOIN oggettiaula o ON a.IdAula = o.IdAula AND a.Edificio = o.Edificio
                 """;
 
         try (PreparedStatement stmt = getConnection().prepareStatement(query);
@@ -143,14 +168,15 @@ public class JdbcAulaDao   implements AulaDao {
 
             while (rs.next()) {
                 String idAula = rs.getString("IdAula");
-                String edificio = rs.getString("Edificio");
+                String edificio = rs.getString(ACTION_2);
                 int piano = rs.getInt("Piano");
                 String oggetto = rs.getString(ACTION_1);
 
-                Aula aula = aulaMap.get(idAula);
+                String key = (edificio + "_" + idAula).toLowerCase();
+                Aula aula = aulaMap.get(key);
                 if (aula == null) {
-                    aula = new Aula(idAula,piano, edificio, new ArrayList<>());
-                    aulaMap.put(idAula, aula);
+                    aula = new Aula(idAula, piano, edificio, new ArrayList<>());
+                    aulaMap.put(key, aula);
                 }
 
                 // Aggiunge l'oggetto solo se non è null
@@ -177,7 +203,7 @@ public class JdbcAulaDao   implements AulaDao {
         try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                String edificio = rs.getString("Edificio");
+                String edificio = rs.getString(ACTION_2);
                 edifici.add(edificio);
             }
             return edifici;
@@ -187,22 +213,37 @@ public class JdbcAulaDao   implements AulaDao {
     }
 
     @Override
-    public List<String> getAulaOggetti(String idAula) {
+    public List<String> getAulaOggetti(String edificio, String idAula) {
+        String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ? AND Edificio = ?";
         List<String> oggetti = new ArrayList<>();
-        String query = "SELECT Oggetto FROM oggettiaula WHERE IdAula = ?";
-        try (PreparedStatement stmt = getConnection().prepareStatement(query);) {
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, idAula);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    String oggetto = rs.getString(ACTION_1);
-                    oggetti.add(oggetto);
-                }
-                return oggetti;
+            stmt.setString(2, edificio);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                oggetti.add(rs.getString(ACTION_1));
             }
-        } catch (SQLException _) {
-            throw new AuleNonTrovateException("Errore durante il recupero degli oggetti nell'aula"+idAula);
+        } catch (SQLException e) {
+            throw new PersistenceException("Errore nel recupero degli oggetti: " + e.getMessage());
+        }
+        return oggetti;
+    }
+
+    @Override
+    public boolean exists(String edificio, String idAula) {
+        String query = "SELECT COUNT(*) FROM aule WHERE IdAula = ? AND Edificio = ?";
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+            stmt.setString(1, idAula);
+            stmt.setString(2, edificio);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("Errore controllo esistenza aula: " + e.getMessage());
         }
     }
+
+
 
     @Override
     public int countAule() {
