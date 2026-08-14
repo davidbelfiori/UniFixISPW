@@ -1,0 +1,1116 @@
+[ {
+  "idAula" : "Auditorium",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2 - CampuSX",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 4 - CampuSX",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 5 - CampuSX",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Moscati",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P02",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P03",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P07",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P08",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P09",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P10",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P12",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P24",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P25",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P26 B (Mediterraneo)",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Roma",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T12 A AULA ROSSA",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T12 B AULA VERDE",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T18",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T19",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T20",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T21",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T23A",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T23B",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T25",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T26",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T27",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T28",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T29",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T30",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T31",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T32",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T33",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T34",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T35",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Laboratorio Cartografico",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Computer", "Proiettore", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Laboratorio Cinema",
+  "piano" : 0,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Computer", "Proiettore", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Piano 1 - Aula Dipartimentale",
+  "piano" : 1,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Piano 2 - Aula Dipartimentale",
+  "piano" : 2,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Piano 3 - Aula Dipartimentale",
+  "piano" : 3,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Piano 4 - Aula Dipartimentale",
+  "piano" : 4,
+  "edificio" : "Macroarea di Lettere e Filosofia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 003",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Auditorio - CampuSX",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D502 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula E",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA1 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA2 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA3 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA4 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA5 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula MA6 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P10",
+  "piano" : 1,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula PM1 - Foro Italico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula PM2 - ForoItalico",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T2",
+  "piano" : 0,
+  "edificio" : "Dipartimento di Giurisprudenza",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA 11",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA 12",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA 5",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA 8",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA 9",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA A1",
+  "piano" : 0,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA A2",
+  "piano" : 0,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA A3",
+  "piano" : 0,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA A4",
+  "piano" : 0,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B10",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B11",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B12",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B13",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B14",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B3",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B5",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B6",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B7",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B8",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA B9",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C10",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C12",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C2",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C3",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C4",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C5",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C6",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C7",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C8",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA C9",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA DISEGNO 1",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "AULA DISEGNO 2",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 10",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 3",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 4",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 6",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 7",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Archimede",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula B1",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula B15",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula B16",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula B2",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula B4",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula C1",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula C11",
+  "piano" : 2,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Convegni",
+  "piano" : 0,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Galileo",
+  "piano" : 3,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Leonardo",
+  "piano" : 3,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Pitagora",
+  "piano" : 3,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Lab. Elettronica",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Computer", "Proiettore", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "R2",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "R3",
+  "piano" : 1,
+  "edificio" : "Macroarea di Ingegneria",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1- PP1",
+  "piano" : 1,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1- PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 11",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 12",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 13",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 14",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 15",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 16",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 18",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 19",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2- PP1",
+  "piano" : 1,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 20",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 21",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 22",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 27",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 28",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 29",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 29A",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 3",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 3 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 3A",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 4 - PP1",
+  "piano" : 1,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 4 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 5 - PP1",
+  "piano" : 1,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 5 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 6 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 6A (Sogene)",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 7 (Sogene)",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 7 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 8 (sogene)",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 8 - PP1",
+  "piano" : 1,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 8 - PP2",
+  "piano" : 2,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 8A",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 9",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula G2A",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula G2B",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula G2C - Sogene",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Gismondi(Aula Magna) - Sogene",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula L3",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Computer", "Proiettore", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula L5",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Computer", "Proiettore", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T1 (Sogene)",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T2",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T4 - Sogene",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T5",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T5 Bis",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T6",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T6 Bis",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T7",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T7 Bis",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T8",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T8 Bis",
+  "piano" : 0,
+  "edificio" : "MM.FF.NN",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1A2",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1A3/4",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1A5",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1A6",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1B3",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1B4",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1B5",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 1B6",
+  "piano" : 1,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2A1",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2A2",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2A3",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2A4",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2B1",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2B3",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula 2B4",
+  "piano" : 2,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Bovet",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D022",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D10",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D15",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D16",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D19a",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula D19b",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Dulbecco",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Fleming",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Golgi",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Luria",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Montalcini",
+  "piano" : 0,
+  "edificio" : "Facoltà di Medicina e Chiururgia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Auditorium CampusX",
+  "piano" : 0,
+  "edificio" : "Campus X",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula cinecittà",
+  "piano" : 0,
+  "edificio" : "Cinecittà",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula F",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula I 2",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula I 4",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula Magna",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Microfono", "Poltrone", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P1",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P11",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P12",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P2",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P3",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P4",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P57",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P6",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P8",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula P9",
+  "piano" : 1,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S10",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S11",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S12",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S2",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S4",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S5",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S6",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S7",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S8",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula S9",
+  "piano" : 2,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T1",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T2",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T3",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T4",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T5",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula T7",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+}, {
+  "idAula" : "Aula TL",
+  "piano" : 0,
+  "edificio" : "Facoltà di Economia",
+  "oggetti" : [ "Proiettore", "Impianto Audio", "Banchi", "Sedie", "Lavagna", "Prese", "Climatizzatore" ]
+} ]

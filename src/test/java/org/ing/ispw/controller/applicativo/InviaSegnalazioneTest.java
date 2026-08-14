@@ -76,7 +76,7 @@ class InviaSegnalazioneTest {
         String chiave = "EdificioIngegneria_Aula1_OggettoGuastoProiettore";
         assertTrue(segnalazioneDao.exists(chiave), "La segnalazione deve essere presente nel DAO");
 
-        Segnalazione segnalazioneCreata = segnalazioneDao.getSegnalazione(chiave);
+        Segnalazione segnalazioneCreata = segnalazioneDao.load(chiave);
         assertNotNull(segnalazioneCreata, "L'entità segnalazione salvata non deve essere null");
         assertEquals("Ingegneria", segnalazioneCreata.getEdificio());
         assertEquals("1", segnalazioneCreata.getAula());
@@ -170,7 +170,7 @@ class InviaSegnalazioneTest {
         assertTrue(result);
 
         String chiave = "EdificioIngegneria_Aula2_OggettoGuastoImpianto Audio";
-        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(chiave);
+        Segnalazione segnalazione = segnalazioneDao.load(chiave);
         assertNotNull(segnalazione);
         assertEquals("giuseppe.rossi@tec.uniroma2.eu", segnalazione.getTecnico().getEmail(), "La segnalazione deve essere assegnata al tecnico con meno carichi (0)");
         assertEquals(1, segnalazione.getTecnico().getNumeroSegnalazioni());

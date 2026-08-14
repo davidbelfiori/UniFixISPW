@@ -46,7 +46,7 @@ public class TecnicoController {
     }
 
     public SegnalazioneBean getSegnalazione(String idSegnalazione) {
-        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         if (segnalazione == null) {
             throw new NessunaSegnalazioneException("Segnalazione non trovata con ID: " + idSegnalazione);
         }
@@ -81,7 +81,7 @@ public class TecnicoController {
 
 
     public void chiudiSegnalazione(String idSegnalazione) throws InvalidStateTransitionException {
-        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
 
@@ -101,7 +101,7 @@ public class TecnicoController {
     }
 
     public void inLavorazioneSegnalazione(String idSegnalazione) throws InvalidStateTransitionException{
-        Segnalazione segnalazione = segnalazioneDao.getSegnalazione(idSegnalazione);
+        Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         segnalazione.inLavorazione();
         segnalazioneDao.update(segnalazione);
         segnalazione.attach(new EmailNotificationService());

@@ -8,9 +8,6 @@ public interface SegnalazioneDao extends Dao<String, Segnalazione> {
 
     Segnalazione create(String idSegnalazione);
 
-    List<Segnalazione> getAllSegnalazioni();
-
-    Segnalazione getSegnalazione(String idSegnalazione);
 
     List<Segnalazione> getSegnalazioniByDocente(String docenteEmail);
 

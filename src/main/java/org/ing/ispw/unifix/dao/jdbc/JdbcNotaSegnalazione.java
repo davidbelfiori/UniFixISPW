@@ -1,13 +1,11 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
-import org.ing.ispw.unifix.exception.ErroreLetturaPasswordException;
-import org.ing.ispw.unifix.exception.NoteNonTrovateException;
-import org.ing.ispw.unifix.exception.StoreNotaException;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
-import org.ing.ispw.unifix.utils.Printer;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,28 +25,59 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
     @Override
     public NotaSegnalazione load(String id) {
-        String query = "SELECT uuid, idsegnalazione as id, datacreazione, tecnico as tec, nota FROM nota_segnalazione WHERE UUID = ?";
-        try {
-            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-                ps.setString(1, id);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        Segnalazione segnalazione = new Segnalazione(rs.getString("id"));
-                        Tecnico tecnico = new Tecnico(rs.getString("tec"));
-                        return new NotaSegnalazione(
-                                rs.getString("UUID"),
-                                segnalazione,
-                                rs.getTimestamp("dataCreazione"),
-                                tecnico,
-                                rs.getString("Nota")
-                        );
-                    }
-                }
-            }
-        } catch (SQLException _) {
-            throw new NoteNonTrovateException("Immpossibile trovare la nota con UUID"+id);
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
         }
-        return null;
+
+        String query = """
+            SELECT
+                uuid,
+                idsegnalazione AS id,
+                datacreazione,
+                tecnico AS tec,
+                nota
+            FROM nota_segnalazione
+            WHERE UUID = ?
+            """;
+
+        try (PreparedStatement ps =
+                     getConnection().prepareStatement(query)) {
+
+            ps.setString(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                Segnalazione segnalazione =
+                        new Segnalazione(rs.getString("id"));
+
+                Tecnico tecnico =
+                        new Tecnico(rs.getString("tec"));
+
+                return new NotaSegnalazione(
+                        rs.getString("uuid"),
+                        segnalazione,
+                        rs.getTimestamp("datacreazione"),
+                        tecnico,
+                        rs.getString("nota")
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante il caricamento della nota " + id,
+                    e
+            );
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException(
+                    "I dati persistiti della nota " + id + " non sono validi",
+                    e
+            );
+        }
     }
 
     @Override
@@ -80,31 +109,79 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
     @Override
     public void store(NotaSegnalazione nota) {
-        String query = "INSERT INTO nota_segnalazione (UUID, idSegnalazione, dataCreazione, tecnico, Nota) VALUES (?, ?, ?, ?, ?)";
-        try {
-            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-                ps.setString(1, nota.getUuid());
-                ps.setString(2, nota.getSegnalazione().getIdSegnalazione());
-                ps.setTimestamp(3, nota.getDataCreazione());
-                ps.setString(4, nota.getTecnico().getEmail());
-                ps.setString(5, nota.getTesto());
-                ps.executeUpdate();
-            }
+        if (nota == null) {
+            throw new IllegalArgumentException(
+                    "La nota non può essere nulla"
+            );
+        }
+
+        String uuid = nota.getUuid();
+
+        if (uuid == null || uuid.isBlank()) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo o vuoto"
+            );
+        }
+
+        String query = """
+            INSERT INTO nota_segnalazione (
+                UUID,
+                idSegnalazione,
+                dataCreazione,
+                tecnico,
+                Nota
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setString(1, uuid);
+            ps.setString(
+                    2,
+                    nota.getSegnalazione().getIdSegnalazione()
+            );
+            ps.setTimestamp(3, nota.getDataCreazione());
+            ps.setString(4, nota.getTecnico().getEmail());
+            ps.setString(5, nota.getTesto());
+
+            ps.executeUpdate();
         } catch (SQLException e) {
-           throw new StoreNotaException("impossibile salvare la nota:"+e.getMessage());
+            if (isDuplicateKey(e)) {
+                throw new EntityAlreadyExistsException(
+                        "Esiste già una nota con UUID " + uuid,
+                        e
+                );
+            }
+
+            throw new StoreNotaException(
+                    "Impossibile salvare la nota con UUID " + uuid,
+                    e
+            );
         }
     }
 
     @Override
     public void delete(String id) {
-        String query = "DELETE FROM nota_segnalazione WHERE UUID = ?";
-        try {
-            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-                ps.setString(1, id);
-                ps.executeUpdate();
-            }
-        } catch (SQLException _) {
-            Printer.error("impossibile eliminare la nota");
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
+        }
+
+        String query =
+                "DELETE FROM nota_segnalazione WHERE UUID = ?";
+
+        try (PreparedStatement ps =
+                     getConnection().prepareStatement(query)) {
+
+            ps.setString(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante l'eliminazione della nota " + id,
+                    e
+            );
         }
     }
 
@@ -165,4 +242,10 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
             throw new NoteNonTrovateException("impossibile aggiornare la nota"+e.getMessage());
         }
     }
+
+
+    private static boolean isDuplicateKey(SQLException exception) {
+        return exception.getErrorCode() == 1062;
+    }
+
 }

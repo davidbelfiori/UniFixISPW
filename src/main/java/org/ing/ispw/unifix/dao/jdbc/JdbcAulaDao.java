@@ -29,7 +29,10 @@ public class JdbcAulaDao  implements AulaDao {
 
     @Override
     public Aula load(AulaId id) {
-        String query = """
+         if (id == null) {
+            throw new IllegalArgumentException("L'identificatore dell'aula non può essere nullo.");
+        }
+         String query = """
             SELECT a.IdAula, a.Edificio, a.Piano, o.Oggetto
             FROM aule a
             LEFT JOIN oggettiaula o
@@ -79,9 +82,17 @@ public class JdbcAulaDao  implements AulaDao {
 
     @Override
     public void store(Aula entity) {
-       if (entity == null) {throw new IllegalArgumentException("Aula non valida");}
-        String insertAulaQuery = "INSERT INTO aule (IdAula, Edificio, Piano) VALUES (?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE Piano = VALUES(Piano)";
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'aula non può essere nulla"
+            );
+        }
+
+        AulaId key = new AulaId(
+                entity.getIdAula(),
+                entity.getEdificio()
+        );
+        String insertAulaQuery = "INSERT INTO aule (IdAula, Edificio, Piano) VALUES (?, ?, ?) ";
 
         String insertOggettoQuery = "INSERT INTO oggettiaula (IdAula, Edificio, Oggetto) VALUES (?, ?, ?)";
 
@@ -93,13 +104,6 @@ public class JdbcAulaDao  implements AulaDao {
             aulaStmt.setString(2, entity.getEdificio());
             aulaStmt.setInt(3, entity.getPiano());
             aulaStmt.executeUpdate();
-
-            // Eliminare gli oggetti precedenti per l'aula per evitare duplicati
-            try (PreparedStatement deleteStmt = getConnection().prepareStatement("DELETE FROM oggettiaula WHERE IdAula = ? AND Edificio = ?")) {
-                deleteStmt.setString(1, entity.getIdAula());
-                deleteStmt.setString(2, entity.getEdificio());
-                deleteStmt.executeUpdate();
-            }
 
             // Inserimento degli oggetti associati all'aula
             List<String> oggetti = entity.getOggetti();
@@ -114,33 +118,49 @@ public class JdbcAulaDao  implements AulaDao {
             }
 
         } catch (SQLException e) {
-            throw new ErroreCaricamentoAuleException("Errore nell'inserimento dell'aula: " + e.getMessage());
+            if (isDuplicateKey(e)) {
+                throw new EntityAlreadyExistsException(
+                        "Esiste già l'aula " + key,
+                        e
+                );
+            }
+
+            throw new PersistenceException(
+                    "Errore durante l'inserimento dell'aula " + key,
+                    e
+            );
         }
 
     }
-
     @Override
     public void delete(AulaId id) {
+        if (id == null) {
+            throw new IllegalArgumentException("L'identificatore dell'aula non può essere nullo");
+        }
+
         String query = """
             DELETE FROM aule
             WHERE LOWER(IdAula) = ?
-                AND LOWER(Edificio) = ?
+              AND LOWER(Edificio) = ?
             """;
 
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
             stmt.setString(1, id.idAula());
             stmt.setString(2, id.edificio());
             stmt.executeUpdate();
+
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Impossibile eliminare l'aula: " + e.getMessage()
-            );
+            throw new PersistenceException("Errore durante l'eliminazione dell'aula " + id, e);
         }
     }
 
-
     @Override
     public boolean exists(AulaId id) {
+        if (id == null) {
+            throw new IllegalArgumentException("L'identificatore dell'aula non può essere nullo.");
+        }
         String query = """
             SELECT COUNT(*)
             FROM aule
@@ -297,6 +317,11 @@ public class JdbcAulaDao  implements AulaDao {
         } catch (SQLException e) {
             throw new EdificiNonTrovatiException("Errore durante il conteggio degli edifici: " + e.getMessage());
         }
+    }
+
+
+    private static boolean isDuplicateKey(SQLException exception) {
+        return exception.getErrorCode() == 1062;
     }
 
 }

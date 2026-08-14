@@ -38,12 +38,11 @@ public class VisualizzaSegnalazioniTecnicoController {
             throw new IllegalStateException("Nessun tecnicoMail loggato");
         }
         String tecnicoMail = currentUser.getEmail();
-        segnalazioniAll = segnalazioneDao.getAllSegnalazioni();
+        segnalazioniAll = segnalazioneDao.getSegnalazioniByTecnico(tecnicoMail);
         List<SegnalazioneBean> segnalazioniTecnico = new ArrayList<>();
         //prendi solo quelle assegnate al tecnicoMail
         if (segnalazioniAll.isEmpty()) throw new NessunaSegnalazioneException("Nessuna segnalazione presente");
         for (Segnalazione segnalazione : segnalazioniAll) {
-            if (segnalazione.getTecnico().getEmail().equals(tecnicoMail)) {
                 SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
                 segnalazioneBean.setIdSegnalazione(segnalazione.getIdSegnalazione());
                 segnalazioneBean.setDataCreazione(segnalazione.getDataCreazione());
@@ -59,9 +58,7 @@ public class VisualizzaSegnalazioniTecnicoController {
                         segnalazione.getTecnico().getCognome(),
                         segnalazione.getTecnico().getNome()));
                 segnalazioniTecnico.add(segnalazioneBean);
-            }
         }
-        if (segnalazioniTecnico.isEmpty()) throw new NessunaSegnalazioneTecnicoException("Nessuna segnalazione assegnata al tecnicoMail");
         return segnalazioniTecnico;
 
     }

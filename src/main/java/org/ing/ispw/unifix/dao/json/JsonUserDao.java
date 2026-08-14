@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.UserDao;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.UserType;
@@ -61,31 +62,67 @@ public class JsonUserDao implements UserDao {
 
     @Override
     public User load(String id) {
-        List<User> users = loadAll();
-        for (User user : users) {
-            if (user.getEmail().equals(id)) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla"
+            );
+        }
+
+        for (User user : loadAll()) {
+            if (id.equals(user.getEmail())) {
                 return user;
             }
         }
+
         return null;
     }
 
     @Override
     public void store(User entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("L'utente non può essere nullo");
+        }
+
+        String email = entity.getEmail();
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla o vuota"
+            );
+        }
+
         List<User> users = loadAll();
-        String key = entity.getEmail();
 
-        users.removeIf(u -> u.getEmail().equals(key));
+        boolean alreadyExists = users.stream()
+                .anyMatch(user -> email.equals(user.getEmail()));
+
+        if (alreadyExists) {
+            throw new EntityAlreadyExistsException(
+                    "Esiste già un utente con email " + email
+            );
+        }
+
         users.add(entity);
-
         saveAll(users);
     }
 
     @Override
     public void delete(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla"
+            );
+        }
+
         List<User> users = loadAll();
-        users.removeIf(u -> u.getEmail().equals(id));
-        saveAll(users);
+
+        boolean removed = users.removeIf(
+                user -> id.equals(user.getEmail())
+        );
+
+        if (removed) {
+            saveAll(users);
+        }
     }
 
     @Override

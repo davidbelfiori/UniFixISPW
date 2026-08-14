@@ -20,7 +20,7 @@ public class GestisciSegnalazioniAdminController {
 
 
     public List<SegnalazioneBean> getAllSegnalazioni() {
-        List<Segnalazione> segnalazioni = segnalazioneDao.getAllSegnalazioni();
+        List<Segnalazione> segnalazioni = segnalazioneDao.loadAll();
         List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
 
         for (Segnalazione segnalazione : segnalazioni) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.ing.ispw.unifix.dao.Dao;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 
 import java.io.File;
@@ -48,32 +49,65 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
 
     @Override
     public V load(K id) {
-        List<V> entities = loadAll();
-        for (V entity : entities) {
-            if (getKey(entity).equals(id)) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'identificatore non può essere nullo"
+            );
+        }
+
+        for (V entity : loadAll()) {
+            if (id.equals(getKey(entity))) {
                 return entity;
             }
         }
+
         return null;
     }
 
     @Override
     public void store(V entity) {
-        List<V> entities = loadAll();
+        if (entity == null) {
+            throw new IllegalArgumentException("L'entità non può essere nulla");
+        }
+
         K key = getKey(entity);
 
-        // Rimuove eventuale entità esistente con stessa chiave
-        entities.removeIf(e -> getKey(e).equals(key));
-        entities.add(entity);
+        if (key == null) {
+            throw new IllegalArgumentException("La chiave dell'entità non può essere nulla");
+        }
 
+        List<V> entities = loadAll();
+
+        boolean alreadyExists = entities.stream()
+                .anyMatch(existing -> key.equals(getKey(existing)));
+
+        if (alreadyExists) {
+            throw new EntityAlreadyExistsException(
+                    "Esiste già un'entità con chiave " + key
+            );
+        }
+
+        entities.add(entity);
         saveAll(entities);
     }
 
     @Override
     public void delete(K id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'identificatore non può essere nullo"
+            );
+        }
+
         List<V> entities = loadAll();
-        entities.removeIf(e -> getKey(e).equals(id));
-        saveAll(entities);
+
+        boolean removed = entities.removeIf(
+                entity -> id.equals(getKey(entity))
+        );
+
+        if (removed) {
+            saveAll(entities);
+        }
     }
 
     @Override

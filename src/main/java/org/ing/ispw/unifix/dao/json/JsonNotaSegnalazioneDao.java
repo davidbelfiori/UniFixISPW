@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
@@ -61,33 +62,70 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
 
     @Override
     public NotaSegnalazione load(String id) {
-        List<NotaSegnalazione> note = loadAll();
-        for (NotaSegnalazione nota : note) {
-            if (nota.getUuid().equals(id)) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
+        }
+
+        for (NotaSegnalazione nota : loadAll()) {
+            if (id.equals(nota.getUuid())) {
                 return nota;
             }
         }
+
         return null;
     }
 
     @Override
     public void store(NotaSegnalazione entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La nota non può essere nulla"
+            );
+        }
+
+        String uuid = entity.getUuid();
+
+        if (uuid == null || uuid.isBlank()) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo o vuoto"
+            );
+        }
+
         List<NotaSegnalazione> note = loadAll();
-        String key = entity.getUuid();
 
-        note.removeIf(n -> n.getUuid().equals(key));
+        boolean alreadyExists = note.stream()
+                .anyMatch(nota -> uuid.equals(nota.getUuid()));
+
+        if (alreadyExists) {
+            throw new EntityAlreadyExistsException(
+                    "Esiste già una nota con UUID " + uuid
+            );
+        }
+
         note.add(entity);
-
         saveAll(note);
     }
 
     @Override
     public void delete(String id) {
-        List<NotaSegnalazione> note = loadAll();
-        note.removeIf(n -> n.getUuid().equals(id));
-        saveAll(note);
-    }
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
+        }
 
+        List<NotaSegnalazione> note = loadAll();
+
+        boolean removed = note.removeIf(
+                nota -> id.equals(nota.getUuid())
+        );
+
+        if (removed) {
+            saveAll(note);
+        }
+    }
     @Override
     public boolean exists(String id) {
         return load(id) != null;

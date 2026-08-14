@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.JsonFileException;
+import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
@@ -67,31 +68,72 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     @Override
     public Segnalazione load(String id) {
-        List<Segnalazione> segnalazioni = loadAll();
-        for (Segnalazione s : segnalazioni) {
-            if (s.getIdSegnalazione().equals(id)) {
-                return s;
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo"
+            );
+        }
+
+        for (Segnalazione segnalazione : loadAll()) {
+            if (id.equals(segnalazione.getIdSegnalazione())) {
+                return segnalazione;
             }
         }
+
         return null;
     }
 
     @Override
     public void store(Segnalazione entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La segnalazione non può essere nulla"
+            );
+        }
+
+        String id = entity.getIdSegnalazione();
+
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo o vuoto"
+            );
+        }
+
         List<Segnalazione> segnalazioni = loadAll();
-        String key = entity.getIdSegnalazione();
 
-        segnalazioni.removeIf(s -> s.getIdSegnalazione().equals(key));
+        boolean alreadyExists = segnalazioni.stream()
+                .anyMatch(segnalazione ->
+                        id.equals(segnalazione.getIdSegnalazione())
+                );
+
+        if (alreadyExists) {
+            throw new SegnalazioneGiaEsistenteException(
+                    "Esiste già una segnalazione con ID " + id
+            );
+        }
+
         segnalazioni.add(entity);
-
         saveAll(segnalazioni);
     }
 
     @Override
     public void delete(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo"
+            );
+        }
+
         List<Segnalazione> segnalazioni = loadAll();
-        segnalazioni.removeIf(s -> s.getIdSegnalazione().equals(id));
-        saveAll(segnalazioni);
+
+        boolean removed = segnalazioni.removeIf(
+                segnalazione ->
+                        id.equals(segnalazione.getIdSegnalazione())
+        );
+
+        if (removed) {
+            saveAll(segnalazioni);
+        }
     }
 
     @Override
@@ -126,16 +168,6 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
             throw new IllegalArgumentException("Impossibile aggiornare: segnalazione con ID " + entity.getIdSegnalazione() + " non trovata.");
         }
         store(entity);
-    }
-
-    @Override
-    public List<Segnalazione> getAllSegnalazioni() {
-        return loadAll();
-    }
-
-    @Override
-    public Segnalazione getSegnalazione(String idSegnalazione) {
-        return load(idSegnalazione);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.UserDao;
-import org.ing.ispw.unifix.exception.SignUpException;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.utils.UserType;
@@ -23,7 +24,7 @@ public class JdbcUserDao  implements UserDao {
     private static final String RUOLO = "ruolo";
     private static final String COGNOME = "cognome";
     private static final String PASSWORD = "password";
-
+    private static final String NUMERO_SEGNALAZIONI = "numeroSegnalazioni";
 
     private Connection getConnection() {
         return SingletonConnessione.getInstance();
@@ -35,53 +36,123 @@ public class JdbcUserDao  implements UserDao {
 
     @Override
     public User load(String id) {
-        String query = "SELECT email, password, nome, cognome, ruolo FROM user WHERE email = ?";
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
-            stmt.setString(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String email = rs.getString(EMAIL);
-                    String password = rs.getString(PASSWORD);
-                    String nome = rs.getString(NOME);
-                    String cognome = rs.getString(COGNOME);
-                    UserType ruolo = UserType.valueOf(rs.getString(RUOLO));
-                    return UserFactory.createUser(email, password, nome, cognome, ruolo, 0);
-                }
-            }
-        }catch (SQLException e) {
-            Printer.error("Errore durante il caricamento dell'utente" + e.getMessage());
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla"
+            );
         }
-        return null;
+
+        String query = """
+            SELECT email, password, nome, cognome, ruolo , numeroSegnalazioni
+            FROM user
+            WHERE email = ?
+            """;
+
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
+            stmt.setString(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                String email = rs.getString(EMAIL);
+                String password = rs.getString(PASSWORD);
+                String nome = rs.getString(NOME);
+                String cognome = rs.getString(COGNOME);
+                int numeroSegnalazioni = rs.getInt(NUMERO_SEGNALAZIONI);
+                UserType ruolo = UserType.valueOf(rs.getString(RUOLO));
+
+                return UserFactory.createUser(
+                        email,
+                        password,
+                        nome,
+                        cognome,
+                        ruolo,
+                        numeroSegnalazioni
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante il caricamento dell'utente " + id,
+                    e
+            );
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException(
+                    "I dati persistiti dell'utente " + id + " non sono validi",
+                    e
+            );
+        }
     }
 
     @Override
     public void store(User entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'utente non può essere nullo"
+            );
+        }
 
-        if (existsEmail(entity.getEmail())) {
-                throw new SignUpException("Email già registrata");
-            }
-            try (PreparedStatement stmt = getConnection().prepareStatement("INSERT INTO user (email, password, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?)")) {
-                stmt.setString(1, entity.getEmail());
-                stmt.setString(2, entity.getPassword());
-                stmt.setString(3, entity.getNome());
-                stmt.setString(4, entity.getCognome());
-                stmt.setString(5, entity.getRuolo().toString());
-                stmt.executeUpdate();
-                Printer.print("Utente registrato con successo" + entity.getEmail());
-            } catch (SQLException e) {
-                Printer.error("Errore durante la registrazione dell'utente" + e.getMessage());
+        String email = entity.getEmail();
 
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla o vuota"
+            );
+        }
+
+        String query = """
+            INSERT INTO user (email, password, nome, cognome, ruolo)
+            VALUES (?, ?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+            stmt.setString(1, email);
+            stmt.setString(2, entity.getPassword());
+            stmt.setString(3, entity.getNome());
+            stmt.setString(4, entity.getCognome());
+            stmt.setString(5, entity.getRuolo().toString());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            if (isDuplicateKey(e)) {
+                throw new EntityAlreadyExistsException(
+                        "Esiste già un utente con email " + email,
+                        e
+                );
             }
+
+            throw new PersistenceException(
+                    "Errore durante la registrazione dell'utente " + email,
+                    e
+            );
+        }
     }
 
     @Override
     public void delete(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla"
+            );
+        }
+
         String query = "DELETE FROM user WHERE email = ?";
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
             stmt.setString(1, id);
             stmt.executeUpdate();
+
         } catch (SQLException e) {
-            Printer.error( "Errore durante l'eliminazione dell'utente"+e.getMessage());
+            throw new PersistenceException(
+                    "Errore durante l'eliminazione dell'utente " + id,
+                    e
+            );
         }
     }
 
@@ -167,7 +238,7 @@ public class JdbcUserDao  implements UserDao {
                     String password = rs.getString(PASSWORD);
                     String nome = rs.getString(NOME);
                     String cognome = rs.getString(COGNOME);
-                    int numeroSegnalazioni = rs.getInt("numeroSegnalazioni");
+                    int numeroSegnalazioni = rs.getInt(NUMERO_SEGNALAZIONI);
                     tecnici.add(new Tecnico(email, password, nome, cognome, UserType.TECNICO, numeroSegnalazioni));
                 }
                 return tecnici;
@@ -190,4 +261,9 @@ public class JdbcUserDao  implements UserDao {
         }
         return false; // Return false if there's an exception during the check
     }
+
+    private static boolean isDuplicateKey(SQLException exception) {
+        return exception.getErrorCode() == 1062;
+    }
+
 }
