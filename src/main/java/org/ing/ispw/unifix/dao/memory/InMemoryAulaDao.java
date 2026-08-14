@@ -2,15 +2,24 @@ package org.ing.ispw.unifix.dao.memory;
 
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.model.AulaId;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDao {
+public class InMemoryAulaDao extends InMemoryDao<AulaId, Aula> implements AulaDao {
 
     @Override
     public Aula create(String idAula) {
         return new Aula(idAula);
+    }
+
+    @Override
+    protected AulaId getKey(Aula aula) {
+        return new AulaId(
+                aula.getIdAula(),
+                aula.getEdificio()
+        );
     }
 
     @Override
@@ -19,9 +28,28 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
     }
 
     @Override
-    public Aula load(String edificio, String idAula) {
-        String compositeKey = (edificio + "_" + idAula).toLowerCase();
-        return super.load(compositeKey);
+    public List<String> getAllEdifici() {
+        List<String> edifici = new ArrayList<>();
+
+        for (Aula aula : loadAll()) {
+            if (aula.getEdificio() != null
+                    && !edifici.contains(aula.getEdificio())) {
+                edifici.add(aula.getEdificio());
+            }
+        }
+
+        return edifici;
+    }
+
+    @Override
+    public List<String> getAulaOggetti(AulaId id) {
+        Aula aula = load(id);
+
+        if (aula == null || aula.getOggetti() == null) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(aula.getOggetti());
     }
 
     @Override
@@ -31,41 +59,8 @@ public class InMemoryAulaDao extends InMemoryDao<String, Aula> implements AulaDa
 
     @Override
     public int countEdificiGestiti() {
-        List<String> edifici = new ArrayList<>();
-        for (Aula aula : getAllAule()) {
-            if (!edifici.contains(aula.getEdificio())) {
-                edifici.add(aula.getEdificio());
-            }
-        }
-        return edifici.size();
+        return getAllEdifici().size();
     }
 
-    @Override
-    protected String getKey(Aula aula) {
-        return (aula.getEdificio() + "_" + aula.getIdAula()).toLowerCase();
-    }
 
-    @Override
-    public boolean exists(String edificio, String idAula) {
-        String compositeKey = (edificio + "_" + idAula).toLowerCase();
-        return super.exists(compositeKey);
-    }
-
-    @Override
-    public List<String> getAulaOggetti(String edificio, String idAula) {
-        String compositeKey = (edificio + "_" + idAula).toLowerCase();
-        Aula aula = load(compositeKey);
-        return (aula != null && aula.getOggetti() != null) ? aula.getOggetti() : new ArrayList<>();
-    }
-
-    @Override
-    public List<String> getAllEdifici() {
-        List<String> edifici = new ArrayList<>();
-        for (Aula aula : getAllAule()) {
-            if (!edifici.contains(aula.getEdificio())) {
-                edifici.add(aula.getEdificio());
-            }
-        }
-        return edifici;
-    }
 }

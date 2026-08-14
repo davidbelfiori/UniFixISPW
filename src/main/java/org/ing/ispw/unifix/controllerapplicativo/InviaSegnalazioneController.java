@@ -62,7 +62,7 @@ public class InviaSegnalazioneController {
     }
 
     public List<String> getOggettiAula(String edificio, String idAula) {
-        return aulaDao.getAulaOggetti(edificio, idAula);
+        return aulaDao.getAulaOggetti(new AulaId(idAula,edificio));
     }
 
     private Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {

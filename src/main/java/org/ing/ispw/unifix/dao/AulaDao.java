@@ -1,25 +1,16 @@
 package org.ing.ispw.unifix.dao;
 
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.model.AulaId;
 
 import java.util.List;
 
-public interface AulaDao extends Dao<String, Aula> {
+public interface AulaDao extends Dao<AulaId, Aula> {
 
     Aula create(String idAula);
-
-    Aula load(String edificio, String idAula);
-
     List<Aula> getAllAule();
-
     List<String> getAllEdifici();
-
-    // Aggiornato: ora riceve sia l'edificio che l'idAula
-    List<String> getAulaOggetti(String edificio, String idAula);
-
-    // Nuovo metodo per verificare l'esistenza nell'edificio specifico
-    boolean exists(String edificio, String idAula);
-
+    List<String> getAulaOggetti(AulaId aulaId);
     int countAule();
     int countEdificiGestiti();
 }

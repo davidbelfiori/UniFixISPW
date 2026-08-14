@@ -7,6 +7,7 @@ import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.CsvInvalidException;
 import org.ing.ispw.unifix.model.Aula;
+import org.ing.ispw.unifix.model.AulaId;
 import org.ing.ispw.unifix.utils.CSVParserService;
 import org.ing.ispw.unifix.utils.Printer;
 import org.ing.ispw.unifix.utils.observer.Subject;
@@ -82,7 +83,7 @@ public class GestioneAuleController extends Subject{
     }
 
     private boolean inserisciAulaSeNonEsiste(String edificio, String idAula, int piano, List<String> oggetti) {
-        if (aulaDao.exists(edificio, idAula)) {
+        if (aulaDao.exists(new AulaId(idAula,edificio))) {
             return false;
         }
         Aula aula = aulaDao.create(idAula);
@@ -119,7 +120,7 @@ public class GestioneAuleController extends Subject{
 
     public void inserisciAula(AulaBean aulaBean) throws AulaGiaPresenteException {
         // Controllo basato su Edificio + IdAula
-        if (!aulaDao.exists(aulaBean.getEdificio(), aulaBean.getIdAula())) {
+        if (!aulaDao.exists(new AulaId(aulaBean.getIdAula(), aulaBean.getEdificio()))) {
             Aula aula = aulaDao.create(aulaBean.getIdAula());
             aula.setEdificio(aulaBean.getEdificio());
             aula.setPiano(aulaBean.getPiano());
