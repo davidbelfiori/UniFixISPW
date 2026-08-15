@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
+        <sonar.organization>davidbelfiori</sonar.organization>
         <!--
     S110 è ignorata esclusivamente per le eccezioni applicative.
     La profondità deriva dalla gerarchia intenzionale
@@ -188,6 +189,12 @@
                         -XX:+EnableDynamicAgentLoading
                     </argLine>
                 </configuration>
+            </plugin>
+            <!-- SonarQube Maven Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.10.0.2594</version>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
