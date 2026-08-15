@@ -158,7 +158,7 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
                 );
             }
 
-            throw new StoreNotaException(
+            throw new PersistenceException(
                     "Impossibile salvare la nota con UUID " + uuid,
                     e
             );

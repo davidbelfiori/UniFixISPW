@@ -12,6 +12,23 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
+        <!--
+    S110 è ignorata esclusivamente per le eccezioni applicative.
+    La profondità deriva dalla gerarchia intenzionale
+    RuntimeException -> UniFixException -> BusinessException ->
+    EntityAlreadyExistsException -> eccezione specifica,
+    utilizzata per consentire la gestione degli errori a diversi
+    livelli di astrazione.
+-->
+        <sonar.issue.ignore.multicriteria>exceptionInheritance</sonar.issue.ignore.multicriteria>
+
+        <sonar.issue.ignore.multicriteria.exceptionInheritance.ruleKey>
+            java:S110
+        </sonar.issue.ignore.multicriteria.exceptionInheritance.ruleKey>
+
+        <sonar.issue.ignore.multicriteria.exceptionInheritance.resourceKey>
+            **/exception/*Exception.java
+        </sonar.issue.ignore.multicriteria.exceptionInheritance.resourceKey>
         <sonar.exclusions>**/*.css</sonar.exclusions>
     </properties>
 

@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class EntityNotFoundException extends BusinessException {
+public class EntityNotFoundException extends UniFixException {
     public EntityNotFoundException(String message) {
         super(message);
     }

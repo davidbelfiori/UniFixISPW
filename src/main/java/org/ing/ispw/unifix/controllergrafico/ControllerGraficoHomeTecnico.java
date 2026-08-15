@@ -393,8 +393,6 @@ public class ControllerGraficoHomeTecnico {
             notaSegnalazioneBean.setIdSegnalazione(segnalazione.getIdSegnalazione());
             notaSegnalazioneBean.setTestoNota(nuovaNota.trim());
             isnsc.inserisciNotaSegnalazione(notaSegnalazioneBean);
-        } catch (StoreNotaException e) {
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore nel salvataggio", POPUPMESSAGGI_2 + e.getMessage());
         } catch (SegnalazioneNonTrovataException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Segnalazione non trovata", POPUPMESSAGGI_2 + e.getMessage());
         } catch (TecnicoNonAssegnatoException e) {
