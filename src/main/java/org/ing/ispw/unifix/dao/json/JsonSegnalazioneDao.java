@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Docente;
@@ -164,10 +165,35 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     @Override
     public void update(Segnalazione entity) {
-        if (!exists(entity.getIdSegnalazione())) {
-            throw new IllegalArgumentException("Impossibile aggiornare: segnalazione con ID " + entity.getIdSegnalazione() + " non trovata.");
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La segnalazione non può essere nulla"
+            );
         }
-        store(entity);
+
+        String id = entity.getIdSegnalazione();
+
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo"
+            );
+        }
+
+        List<Segnalazione> segnalazioni = loadAll();
+
+        for (int i = 0; i < segnalazioni.size(); i++) {
+            if (id.equals(
+                    segnalazioni.get(i).getIdSegnalazione()
+            )) {
+                segnalazioni.set(i, entity);
+                saveAll(segnalazioni);
+                return;
+            }
+        }
+
+        throw new EntityNotFoundException(
+                "Nessuna segnalazione trovata con ID " + id
+        );
     }
 
     @Override

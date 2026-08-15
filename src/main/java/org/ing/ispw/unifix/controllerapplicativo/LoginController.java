@@ -15,7 +15,6 @@ import org.ing.ispw.unifix.model.UserFactory;
 public class LoginController {
 
 
-
     private final UserDao userDao;
     private final UserFactory userFactory;
 
@@ -25,9 +24,8 @@ public class LoginController {
     }
 
 
-
-    public  boolean register(RegistrazioneBean rb) throws IllegalArgumentException,RuoloNonTrovatoException{
-        if(userDao.exists(rb.getEmail())){
+    public boolean register(RegistrazioneBean rb) throws IllegalArgumentException, RuoloNonTrovatoException {
+        if (userDao.exists(rb.getEmail())) {
             return false;
         }
         User user = userFactory.createUser(rb.getEmail(), rb.getPassword());
@@ -36,20 +34,23 @@ public class LoginController {
     }
 
     // NEL LoginController.java
-    public UserBean validate(CredentialBean credentialBean) throws UtenteNonTrovatoException , PasswordErrataExecption {
-        if (userDao.exists(credentialBean.getEmail())) {
-            User user = userDao.load(credentialBean.getEmail());
-            if (user != null && user.getPassword().equals(credentialBean.getPassword())) {
-                UserBean userBean = new UserBean();
-                userBean.setEmail(user.getEmail());
-                userBean.setRuolo(user.getRuolo());
+    public UserBean validate(CredentialBean credentialBean) {
+        User user = userDao.load(credentialBean.getEmail());
 
-                return userBean;
-            }else {
-                throw  new PasswordErrataExecption("Email o password errata");
-            }
-        } else {
-            throw new UtenteNonTrovatoException("L'utente inserito non esiste");
+        if (user == null) {
+            throw new UtenteNonTrovatoException(
+                    "L'utente inserito non esiste"
+            );
         }
+
+        if (!user.getPassword().equals(credentialBean.getPassword())) {
+            throw new PasswordErrataExecption("Email o password errata");
+        }
+
+        UserBean userBean = new UserBean();
+        userBean.setEmail(user.getEmail());
+        userBean.setRuolo(user.getRuolo());
+
+        return userBean;
     }
 }

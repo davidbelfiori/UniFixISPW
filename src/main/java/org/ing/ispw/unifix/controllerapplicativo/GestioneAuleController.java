@@ -83,20 +83,29 @@ public class GestioneAuleController extends Subject{
     }
 
     private boolean inserisciAulaSeNonEsiste(String edificio, String idAula, int piano, List<String> oggetti) {
-        if (aulaDao.exists(new AulaId(idAula,edificio))) {
+        AulaId aulaId = new AulaId(idAula, edificio);
+        if (aulaDao.exists(aulaId)) {
             return false;
         }
+
         Aula aula = aulaDao.create(idAula);
         aula.setEdificio(edificio);
         aula.setPiano(piano);
         aula.setOggetti(oggetti);
-        aulaDao.store(aula);
-        return true;
+
+        try {
+            aulaDao.store(aula);
+            return true;
+        } catch (AulaGiaPresenteException _) {
+            // Il database può rilevare un duplicato anche dopo il controllo exists
+            // (ad esempio per regole di confronto o inserimenti concorrenti).
+            return false;
+        }
     }
 
 
     public List<AulaBean> visualizzaAule() throws AuleNonTrovateException {
-        List<Aula> aule = aulaDao.getAllAule();
+        List<Aula> aule = aulaDao.loadAll();
         List<AulaBean> auleToBean = new ArrayList<>();
         if (aule.isEmpty()) {
             throw new AuleNonTrovateException("Non sono state trovate aule");

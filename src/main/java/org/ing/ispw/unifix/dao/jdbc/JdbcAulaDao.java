@@ -119,7 +119,7 @@ public class JdbcAulaDao  implements AulaDao {
 
         } catch (SQLException e) {
             if (isDuplicateKey(e)) {
-                throw new EntityAlreadyExistsException(
+                throw new AulaGiaPresenteException(
                         "Esiste già l'aula " + key,
                         e
                 );
@@ -155,49 +155,43 @@ public class JdbcAulaDao  implements AulaDao {
             throw new PersistenceException("Errore durante l'eliminazione dell'aula " + id, e);
         }
     }
-
     @Override
     public boolean exists(AulaId id) {
         if (id == null) {
-            throw new IllegalArgumentException("L'identificatore dell'aula non può essere nullo.");
+            throw new IllegalArgumentException(
+                    "L'identificatore dell'aula non può essere nullo"
+            );
         }
+
         String query = """
-            SELECT COUNT(*)
+            SELECT 1
             FROM aule
             WHERE LOWER(IdAula) = ?
-                AND LOWER(Edificio) = ?
+              AND LOWER(Edificio) = ?
+            LIMIT 1
             """;
 
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
             stmt.setString(1, id.idAula());
             stmt.setString(2, id.edificio());
 
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
+                return rs.next();
             }
+
         } catch (SQLException e) {
             throw new PersistenceException(
-                    "Errore durante il controllo dell'esistenza dell'aula: "
-                            + e.getMessage()
+                    "Errore durante la verifica dell'aula " + id,
+                    e
             );
         }
     }
+
+
     @Override
     public List<Aula> loadAll() {
-        return getAllAule();
-    }
-
-    @Override
-    public void update(Aula entity) {
-        // Il metodo store gestisce già l'aggiornamento se l'aula esiste
-        // (grazie a ON DUPLICATE KEY UPDATE), quindi possiamo semplicemente invocarlo.
-        // Questo approccio evita la duplicazione del codice e mantiene la logica
-        // di salvataggio/aggiornamento in un unico posto.
-        if (entity == null) {throw new IllegalArgumentException("L'entità Aula non può essere nulla.");}
-    }
-
-    @Override
-    public List<Aula> getAllAule() {
         List<Aula> aule = new ArrayList<>();
         Map<String, Aula> aulaMap = new HashMap<>();
 
@@ -232,10 +226,96 @@ public class JdbcAulaDao  implements AulaDao {
             aule.addAll(aulaMap.values());
 
         } catch (SQLException e) {
-            throw new AuleNonTrovateException("Errore nel recupero delle aule: " + e.getMessage());
+            throw new PersistenceException("Errore nel recupero delle aule: " + e.getMessage());
         }
 
         return aule;
+    }
+
+    @Override
+    public void update(Aula entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'aula non può essere nulla"
+            );
+        }
+
+        AulaId key = new AulaId(
+                entity.getIdAula(),
+                entity.getEdificio()
+        );
+
+        if (!exists(key)) {
+            throw new EntityNotFoundException(
+                    "Nessuna aula trovata con identificatore " + key
+            );
+        }
+
+        String updateAulaQuery = """
+            UPDATE aule
+            SET Piano = ?
+            WHERE LOWER(IdAula) = ?
+              AND LOWER(Edificio) = ?
+            """;
+
+        String deleteOggettiQuery = """
+            DELETE FROM oggettiaula
+            WHERE LOWER(IdAula) = ?
+              AND LOWER(Edificio) = ?
+            """;
+
+        String insertOggettoQuery = """
+            INSERT INTO oggettiaula (IdAula, Edificio, Oggetto)
+            VALUES (?, ?, ?)
+            """;
+
+        try (
+                PreparedStatement aulaStmt =
+                        getConnection().prepareStatement(updateAulaQuery);
+                PreparedStatement deleteStmt =
+                        getConnection().prepareStatement(deleteOggettiQuery);
+                PreparedStatement oggettoStmt =
+                        getConnection().prepareStatement(insertOggettoQuery)
+        ) {
+            // Aggiorna il piano.
+            aulaStmt.setInt(1, entity.getPiano());
+            aulaStmt.setString(2, key.idAula());
+            aulaStmt.setString(3, key.edificio());
+            aulaStmt.executeUpdate();
+
+            // Elimina gli oggetti precedenti.
+            deleteStmt.setString(1, key.idAula());
+            deleteStmt.setString(2, key.edificio());
+            deleteStmt.executeUpdate();
+
+            // Inserisce i nuovi oggetti.
+            List<String> oggetti = entity.getOggetti();
+
+            if (oggetti != null) {
+                for (String oggetto : oggetti) {
+                    if (oggetto == null || oggetto.isBlank()) {
+                        throw new IllegalArgumentException(
+                                "Gli oggetti dell'aula non possono essere nulli o vuoti"
+                        );
+                    }
+
+                    oggettoStmt.setString(1, entity.getIdAula());
+                    oggettoStmt.setString(2, entity.getEdificio());
+                    oggettoStmt.setString(3, oggetto);
+                    oggettoStmt.addBatch();
+                }
+
+                if (!oggetti.isEmpty()) {
+                    oggettoStmt.executeBatch();
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante l'aggiornamento dell'aula " + key,
+                    e
+            );
+        }
     }
 
 

@@ -187,16 +187,27 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
     @Override
     public boolean exists(String id) {
-        String query = "SELECT UUID FROM nota_segnalazione WHERE UUID = ?";
-        try {
-            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-                ps.setString(1, id);
-                try (ResultSet rs = ps.executeQuery()) {
-                    return rs.next();
-                }
+        if (id == null) {
+            throw new IllegalArgumentException("L'UUID della nota non può essere nullo");
+        }
+
+        String query = """
+            SELECT 1
+            FROM nota_segnalazione
+            WHERE UUID = ?
+            LIMIT 1
+            """;
+
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
             }
-        } catch (SQLException | ErroreLetturaPasswordException _) {
-            throw new NoteNonTrovateException("Non è stato possibile trovare la nota con UUID:"+id);
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante la verifica della nota " + id,
+                    e
+            );
         }
     }
 
@@ -228,18 +239,54 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
     @Override
     public void update(NotaSegnalazione entity) {
-        String query = "UPDATE nota_segnalazione SET idSegnalazione = ?, dataCreazione = ?, tecnico = ?, Nota = ? WHERE UUID = ?";
-        try {
-            try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-                ps.setString(1, entity.getSegnalazione().getIdSegnalazione());
-                ps.setTimestamp(2, entity.getDataCreazione());
-                ps.setString(3, entity.getTecnico().getEmail());
-                ps.setString(4, entity.getTesto());
-                ps.setString(5, entity.getUuid());
-                ps.executeUpdate();
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La nota non può essere nulla"
+            );
+        }
+
+        String uuid = entity.getUuid();
+
+        if (uuid == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
+        }
+
+        String query = """
+            UPDATE nota_segnalazione
+            SET idSegnalazione = ?,
+                dataCreazione = ?,
+                tecnico = ?,
+                Nota = ?
+            WHERE UUID = ?
+            """;
+
+        try (PreparedStatement ps =
+                     getConnection().prepareStatement(query)) {
+
+            ps.setString(
+                    1,
+                    entity.getSegnalazione().getIdSegnalazione()
+            );
+            ps.setTimestamp(2, entity.getDataCreazione());
+            ps.setString(3, entity.getTecnico().getEmail());
+            ps.setString(4, entity.getTesto());
+            ps.setString(5, uuid);
+
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0 && !exists(uuid)) {
+                throw new EntityNotFoundException(
+                        "Nessuna nota trovata con UUID " + uuid
+                );
             }
-        } catch (SQLException | ErroreLetturaPasswordException e) {
-            throw new NoteNonTrovateException("impossibile aggiornare la nota"+e.getMessage());
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante l'aggiornamento della nota " + uuid,
+                    e
+            );
         }
     }
 

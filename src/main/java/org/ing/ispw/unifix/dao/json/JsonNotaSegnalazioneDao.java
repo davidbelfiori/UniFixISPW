@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
+import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
@@ -154,10 +155,33 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
 
     @Override
     public void update(NotaSegnalazione entity) {
-        if (!exists(entity.getUuid())) {
-            throw new IllegalArgumentException("Impossibile aggiornare: nota con UUID " + entity.getUuid() + " non trovata.");
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La nota non può essere nulla"
+            );
         }
-        store(entity);
+
+        String uuid = entity.getUuid();
+
+        if (uuid == null) {
+            throw new IllegalArgumentException(
+                    "L'UUID della nota non può essere nullo"
+            );
+        }
+
+        List<NotaSegnalazione> note = loadAll();
+
+        for (int i = 0; i < note.size(); i++) {
+            if (uuid.equals(note.get(i).getUuid())) {
+                note.set(i, entity);
+                saveAll(note);
+                return;
+            }
+        }
+
+        throw new EntityNotFoundException(
+                "Nessuna nota trovata con UUID " + uuid
+        );
     }
 
     @Override

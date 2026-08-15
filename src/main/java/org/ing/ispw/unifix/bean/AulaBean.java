@@ -1,6 +1,7 @@
 package org.ing.ispw.unifix.bean;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AulaBean {
@@ -56,9 +57,9 @@ public class AulaBean {
 
     public void setOggetti(List<String> oggetti) {
         if (oggetti == null || oggetti.isEmpty()) {
-            throw new IllegalArgumentException("Deve essere presente almeno un oggetto");
+            this.oggetti = new ArrayList<>();
         } else {
-            this.oggetti = oggetti;
+            this.oggetti = new ArrayList<>(oggetti);
         }
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
+import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.UserType;
@@ -153,10 +154,33 @@ public class JsonUserDao implements UserDao {
 
     @Override
     public void update(User entity) {
-        if (!exists(entity.getEmail())) {
-            throw new IllegalArgumentException("Impossibile aggiornare: utente con email " + entity.getEmail() + " non trovato.");
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'utente non può essere nullo"
+            );
         }
-        store(entity);
+
+        String email = entity.getEmail();
+
+        if (email == null) {
+            throw new IllegalArgumentException(
+                    "L'email dell'utente non può essere nulla"
+            );
+        }
+
+        List<User> users = loadAll();
+
+        for (int i = 0; i < users.size(); i++) {
+            if (email.equals(users.get(i).getEmail())) {
+                users.set(i, entity);
+                saveAll(users);
+                return;
+            }
+        }
+
+        throw new EntityNotFoundException(
+                "Nessun utente trovato con email " + email
+        );
     }
 
     @Override

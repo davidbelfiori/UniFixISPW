@@ -2,10 +2,7 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
-import org.ing.ispw.unifix.exception.PersistenceException;
-import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
-import org.ing.ispw.unifix.exception.UpdateSegnalazioneException;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
@@ -198,14 +195,22 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
     @Override
     public boolean exists(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo"
+            );
+        }
         String query = "SELECT COUNT(*) FROM segnalazione WHERE IdSegnalazione = ? and stato <> 'CHIUSA' ";
 
         try (PreparedStatement stmt = getConnection() .prepareStatement(query)){
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
             return rs.next() && rs.getInt(1) > 0;
-        } catch (SQLException _) {
-            throw new SegnalazioneGiaEsistenteException("La segnalazione Esiste Gia");
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante la verifica della segnalazione " + id,
+                    e
+            );
         }
     }
 
@@ -243,16 +248,45 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                 segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
-        }catch (SQLException _){
-            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+            return segnalazioni;
+        }catch (SQLException e){
+            throw new PersistenceException("Nessuna segnalazione trovata" + e.getMessage());
         }
-        return segnalazioni;
+
     }
 
     @Override
     public void update(Segnalazione entity) {
-        String query = "UPDATE segnalazione SET dataCreazione = ?, oggettoGuasto = ?, docente = ?, stato = ?, descrizione = ?, aula = ?, edificio = ?, tecnico = ? WHERE IdSegnalazione = ?";
-        try (PreparedStatement stmt = getConnection() .prepareStatement(query)) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "La segnalazione non può essere nulla"
+            );
+        }
+
+        String id = entity.getIdSegnalazione();
+
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "L'ID della segnalazione non può essere nullo"
+            );
+        }
+
+        String query = """
+            UPDATE segnalazione
+            SET dataCreazione = ?,
+                oggettoGuasto = ?,
+                docente = ?,
+                stato = ?,
+                descrizione = ?,
+                aula = ?,
+                edificio = ?,
+                tecnico = ?
+            WHERE IdSegnalazione = ?
+            """;
+
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
             stmt.setDate(1, entity.getDataCreazione());
             stmt.setString(2, entity.getOggettoGuasto());
             stmt.setString(3, entity.getDocente().getEmail());
@@ -260,16 +294,28 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             stmt.setString(5, entity.getDescrizione());
             stmt.setString(6, entity.getAula());
             stmt.setString(7, entity.getEdificio());
-            // Handle the case where tecnico might be null (e.g., if it's an optional field)
+
             if (entity.getTecnico() != null) {
                 stmt.setString(8, entity.getTecnico().getEmail());
             } else {
                 stmt.setNull(8, java.sql.Types.VARCHAR);
             }
-            stmt.setString(9, entity.getIdSegnalazione());
-            stmt.executeUpdate();
-        } catch (SQLException _) {
-            throw new UpdateSegnalazioneException("Errore durante l'aggiornamento della segnalazione");
+
+            stmt.setString(9, id);
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0 && !exists(id)) {
+                throw new EntityNotFoundException(
+                        "Nessuna segnalazione trovata con ID " + id
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore durante l'aggiornamento della segnalazione " + id,
+                    e
+            );
         }
     }
 
@@ -312,8 +358,8 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                 segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
-        }catch (SQLException _){
-            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }catch (SQLException e){
+            throw new PersistenceException("Si è verificato un errore durante il conteggio delle segnalazioni attive", e);
         }
         return segnalazioni;
     }
@@ -354,8 +400,8 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
                 segnalazione.setTecnico(new Tecnico(rs.getString(TECNICOMAIL),rs.getString(TECNICONOME),rs.getString(TECNINCOCOGNOME)));
                 segnalazioni.add(segnalazione);
             }
-        }catch (SQLException _){
-            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }catch (SQLException e){
+            throw new PersistenceException("Si è verificato un errore durante il conteggio delle segnalazioni attive", e);
         }
         return segnalazioni;
     }
@@ -367,8 +413,8 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt("numero");
-        }catch (SQLException _){
-            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }catch (SQLException e){
+            throw new PersistenceException("Si è verificato un errore durante il conteggio delle segnalazioni attive", e);
         }
     }
 
@@ -379,8 +425,8 @@ public class JdbcSegnalazioneDao  implements SegnalazioneDao {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt("numero");
-        }catch (SQLException _){
-            throw new NessunaSegnalazioneException("Nessuna segnalazione trovata");
+        }catch (SQLException e){
+            throw new PersistenceException("Si è verificato un errore durante il conteggio delle segnalazioni risolte", e);
         }
     }
     private static boolean isDuplicateKey(SQLException exception) {

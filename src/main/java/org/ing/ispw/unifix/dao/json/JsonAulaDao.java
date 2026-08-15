@@ -28,10 +28,7 @@ public class JsonAulaDao
         );
     }
 
-    @Override
-    public List<Aula> getAllAule() {
-        return new ArrayList<>(loadAll());
-    }
+
 
     @Override
     public List<String> getAllEdifici() {

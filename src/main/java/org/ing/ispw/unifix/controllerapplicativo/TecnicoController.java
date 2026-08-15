@@ -10,6 +10,7 @@ import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 import org.ing.ispw.unifix.exception.InvalidStateTransitionException;
+import org.ing.ispw.unifix.exception.SegnalazioneNonTrovataException;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
@@ -82,6 +83,12 @@ public class TecnicoController {
 
     public void chiudiSegnalazione(String idSegnalazione) throws InvalidStateTransitionException {
         Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
+        if (segnalazione == null) {
+            throw new SegnalazioneNonTrovataException(
+                    "Segnalazione non trovata con ID: "
+                            + idSegnalazione
+            );
+        }
         segnalazione.chiudi();
         segnalazioneDao.update(segnalazione);
 
@@ -102,6 +109,12 @@ public class TecnicoController {
 
     public void inLavorazioneSegnalazione(String idSegnalazione) throws InvalidStateTransitionException{
         Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
+        if (segnalazione == null) {
+            throw new SegnalazioneNonTrovataException(
+                    "Segnalazione non trovata con ID: "
+                            + idSegnalazione
+            );
+        }
         segnalazione.inLavorazione();
         segnalazioneDao.update(segnalazione);
         segnalazione.attach(new EmailNotificationService());

@@ -116,25 +116,30 @@ public class ControllerGraficoGestioneAule implements Observer {
     }
 
     public void aggiungiAula() {
-        Dialog<AulaBean> dialog = creaDialogAula();
-        ButtonType aggiungiButtonType = new ButtonType("Aggiungi", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(aggiungiButtonType, ButtonType.CANCEL);
+        try {
+            Dialog<AulaBean> dialog = creaDialogAula();
+            ButtonType aggiungiButtonType = new ButtonType("Aggiungi", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(aggiungiButtonType, ButtonType.CANCEL);
 
-        TextField idAula = new TextField();
-        idAula.setPromptText("ID Aula (es. A1)");
-        TextField edificio = new TextField();
-        edificio.setPromptText("Edificio");
-        TextField piano = new TextField();
-        piano.setPromptText("Piano (numero)");
-        VBox oggettiContainer = creaOggettiContainer();
+            TextField idAula = new TextField();
+            idAula.setPromptText("ID Aula (es. A1)");
+            TextField edificio = new TextField();
+            edificio.setPromptText("Edificio");
+            TextField piano = new TextField();
+            piano.setPromptText("Piano (numero)");
+            VBox oggettiContainer = creaOggettiContainer();
 
-        GridPane grid = creaGridLayout(idAula, edificio, piano, oggettiContainer, dialog);
-        dialog.getDialogPane().setContent(grid);
+            GridPane grid = creaGridLayout(idAula, edificio, piano, oggettiContainer, dialog);
+            dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(dialogButton ->
-            convertiRisultatoDialog(dialogButton, aggiungiButtonType, idAula, edificio, piano, oggettiContainer));
+            dialog.setResultConverter(dialogButton -> convertiRisultatoDialog(dialogButton, aggiungiButtonType, idAula, edificio, piano, oggettiContainer));
 
-        dialog.showAndWait().ifPresent(this::processaAulaAggiunta);
+            dialog.showAndWait().ifPresent(this::processaAulaAggiunta);
+        }catch (IllegalArgumentException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
+        }catch (PersistenceException e) {
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Errore di persistenza", e.getMessage());
+        }
     }
 
     private Dialog<AulaBean> creaDialogAula() {
@@ -222,11 +227,8 @@ public class ControllerGraficoGestioneAule implements Observer {
             aula.setPiano(Integer.parseInt(pianoText));
             aula.setOggetti(oggetti);
             return aula;
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati non validi", e.getMessage());
-            return null;
-        } catch (NumberFormatException _) {
-            popUp.showErrorPopup(POPUPMESSAGGI_1, "Piano non valido", "Inserisci un numero valido per il piano");
             return null;
         }
     }

@@ -37,7 +37,7 @@ public class InviaSegnalazioneController {
 
     public List<AulaBean> getAuleByEdificio(String edificio){
         // 1. Recupero la lista delle entità di Dominio dal DAO
-        List<Aula> aule = aulaDao.getAllAule();
+        List<Aula> aule = aulaDao.loadAll();
 
         // 2. Creo una nuova lista vuota che conterrà i Bean per la View
         List<AulaBean> auleBeanList = new ArrayList<>();
@@ -79,10 +79,12 @@ public class InviaSegnalazioneController {
 
     public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
+
         if (loggetUser == null) {
             throw new IllegalStateException("Nessun utente loggato");
         }
         User docenteSegnalatore = userDao.load(loggetUser.getEmail());
+
 
         String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
 

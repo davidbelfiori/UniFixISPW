@@ -3,7 +3,6 @@ package org.ing.ispw.unifix.controllerapplicativo;
 import org.ing.ispw.unifix.dao.AulaDao;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
 
 public class DashboardKpiController {
 
@@ -21,9 +20,8 @@ public class DashboardKpiController {
     /**
      * Per visualizzare il numero di segnalazioni attive
      * @return  String con il numero delle segnalazioni attive
-     * @throws NessunaSegnalazioneException se non ci sono segnalazioni
      */
-    public String visualizzaSegnalazioniAttiveAdmin() throws NessunaSegnalazioneException {
+    public String visualizzaSegnalazioniAttiveAdmin() {
         int numero = segnalazioneDao.countSegnalazioniAttive();
         return String.valueOf(numero);
     }
@@ -31,9 +29,8 @@ public class DashboardKpiController {
     /**
      * Per visualizzare il numero di segnalazioni risolte
      * @return  String con il numero delle segnalazioni risolte
-     * @throws NessunaSegnalazioneException se non ci sono segnalazioni
      */
-    public String  visualizzaSegnalazioniRisolteAdmin() throws NessunaSegnalazioneException {
+    public String  visualizzaSegnalazioniRisolteAdmin()  {
        int numero = segnalazioneDao.countSegnalazioniRisolte();
        return String.valueOf(numero);
     }

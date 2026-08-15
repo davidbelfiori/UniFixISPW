@@ -64,7 +64,13 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
 
     @Override
     public final void update(V entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("L'entità non può essere nulla.");
+        }
         K key = getKey(entity); // Recupera la chiave dell'entità
+        if (key == null) {
+            throw new IllegalArgumentException("La chiave dell'entità non può essere nulla.");
+        }
         if (!memory.containsKey(key)) {
             throw new IllegalArgumentException("Impossibile aggiornare: entità con ID " + key + " non trovata.");
         }

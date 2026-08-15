@@ -22,10 +22,7 @@ public class InMemoryAulaDao extends InMemoryDao<AulaId, Aula> implements AulaDa
         );
     }
 
-    @Override
-    public List<Aula> getAllAule() {
-        return new ArrayList<>(loadAll());
-    }
+
 
     @Override
     public List<String> getAllEdifici() {

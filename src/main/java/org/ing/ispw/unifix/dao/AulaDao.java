@@ -8,7 +8,6 @@ import java.util.List;
 public interface AulaDao extends Dao<AulaId, Aula> {
 
     Aula create(String idAula);
-    List<Aula> getAllAule();
     List<String> getAllEdifici();
     List<String> getAulaOggetti(AulaId aulaId);
     int countAule();

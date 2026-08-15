@@ -7,7 +7,6 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.memory.InMemoryDaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
-import org.ing.ispw.unifix.exception.CsvInvalidException;
 import org.ing.ispw.unifix.model.AulaId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -113,17 +112,24 @@ class GestioneAuleControllerTest {
     }
 
     @Test
-    @DisplayName("Rifiuta un CSV con un piano non numerico")
-    void testInserisciAuleFromCsvConPianoNonValido() throws IOException {
-        tempCsvFile = createTempCsvFile( """
+    @DisplayName("Importa le nuove aule ignorando quelle già presenti nel sistema")
+    void testInserisciAuleFromCsvConAulaGiaPresente() throws IOException, AulaGiaPresenteException {
+        controller.inserisciAula(creaAula("A1", "Ingegneria", 0,
+                List.of("Proiettore")));
+        tempCsvFile = createTempCsvFile("""
                 Edificio,IdAula,Piano,Oggetti
-                Ingegneria,A1,piano-terra,Proiettore;Lavagna
+                Ingegneria,A1,0,Proiettore
+                Ingegneria,A2,1,Lavagna
                 """);
 
-        assertThrows(CsvInvalidException.class,
-                () -> controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath()));
-        assertEquals(0, aulaDao.countAule());
+        boolean inserite = controller.inserisciAuleFromCsv(tempCsvFile.getAbsolutePath());
+
+        assertTrue(inserite);
+        assertEquals(2, aulaDao.countAule());
+        assertTrue(aulaDao.exists(new AulaId("A1", "Ingegneria")));
+        assertTrue(aulaDao.exists(new AulaId("A2", "Ingegneria")));
     }
+
 
     private static AulaBean creaAula(String id, String edificio, int piano,
                                      List<String> oggetti) {

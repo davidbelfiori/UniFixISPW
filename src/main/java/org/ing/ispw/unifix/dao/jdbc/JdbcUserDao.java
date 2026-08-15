@@ -2,6 +2,7 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
+import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.Printer;
@@ -12,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class JdbcUserDao  implements UserDao {
@@ -57,7 +57,6 @@ public class JdbcUserDao  implements UserDao {
                 if (!rs.next()) {
                     return null;
                 }
-
                 String email = rs.getString(EMAIL);
                 String password = rs.getString(PASSWORD);
                 String nome = rs.getString(NOME);
@@ -157,16 +156,28 @@ public class JdbcUserDao  implements UserDao {
     }
 
     @Override
-    public boolean exists(String identifier) {
-        String query = "SELECT COUNT(*) FROM user WHERE  email = ?";
+    public boolean exists(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("L'email dell'utente non può essere nulla");
+        }
+
+        String query = """
+            SELECT 1
+            FROM user
+            WHERE email = ?
+            LIMIT 1
+            """;
+
         try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
-            stmt.setString(1, identifier);
+            stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
+                return rs.next();
             }
         } catch (SQLException e) {
-            Printer.error( "Errore durante la verifica dell'esistenza dell'utente"+e.getMessage());
-            return false;
+            throw new PersistenceException(
+                    "Errore durante la verifica dell'utente " + id,
+                    e
+            );
         }
     }
 
@@ -188,42 +199,103 @@ public class JdbcUserDao  implements UserDao {
             }
 
         }catch (SQLException e) {
-            Printer.error( "Errore durante il recupero degli utenti"+e.getMessage());
+           throw new PersistenceException( "Errore durante il recupero degli utenti"+e.getMessage());
         }
-        //se non sono riuscito a recuperali torno una lista vuota
-        return Collections.emptyList();
     }
 
     @Override
     public void update(User entity) {
-        String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ? WHERE email = ?";
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'utente non può essere nullo"
+            );
+        }
+
+        String email = entity.getEmail();
+
+        if (email == null) {
+            throw new IllegalArgumentException("L'email dell'utente non può essere nulla");
+        }
+
+        String query = """
+            UPDATE user
+            SET password = ?, nome = ?, cognome = ?, ruolo = ?
+            WHERE email = ?
+            """;
+
         try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, entity.getPassword());
             stmt.setString(2, entity.getNome());
             stmt.setString(3, entity.getCognome());
             stmt.setString(4, entity.getRuolo().toString());
-            stmt.setString(5, entity.getEmail());
-            stmt.executeUpdate();
-            Printer.print("Utente aggiornato con successo: " + entity.getEmail());
+            stmt.setString(5, email);
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0 && !exists(email)) {
+                throw new EntityNotFoundException(
+                        "Nessun utente trovato con email " + email
+                );
+            }
+
         } catch (SQLException e) {
-            Printer.error("Errore durante l'aggiornamento dell'utente: " + e.getMessage());
+            throw new PersistenceException(
+                    "Errore durante l'aggiornamento dell'utente " + email,
+                    e
+            );
         }
     }
 
 
+    @Override
     public void update(Tecnico entity) {
-        String query = "UPDATE user SET password = ?, nome = ?, cognome = ?, ruolo = ?, numeroSegnalazioni = ? WHERE email = ?";
-        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "Il tecnico non può essere nullo"
+            );
+        }
+
+        String email = entity.getEmail();
+
+        if (email == null) {
+            throw new IllegalArgumentException(
+                    "L'email del tecnico non può essere nulla"
+            );
+        }
+
+        String query = """
+            UPDATE user
+            SET password = ?,
+                nome = ?,
+                cognome = ?,
+                ruolo = ?,
+                numeroSegnalazioni = ?
+            WHERE email = ?
+            """;
+
+        try (PreparedStatement stmt =
+                     getConnection().prepareStatement(query)) {
+
             stmt.setString(1, entity.getPassword());
             stmt.setString(2, entity.getNome());
             stmt.setString(3, entity.getCognome());
             stmt.setString(4, entity.getRuolo().toString());
             stmt.setInt(5, entity.getNumeroSegnalazioni());
-            stmt.setString(6, entity.getEmail());
-            stmt.executeUpdate();
-            Printer.print("Utente aggiornato con successo: " + entity.getEmail());
+            stmt.setString(6, email);
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0 && !exists(email)) {
+                throw new EntityNotFoundException(
+                        "Nessun tecnico trovato con email " + email
+                );
+            }
+
         } catch (SQLException e) {
-            Printer.error("Errore durante l'aggiornamento dell'utente: " + e.getMessage());
+            throw new PersistenceException(
+                    "Errore durante l'aggiornamento del tecnico " + email,
+                    e
+            );
         }
     }
 

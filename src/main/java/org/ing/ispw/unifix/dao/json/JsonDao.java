@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.ing.ispw.unifix.dao.Dao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
+import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 
 import java.io.File;
@@ -132,11 +133,33 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
 
     @Override
     public void update(V entity) {
-        K key = getKey(entity);
-        if (!exists(key)) {
-            throw new IllegalArgumentException("Impossibile aggiornare: entità con ID " + key + " non trovata.");
+        if (entity == null) {
+            throw new IllegalArgumentException(
+                    "L'entità non può essere nulla"
+            );
         }
-        store(entity);
+
+        K key = getKey(entity);
+
+        if (key == null) {
+            throw new IllegalArgumentException(
+                    "La chiave dell'entità non può essere nulla"
+            );
+        }
+
+        List<V> entities = loadAll();
+
+        for (int i = 0; i < entities.size(); i++) {
+            if (key.equals(getKey(entities.get(i)))) {
+                entities.set(i, entity);
+                saveAll(entities);
+                return;
+            }
+        }
+
+        throw new EntityNotFoundException(
+                "Nessuna entità trovata con chiave " + key
+        );
     }
 
     protected void saveAll(List<V> entities) {
