@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.bean.InfoTecnicoBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.model.Segnalazione;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class GestisciSegnalazioniAdminController {
     }
 
 
-    public List<SegnalazioneBean> getAllSegnalazioni() {
+    public List<SegnalazioneBean> getAllSegnalazioni() throws PersistenceException {
         List<Segnalazione> segnalazioni = segnalazioneDao.loadAll();
         List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
 

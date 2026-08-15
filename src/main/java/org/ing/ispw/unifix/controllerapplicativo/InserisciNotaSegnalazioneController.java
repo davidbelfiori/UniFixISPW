@@ -5,6 +5,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.exception.NotaStatoSegnalazioneLavorazioneException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.SegnalazioneNonTrovataException;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
@@ -57,6 +58,7 @@ public class InserisciNotaSegnalazioneController {
      * @param idSegnalazione l'ID della segnalazione
      * @return lista delle note, può essere vuota se non ci sono note
      * @throws IllegalArgumentException se l'ID è null o vuoto
+     * @throws PersistenceException se si verifica un errore durante l'accesso alla persistenza
      */
     public List<NotaSegnalazioneBean> getNoteForSegnalazione(String idSegnalazione) {
         if (idSegnalazione == null || idSegnalazione.trim().isEmpty()) {

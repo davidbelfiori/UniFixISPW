@@ -14,8 +14,9 @@ import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
+import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
-import org.ing.ispw.unifix.utils.Printer;
+
 
 import java.io.IOException;
 
@@ -31,18 +32,22 @@ public class ControllerGraficoLogin {
 
     @FXML
     private PasswordField passwordField;
-    PopUp popUp = new PopUp();
+
+    private final  PopUp popUp ;
     private final LoginController lc;
+
+
     public ControllerGraficoLogin() {
         this.lc= new LoginController();
+        this.popUp = new PopUp();
     }
 
     public void handleToRegistrazione(javafx.scene.input.MouseEvent mouseEvent){
         try {
            FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/SignUP.fxml"));
             ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
-        } catch (Exception e) {
-            Printer.error(e.getMessage());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina di registrazione");
         }
 
     }

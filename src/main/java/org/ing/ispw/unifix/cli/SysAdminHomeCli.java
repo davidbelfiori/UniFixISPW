@@ -8,11 +8,7 @@ import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
-import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
-import org.ing.ispw.unifix.exception.AuleNonTrovateException;
-import org.ing.ispw.unifix.exception.CsvInvalidException;
-import org.ing.ispw.unifix.exception.PersistenceException;
-import org.ing.ispw.unifix.exception.NessunaSegnalazioneException;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -61,7 +57,7 @@ public class SysAdminHomeCli {
                 case "1":
                     try {
                         sc.inserisciAuleFromCsv("src/main/resources/utvAule.csv");
-                    } catch (AulaGiaPresenteException | CsvInvalidException | PersistenceException e) {
+                    } catch (BusinessException | PersistenceException e) {
                         Printer.error("Errore durante l'inserimento delle aule: " + e.getMessage());
                     }
                     break;
@@ -124,7 +120,7 @@ public class SysAdminHomeCli {
                     }
                 }
             }
-        }catch (NessunaSegnalazioneException | IllegalArgumentException | PersistenceException e){
+        }catch (IllegalArgumentException | PersistenceException e){
             Printer.error(Answer.ERRORE.getValue()+":" + e.getMessage());
         }
     }
@@ -137,7 +133,7 @@ public class SysAdminHomeCli {
             Printer.print("Numero segnalazioni aperte: "+dc.visualizzaSegnalazioniAttiveAdmin());
             Printer.print("Numero segnalazioni risolte: "+dc.visualizzaSegnalazioniRisolteAdmin());
             Printer.print("-------------------------");
-        }catch (NessunaSegnalazioneException | IllegalArgumentException | PersistenceException e){
+        }catch (PersistenceException e){
             Printer.error(Answer.ERRORE.getValue()+":" + e.getMessage());
         }
     }
@@ -157,7 +153,8 @@ public class SysAdminHomeCli {
         }
     }
 
-    private void inserisciAulaSingola() throws IOException {
+    private void inserisciAulaSingola()  {
+        try {
         Printer.print("\n--- Inserimento Nuova Aula ---");
 
         Printer.print("Inserisci ID Aula (es. A1): ");
@@ -190,10 +187,6 @@ public class SysAdminHomeCli {
             oggetti.add(oggetto);
             Printer.print("Oggetto: ");
         }
-
-
-
-        try {
             AulaBean aulaBean = new AulaBean();
             aulaBean.setIdAula(idAula);
             aulaBean.setEdificio(edificio);
@@ -201,9 +194,9 @@ public class SysAdminHomeCli {
             aulaBean.setOggetti(oggetti);
             sc.inserisciAula(aulaBean);
             Printer.print("Aula aggiunta correttamente!");
-        } catch (AulaGiaPresenteException _) {
-            Printer.error(Answer.ERRORE.getValue()+":" + "Errore: Aula già presente");
-        } catch (IllegalStateException | PersistenceException e) {
+        } catch (IOException _) {
+            Printer.error("Errore durante la lettura dell'input");
+        } catch (IllegalStateException | PersistenceException | AulaGiaPresenteException e) {
             Printer.error(Answer.ERRORE.getValue()+":" + e.getMessage());
         }
 

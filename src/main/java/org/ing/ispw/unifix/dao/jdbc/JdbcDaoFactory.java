@@ -2,6 +2,10 @@ package org.ing.ispw.unifix.dao.jdbc;
 
 import org.ing.ispw.unifix.dao.*;
 
+/**
+ * Factory del backend JDBC. Crea pigramente una sola istanza di ciascun DAO
+ * e la riutilizza per tutta la durata della factory.
+ */
 public class JdbcDaoFactory extends DaoFactory {
 
 

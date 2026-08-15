@@ -15,6 +15,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione JDBC del DAO delle segnalazioni.
+ * Salva e ricostruisce anche i riferimenti ad aula, docente e tecnico; gli errori SQL
+ * vengono esposti come eccezioni applicative di persistenza.
+ */
 public class JdbcSegnalazioneDao  implements SegnalazioneDao {
 
 

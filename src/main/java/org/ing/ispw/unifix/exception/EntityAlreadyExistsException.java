@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class EntityAlreadyExistsException extends RuntimeException {
+public class EntityAlreadyExistsException extends BusinessException {
     public EntityAlreadyExistsException(String message) {
         super(message);
     }

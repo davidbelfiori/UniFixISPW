@@ -10,10 +10,22 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Punto di accesso centralizzato alle implementazioni DAO configurate per l'applicazione.
+ * La factory è un singleton inizializzato al primo utilizzo in base alla proprietà
+ * {@code persistence.type}; in assenza di una configurazione valida usa JDBC.
+ */
 public abstract class DaoFactory {
 
     private static DaoFactory instance = null;
-    // Singleton Lazy Initialization guidato da configurazione esterna
+    /**
+     * Restituisce la factory condivisa, creandola al primo accesso.
+     * Per il backend in memoria carica anche i dati dimostrativi.
+     *
+     * @return factory corrispondente al tipo di persistenza configurato
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se l'inizializzazione
+     *         del backend o dei dati dimostrativi non riesce
+     */
     public static synchronized DaoFactory getInstance() {
         if (instance == null) {
             String type = loadPersistenceType();
@@ -37,11 +49,22 @@ public abstract class DaoFactory {
         return instance;
     }
 
+    /**
+     * Sostituisce la factory condivisa, principalmente per test o configurazioni personalizzate.
+     * Passando {@code null}, il successivo accesso ricreerà la factory dalla configurazione.
+     *
+     * @param customInstance factory da utilizzare, oppure {@code null} per azzerarla
+     */
     public static synchronized void setInstance(DaoFactory customInstance) {
         DaoFactory.instance = customInstance;
     }
 
-    // Metodo privato helper per leggere il file application.properties
+    /**
+     * Legge il tipo di persistenza da {@code application.properties}.
+     * Qualunque errore di lettura viene deliberatamente assorbito per consentire il fallback a JDBC.
+     *
+     * @return valore della proprietà {@code persistence.type}, oppure {@code JDBC} come valore predefinito
+     */
     private static String loadPersistenceType() {
         Properties props = new Properties();
         try (InputStream is = new FileInputStream("application.properties")) {
@@ -51,10 +74,15 @@ public abstract class DaoFactory {
             return "JDBC"; // Fallback sicuro
         }
     }
-
-
+    /** @return DAO degli utenti fornito dal backend selezionato */
     public abstract UserDao getUserDao();
+
+    /** @return DAO delle aule fornito dal backend selezionato */
     public abstract AulaDao getAulaDao();
+
+    /** @return DAO delle segnalazioni fornito dal backend selezionato */
     public abstract SegnalazioneDao getSegnalazioneDao();
+
+    /** @return DAO delle note fornito dal backend selezionato */
     public abstract NotaSegnalazioneDao getNotaSegnalazioneDao();
 }

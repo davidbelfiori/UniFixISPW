@@ -7,6 +7,11 @@ import org.ing.ispw.unifix.model.AulaId;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione del DAO delle aule basata sul supporto JSON generico.
+ * Usa la coppia codice aula-edificio come chiave e calcola edifici e conteggi
+ * a partire dal contenuto completo del file.
+ */
 public class JsonAulaDao
         extends JsonDao<AulaId, Aula>
         implements AulaDao {

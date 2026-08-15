@@ -15,6 +15,7 @@ import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestisciSegnalazioniAdminController;
 import org.ing.ispw.unifix.controllerapplicativo.InserisciNotaSegnalazioneController;
+import org.ing.ispw.unifix.exception.BusinessException;
 import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
@@ -110,8 +111,12 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
             for (SegnalazioneBean segnalazione : segnalazioneList) {
                 segnalazioniContainer.getChildren().add(creaBoxSegnalazione(segnalazione));
             }
-        }catch (PersistenceException _){
-            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ","Errore di persistenza");
+        }catch (PersistenceException e){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " \"Errore di persistenza\"", e.getMessage());
+        }catch (IllegalStateException e){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " \"Errore di stato\"", e.getMessage());
+        }catch (BusinessException e){
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " \"Errore di business\"", e.getMessage());
         }
     }
 
@@ -189,7 +194,7 @@ public class ControllerGraficoDashboardSegnalazioniAdmin {
                             .append(": ").append(nota.getTestoNota()).append("\n");
                 }
             }
-        } catch (PersistenceException e) {
+        } catch (PersistenceException | BusinessException e) {
             noteTesto.append("Errore nel recupero delle note: ").append(e.getMessage());
         }
         noteEsistentiArea.setText(noteTesto.toString());

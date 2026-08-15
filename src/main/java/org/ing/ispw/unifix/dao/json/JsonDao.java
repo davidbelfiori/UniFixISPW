@@ -16,6 +16,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione CRUD generica che serializza una collezione di entità in un file JSON.
+ * Ogni modifica riscrive l'intera collezione; gli errori di filesystem o parsing vengono
+ * tradotti in {@code JsonFileException}.
+ *
+ * @param <K> tipo della chiave dell'entità
+ * @param <V> tipo dell'entità serializzata
+ */
 public abstract class JsonDao<K, V> implements Dao<K, V> {
 
     private static final String DATA_DIR = "data/json";
@@ -23,6 +31,13 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
     private final String fileName;
     private final Class<V> entityClass;
 
+    /**
+     * Configura il file e il tipo usato da Jackson per deserializzare le entità.
+     *
+     * @param fileName nome del file nella directory dei dati JSON
+     * @param entityClass classe concreta da serializzare e deserializzare
+     * @throws org.ing.ispw.unifix.exception.JsonFileException se la directory dei dati non può essere creata
+     */
     protected JsonDao(String fileName, Class<V> entityClass) {
         this.fileName = fileName;
         this.entityClass = entityClass;
@@ -42,10 +57,21 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
         }
     }
 
+    /**
+     * Restituisce il file associato a questo DAO.
+     *
+     * @return file JSON collocato nella directory dati
+     */
     protected File getFile() {
         return new File(DATA_DIR, fileName);
     }
 
+    /**
+     * Estrae la chiave identificativa da un'entità.
+     *
+     * @param entity entità da esaminare
+     * @return chiave usata per confronti e operazioni CRUD
+     */
     protected abstract K getKey(V entity);
 
     @Override
@@ -162,6 +188,12 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
         );
     }
 
+    /**
+     * Riscrive nel file l'intera collezione fornita.
+     *
+     * @param entities entità da serializzare
+     * @throws org.ing.ispw.unifix.exception.JsonFileException se la scrittura del file fallisce
+     */
     protected void saveAll(List<V> entities) {
         try {
             objectMapper.writeValue(getFile(), entities);

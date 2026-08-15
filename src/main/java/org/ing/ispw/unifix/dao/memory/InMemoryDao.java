@@ -8,10 +8,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementazione CRUD generica che conserva le entità in una mappa locale.
+ * Non effettua operazioni I/O: i dati vengono persi quando l'istanza non è più disponibile.
+ *
+ * @param <K> tipo della chiave dell'entità
+ * @param <V> tipo dell'entità memorizzata
+ */
 public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
 
     private final Map<K, V> memory = new HashMap<>();
 
+    /**
+     * Inserisce direttamente una coppia chiave-valore nella mappa.
+     * È destinato alle sottoclassi che devono precaricare dati controllati.
+     *
+     * @param key chiave con cui indicizzare il valore
+     * @param value valore da memorizzare
+     */
     protected void store(K key, V value) {
         memory.put(key, value);
     }
@@ -32,6 +46,7 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
         return memory.containsKey(id);
     }
 
+    /** {@inheritDoc} */
     public List<V> loadAll(){
         return new ArrayList<>(memory.values());
     }
@@ -78,5 +93,12 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
     }
 
 
+    /**
+     * Estrae dall'entità la chiave usata dalla mappa.
+     *
+     * @param value entità di cui ottenere la chiave
+     * @return chiave dell'entità
+     * @throws IllegalArgumentException se la sottoclasse non può ricavare una chiave valida
+     */
     protected abstract K getKey(V value);
 }

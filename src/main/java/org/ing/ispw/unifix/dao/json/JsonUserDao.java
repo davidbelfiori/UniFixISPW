@@ -19,6 +19,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione del DAO utenti basata sul file {@code data/json/users.json}.
+ * Conserva nel JSON il tipo concreto dell'utente e segnala problemi di lettura,
+ * scrittura o creazione della directory tramite {@code JsonFileException}.
+ */
 public class JsonUserDao implements UserDao {
 
     private static final String DATA_DIR = "data/json";

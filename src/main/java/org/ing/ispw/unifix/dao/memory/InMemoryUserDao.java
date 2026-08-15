@@ -6,6 +6,10 @@ import org.ing.ispw.unifix.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * DAO in memoria degli utenti, indicizzati tramite email.
+ * I dati esistono soltanto durante la vita dell'istanza della factory in memoria.
+ */
 public class InMemoryUserDao extends InMemoryDao<String, User> implements UserDao {
 
 

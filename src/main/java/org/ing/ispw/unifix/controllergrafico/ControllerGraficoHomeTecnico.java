@@ -60,14 +60,12 @@ public class ControllerGraficoHomeTecnico {
     public void initialize() {
         try {
             InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
-            if (infoTecnico == null) {
-                popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
-                return;
-            }
             welcome1.setText(infoTecnico.getNome() +"  "+infoTecnico.getCognome()+"  ecco i tuoi interventi");
             mostraSegnalazioniTecnico();
         }catch (PersistenceException e){
             popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_4, e.getMessage());
+        }catch (IllegalStateException _){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
         }
 
     }
@@ -156,7 +154,7 @@ public class ControllerGraficoHomeTecnico {
         try {
             tc.inLavorazioneSegnalazione(idSegnalazione);
             popUp.showSuccessPopup("Successo", "Segnalazione presa in lavorazione");
-        } catch (InvalidStateTransitionException | PersistenceException e) {
+        } catch (InvalidStateTransitionException | PersistenceException | SegnalazioneNonTrovataException e) {
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
         }
         ricaricaSegnalazioni();
@@ -172,7 +170,7 @@ public class ControllerGraficoHomeTecnico {
             try {
                 tc.chiudiSegnalazione(idSegnalazione);
                 popUp.showSuccessPopup("Successo", "Segnalazione chiusa correttamente");
-            } catch (InvalidStateTransitionException | PersistenceException e) {
+            } catch (InvalidStateTransitionException | PersistenceException | SegnalazioneNonTrovataException e) {
                 popUp.showErrorPopup(POPUPMESSAGGI_1, "Impossibile eseguire la richiesta", e.getMessage());
             }
             ricaricaSegnalazioni();

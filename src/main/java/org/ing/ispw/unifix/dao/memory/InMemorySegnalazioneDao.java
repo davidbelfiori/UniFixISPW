@@ -7,6 +7,10 @@ import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.util.List;
 
+/**
+ * DAO in memoria delle segnalazioni, indicizzate per identificatore.
+ * Le ricerche per utente e i conteggi vengono effettuati filtrando le entità memorizzate.
+ */
 public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> implements SegnalazioneDao {
 
 

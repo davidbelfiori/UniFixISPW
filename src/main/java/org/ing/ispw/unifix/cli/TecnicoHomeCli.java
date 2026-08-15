@@ -217,6 +217,8 @@ public class TecnicoHomeCli {
                     Printer.print("--------------------------------");
                 } catch (PersistenceException e) {
                     Printer.error("Errore di persistenza: " + e.getMessage());
+                }catch (IllegalArgumentException e) {
+                    Printer.error("Dati non validi: " + e.getMessage());
                 }
             }
 

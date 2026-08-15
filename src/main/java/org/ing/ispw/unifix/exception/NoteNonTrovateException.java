@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class NoteNonTrovateException extends RuntimeException {
+public class NoteNonTrovateException extends PersistenceException {
     public NoteNonTrovateException(String message) {
         super(message);
     }

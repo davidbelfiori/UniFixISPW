@@ -81,9 +81,11 @@ public class ControllerGraficoHomeDocente {
                 }
             });
             mostraSegnalazioni();
-        }catch (IllegalArgumentException _){
+        }catch (IllegalStateException _){
+            //se ci troviamo in questo stato allora il al recupero delle informazioni dal sessionon manager o dal dao quando ha recuperato l'utente ci è stato tornato null, quindi non c'è un docente loggato, quindi mostriamo un popup di errore
             popUp.showErrorPopup(ACTION_1, POPUPMESSAGGI_2, POPUPMESSAGGI_3);
         }catch (PersistenceException e){
+            // nel caso l'eccezzione venga lanciata seguito di un errore nella persistenza
             popUp.showErrorPopup(ACTION_1,"", e.getMessage());
         }
 

@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class CsvInvalidException extends RuntimeException {
+public class CsvInvalidException extends BusinessException {
     public CsvInvalidException(String message) {
         super(message);
     }

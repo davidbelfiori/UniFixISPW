@@ -12,6 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Implementazione JDBC del DAO delle aule.
+ * Traduce gli errori SQL in eccezioni di persistenza e ricostruisce gli oggetti
+ * associati a ogni aula tramite la tabella di relazione {@code oggettiaula}.
+ */
 public class JdbcAulaDao  implements AulaDao {
 
 
@@ -331,8 +336,8 @@ public class JdbcAulaDao  implements AulaDao {
                 edifici.add(edificio);
             }
             return edifici;
-        } catch (SQLException _) {
-            throw new EdificiNonTrovatiException("Impossibile trovare degli edifici");
+        } catch (SQLException e) {
+            throw new PersistenceException("Impossibile trovare degli edifici", e);
         }
     }
 
@@ -377,10 +382,10 @@ public class JdbcAulaDao  implements AulaDao {
             if (rs.next()) {
                 return rs.getInt(1);
             } else {
-                throw new AuleNonTrovateException("Errore durante il conteggio delle aule");
+                throw new PersistenceException("Il conteggio delle aule non ha restituito risultati");
             }
         } catch (SQLException e) {
-            throw new AuleNonTrovateException("Errore durante il conteggio delle aule: " + e.getMessage());
+            throw new PersistenceException("Errore durante il conteggio delle aule", e);
         }
     }
 
@@ -392,10 +397,10 @@ public class JdbcAulaDao  implements AulaDao {
             if (rs.next()) {
                 return rs.getInt(1);
             } else {
-                throw new EdificiNonTrovatiException("Errore durante il conteggio degli edifici");
+                throw new PersistenceException("Il conteggio degli edifici non ha restituito risultati");
             }
         } catch (SQLException e) {
-            throw new EdificiNonTrovatiException("Errore durante il conteggio degli edifici: " + e.getMessage());
+            throw new PersistenceException("Errore durante il conteggio degli edifici", e);
         }
     }
 

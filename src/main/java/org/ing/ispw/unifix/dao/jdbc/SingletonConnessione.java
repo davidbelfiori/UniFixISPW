@@ -10,6 +10,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Gestisce una singola connessione JDBC condivisa verso il database UniFix.
+ * La connessione viene aperta pigramente e ricreata se quella precedente è stata chiusa.
+ */
 public class SingletonConnessione {
 
     private static Connection connection;
@@ -21,6 +25,12 @@ public class SingletonConnessione {
     private SingletonConnessione() {}
 
     // Metodo thread-safe per ottenere la connessione unica
+    /**
+     * Restituisce la connessione condivisa, aprendola se necessario.
+     *
+     * @return connessione JDBC aperta
+     * @throws DbConnException se il driver non riesce a stabilire o verificare la connessione
+     */
     public static synchronized Connection getInstance() throws DbConnException {
         try {
             // Controlla sia se la connessione è null, sia se è stata chiusa/interrotta
@@ -37,6 +47,12 @@ public class SingletonConnessione {
     // Metodo privato estratto per isolare la logica di lettura del file
     //un metodo statico non possiede un riferimento this ad un'istanza e non
     // può invocare metodi di istanza non statici senza istanziare la classe.
+    /**
+     * Legge la password del database dalla configurazione.
+     * Se il file o la proprietà non sono disponibili restituisce il valore predefinito previsto dall'ambiente locale.
+     *
+     * @return password configurata o valore di fallback
+     */
     private static String loadDatabasePassword() {
         Properties properties = new Properties();
         try (InputStream is = new FileInputStream("application.properties")) {
@@ -52,6 +68,11 @@ public class SingletonConnessione {
     /*Rendere closeConnection() static consente a qualunque componente
     (es. alla chiusura dell'app o in fase di shutdown hook)
      di invocare SingletonConnessione.closeConnection() senza bisogno di avere un'istanza della classe.*/
+    /**
+     * Chiude la connessione condivisa se è aperta e azzera il riferimento.
+     * Un eventuale errore SQL durante la chiusura viene deliberatamente ignorato perché
+     * non è possibile recuperare la connessione in questa fase.
+     */
     public static synchronized void closeConnection() {
         if (connection != null) {
             try {

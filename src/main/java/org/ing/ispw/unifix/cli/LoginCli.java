@@ -75,7 +75,7 @@ public class LoginCli {
 
     }
 
-    private Boolean attemptLogin (String mail, String password) throws IOException, PersistenceException {
+    private boolean attemptLogin (String mail, String password) throws IOException, PersistenceException {
         try {
             CredentialBean cb = new CredentialBean();
             cb.setEmail(mail);

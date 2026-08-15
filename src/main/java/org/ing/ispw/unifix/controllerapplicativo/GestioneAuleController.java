@@ -104,7 +104,7 @@ public class GestioneAuleController extends Subject{
     }
 
 
-    public List<AulaBean> visualizzaAule() throws AuleNonTrovateException {
+    public List<AulaBean> visualizzaAule()  {
         List<Aula> aule = aulaDao.loadAll();
         List<AulaBean> auleToBean = new ArrayList<>();
         if (aule.isEmpty()) {
@@ -127,7 +127,7 @@ public class GestioneAuleController extends Subject{
 
 
 
-    public void inserisciAula(AulaBean aulaBean) throws AulaGiaPresenteException {
+    public void inserisciAula(AulaBean aulaBean){
         // Controllo basato su Edificio + IdAula
         if (!aulaDao.exists(new AulaId(aulaBean.getIdAula(), aulaBean.getEdificio()))) {
             Aula aula = aulaDao.create(aulaBean.getIdAula());

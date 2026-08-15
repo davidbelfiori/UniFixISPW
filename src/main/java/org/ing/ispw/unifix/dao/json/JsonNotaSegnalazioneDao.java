@@ -23,6 +23,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione del DAO delle note basata su file JSON.
+ * Persistendo una nota conserva anche i riferimenti necessari a ricostruirne autore
+ * e segnalazione; gli errori I/O sono tradotti in {@code JsonFileException}.
+ */
 public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
 
     private static final String DATA_DIR = "data/json";

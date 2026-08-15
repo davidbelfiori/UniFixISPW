@@ -6,10 +6,10 @@ import org.ing.ispw.unifix.exception.PersistenceException;
 
 import java.util.List;
 /**
- * Utilizza i Generici di Java per definire un contratto CRUD comune per tutte le entità.
+ * Contratto CRUD comune a tutti gli oggetti di accesso ai dati (DAO).
  *
- * @param <K> Tipo di dato della chiave primaria / identificatore univoco dell'entità (es. String, Long)
- * @param <E> Tipo della classe di dominio (Entità) gestita dal DAO (es. User, Aula, Segnalazione)
+ * @param <K> tipo della chiave primaria o dell'identificatore univoco
+ * @param <E> tipo dell'entità di dominio gestita
  */
 public interface Dao <K,E>{
 

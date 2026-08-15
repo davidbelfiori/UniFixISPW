@@ -14,6 +14,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione JDBC del DAO delle note di segnalazione.
+ * Gestisce la nota e i riferimenti alla segnalazione e all'autore, traducendo gli errori
+ * del database in eccezioni del livello di persistenza.
+ */
 public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
 
     private Connection getConnection() { return SingletonConnessione.getInstance(); }
@@ -231,8 +236,8 @@ public class JdbcNotaSegnalazione  implements NotaSegnalazioneDao {
                     }
                 }
             }
-        } catch (SQLException | ErroreLetturaPasswordException e) {
-            throw new NoteNonTrovateException("impossibile trovare tutte le note"+e.getMessage());
+        } catch (SQLException  e) {
+            throw new PersistenceException("impossibile trovare tutte le note"+e.getMessage());
         }
         return note;
     }

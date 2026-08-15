@@ -7,6 +7,10 @@ import org.ing.ispw.unifix.model.AulaId;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO delle aule che conserva i dati esclusivamente in memoria.
+ * Edifici, oggetti e conteggi sono derivati dalla mappa mantenuta dalla classe base.
+ */
 public class InMemoryAulaDao extends InMemoryDao<AulaId, Aula> implements AulaDao {
 
     @Override

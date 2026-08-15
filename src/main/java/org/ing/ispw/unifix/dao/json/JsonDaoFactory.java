@@ -2,6 +2,10 @@ package org.ing.ispw.unifix.dao.json;
 
 import org.ing.ispw.unifix.dao.*;
 
+/**
+ * Factory del backend JSON. Inizializza pigramente un'unica istanza per ogni DAO
+ * e la riutilizza nelle richieste successive.
+ */
 public class JsonDaoFactory extends DaoFactory {
 
     private UserDao userDao;

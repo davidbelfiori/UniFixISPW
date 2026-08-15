@@ -2,6 +2,10 @@ package org.ing.ispw.unifix.dao.memory;
 
 import org.ing.ispw.unifix.dao.*;
 
+/**
+ * Factory del backend volatile in memoria. Crea pigramente un DAO per ogni tipo
+ * di entità e ne mantiene l'istanza, così che i dati restino condivisi.
+ */
 public class InMemoryDaoFactory extends DaoFactory {
 
     private UserDao userDao;

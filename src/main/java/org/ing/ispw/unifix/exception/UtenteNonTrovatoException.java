@@ -1,6 +1,6 @@
 package org.ing.ispw.unifix.exception;
 
-public class UtenteNonTrovatoException extends RuntimeException{
+public class UtenteNonTrovatoException extends BusinessException {
     public UtenteNonTrovatoException(String message) {
         super(message);
     }

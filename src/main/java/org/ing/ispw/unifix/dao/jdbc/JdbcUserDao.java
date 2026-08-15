@@ -15,6 +15,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione JDBC del DAO degli utenti.
+ * Gestisce i diversi sottotipi di utente e converte violazioni dei vincoli o errori SQL
+ * nelle corrispondenti eccezioni del livello di persistenza.
+ */
 public class JdbcUserDao  implements UserDao {
 
    

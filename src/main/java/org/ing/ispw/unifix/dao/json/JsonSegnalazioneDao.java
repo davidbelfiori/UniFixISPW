@@ -24,6 +24,11 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione del DAO segnalazioni basata su file JSON.
+ * Serializza i dati della segnalazione e gli identificatori delle entità collegate;
+ * gli errori di accesso al file sono esposti come {@code JsonFileException}.
+ */
 public class JsonSegnalazioneDao implements SegnalazioneDao {
 
     private static final String DATA_DIR = "data/json";

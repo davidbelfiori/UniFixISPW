@@ -16,6 +16,7 @@ import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.PersistenceException;
+import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.observer.Observer;
 import org.jetbrains.annotations.NotNull;
@@ -247,22 +248,36 @@ public class ControllerGraficoGestioneAule implements Observer {
     
     
     @FXML
-    protected void logout(MouseEvent event) throws IOException {
+    protected void logout(MouseEvent event)  {
         gestioneAuleController.detach(this);
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("login.fxml"));
-        ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
+        try {
+            ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina di login");
+        }
+
     }
 
-    public void goToHomeAdmin(MouseEvent mouseEvent) throws  IOException{
+    public void goToHomeAdmin(MouseEvent mouseEvent) {
         gestioneAuleController.detach(this);
         FXMLLoader fxmlLoaderrr=new FXMLLoader(getClass().getResource("/org/ing/ispw/unifix/homeAdmin.fxml"));
-        ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
+        try {
+            ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoaderrr.load());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina Home Admin");
+        }
     }
 
     public void goToSegnalazioni(MouseEvent mouseEvent) throws IOException {
         gestioneAuleController.detach(this);
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("SegnalazioniAdmin.fxml"));
-        ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+        try {
+            ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina Gestione Segnalazioni");
+        }
+
     }
 
 

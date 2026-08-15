@@ -6,6 +6,10 @@ import org.ing.ispw.unifix.model.NotaSegnalazione;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO in memoria delle note, indicizzate tramite UUID.
+ * La ricerca per segnalazione filtra le note presenti nella mappa della classe base.
+ */
 public class InMemoryNotaSegnalazioneDao  extends InMemoryDao<String, NotaSegnalazione> implements NotaSegnalazioneDao {
 
 

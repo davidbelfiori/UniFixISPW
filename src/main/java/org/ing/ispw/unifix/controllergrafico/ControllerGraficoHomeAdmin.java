@@ -10,9 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import org.ing.ispw.unifix.Driver;
 import org.ing.ispw.unifix.controllerapplicativo.DashboardKpiController;
 import org.ing.ispw.unifix.controllerapplicativo.GestioneAuleController;
-import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
-import org.ing.ispw.unifix.exception.CsvInvalidException;
-import org.ing.ispw.unifix.exception.PersistenceException;
+import org.ing.ispw.unifix.exception.*;
 import org.ing.ispw.unifix.utils.Answer;
 import org.ing.ispw.unifix.utils.PopUp;
 import org.ing.ispw.unifix.utils.observer.Observer;
@@ -92,10 +90,9 @@ public class ControllerGraficoHomeAdmin implements Observer {
                 } catch (IllegalArgumentException e){
                     popUp.showErrorPopup(Answer.ERRORE.toString(), "File non valido", e.getMessage());
                 }
-                catch (CsvInvalidException | AulaGiaPresenteException | PersistenceException e) {
+                catch (BusinessException | PersistenceException e) {
                     popUp.showErrorPopup(Answer.ERRORE.toString(), "Errore durante l'inserimento", e.getMessage());
                 }
-
             }else {
                 popUp.showErrorPopup(Answer.ERRORE.toString(), "", "Il file selezionato non è un file CSV");
             }
@@ -108,9 +105,14 @@ public class ControllerGraficoHomeAdmin implements Observer {
 
 
     @FXML
-    void goToGestioneAule(MouseEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("GestioneAule.fxml"));
-        ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
+    void goToGestioneAule(MouseEvent event)  {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("GestioneAule.fxml"));
+            ((Node) event.getSource()).getScene().setRoot(fxmlLoader.load());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina Gestione Aule");
+        }
+
     }
 
     @Override
@@ -124,14 +126,18 @@ public class ControllerGraficoHomeAdmin implements Observer {
             auleGestiteLabel.setText(getAuleGestite());
             segnalazioniAttiveLabel.setText(getNumeroSegnalazioniAttive());
             segnalazioRisolteLabel.setText(getNumeroSegnalazioniRisolte());
-        }catch (PersistenceException e){
+        }catch (PersistenceException | EntityNotFoundException e){
             popUp.showErrorPopup(Answer.ERRORE.getValue(), " ",e.getMessage());
         }
 
     }
 
-    public void goToGestioneSegnalazioni(MouseEvent mouseEvent) throws IOException {
+    public void goToGestioneSegnalazioni(MouseEvent mouseEvent) {
         FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("SegnalazioniAdmin.fxml"));
-        ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+        try {
+            ((Node) mouseEvent.getSource()).getScene().setRoot(fxmlLoader.load());
+        } catch (IOException _) {
+            popUp.showErrorPopup(Answer.ERRORE.getValue(), " ", "Errore durante il caricamento della pagina Gestione Segnalazioni");
+        }
     }
 }
