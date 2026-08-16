@@ -25,7 +25,15 @@ public abstract class DaoFactory {
      * @return factory corrispondente al tipo di persistenza configurato
      * @throws org.ing.ispw.unifix.exception.PersistenceException se l'inizializzazione
      *         del backend o dei dati dimostrativi non riesce
+     * @throws org.ing.ispw.unifix.exception.CsvInvalidException se il caricamento dei dati dimostrativi fallisce per CSV malformato
+     *
+     *<p>Le chiamate successive restituiscono la stessa factory, senza
+     *  * rileggere la configurazione. I controller possono quindi ottenere
+     *  * il DAO relativo al backend selezionato attraverso chiamate come
+     *  * {@code DaoFactory.getInstance().getUserDao()} o
+     *  * {@code DaoFactory.getInstance().getAulaDao()}.</p>
      */
+
     public static synchronized DaoFactory getInstance() {
         if (instance == null) {
             String type = loadPersistenceType();
