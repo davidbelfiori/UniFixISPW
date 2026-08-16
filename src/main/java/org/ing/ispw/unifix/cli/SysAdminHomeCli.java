@@ -164,13 +164,7 @@ public class SysAdminHomeCli {
         String edificio = readLineSafe(br);
 
         Printer.print("Inserisci Piano (numero): ");
-        int piano;
-        try {
-            piano = Integer.parseInt(readLineSafe(br));
-        } catch (NumberFormatException _) {
-            Printer.error("Piano non valido, impostato a 0");
-            piano = 0;
-        }
+        int piano = leggiPiano();
 
         List<String> oggetti = new ArrayList<>();
         Printer.print("Inserisci oggetti (invio vuoto per terminare):");
@@ -197,9 +191,20 @@ public class SysAdminHomeCli {
         } catch (IOException _) {
             Printer.error("Errore durante la lettura dell'input");
         } catch (IllegalStateException | PersistenceException | AulaGiaPresenteException e) {
-            Printer.error(Answer.ERRORE.getValue()+":" + e.getMessage());
+            Printer.error(Answer.ERRORE.getValue() + ":" + e.getMessage());
         }
 
+    }
+
+    private int leggiPiano() throws IOException {
+        Printer.print("Inserisci Piano (numero): ");
+        String input = readLineSafe(br);
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException _) {
+            Printer.error("Piano non valido, impostato a 0");
+            return 0;
+        }
     }
 
     private String readLineSafe(BufferedReader br) throws IOException {
