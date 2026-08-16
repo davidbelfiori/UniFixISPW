@@ -24,6 +24,16 @@ public class LoginController {
     }
 
 
+    /**
+     * Registra un nuovo utente nel sistema. Viene verificato a monte se l'utente è presente nel sistema, se è presente ritorna false, altrimenti crea un nuovo utente e lo salva nel database.
+     * Viene creato un utente attraverso l'uso della factory che in base al ruolo (estrapolato da una classe di supporto) crea un oggetto di tipo User con il ruolo corretto.
+     * @return true se l'utente è stato registrato con successo, false se l'utente esiste già nel sistema.
+     * @throws IllegalArgumentException se i dati forniti non sono validi (ad esempio email o password vuote).
+     * @throws RuoloNonTrovatoException se il ruolo dell'utente non è valido o non è stato specificato.
+     * @param rb Bean contenente le informazioni di registrazione dell'utente.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     * */
+
     public boolean register(RegistrazioneBean rb) throws IllegalArgumentException, RuoloNonTrovatoException {
         if (userDao.exists(rb.getEmail())) {
             return false;
@@ -33,7 +43,14 @@ public class LoginController {
         return true;
     }
 
-    // NEL LoginController.java
+    /**
+     * Valida le credenziali di accesso di un utente. Se l'utente esiste e la password è corretta, viene restituito un oggetto UserBean contenente le informazioni dell'utente.
+     * @param credentialBean Bean contenente le credenziali dell'utente (email e password).
+     * @return UserBean contenente le informazioni dell'utente se le credenziali sono valide.
+     * @throws UtenteNonTrovatoException se l'utente non esiste nel sistema.
+     * @throws PasswordErrataExecption se la password fornita non corrisponde a quella memorizzata per l'utente.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
     public UserBean validate(CredentialBean credentialBean) {
         User user = userDao.load(credentialBean.getEmail());
 

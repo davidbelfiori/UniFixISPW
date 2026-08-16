@@ -28,6 +28,12 @@ public class TecnicoController {
         userDao = DaoFactory.getInstance().getUserDao();
     }
 
+    /**
+     * Recupera le informazioni del tecnico loggato e le restituisce come oggetto InfoTecnicoBean.
+     * @return InfoTecnicoBean contenente le informazioni del tecnico loggato.
+     * @throws IllegalStateException se non c'è un tecnico loggato.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     * */
     public InfoTecnicoBean getTecnicoInformation(){
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
         if (loggetUser == null) {
@@ -46,6 +52,13 @@ public class TecnicoController {
         return infoTecnico;
     }
 
+    /**
+     * Recupera le informazioni di una segnalazione specifica.
+     * @param idSegnalazione L'ID della segnalazione da recuperare.
+     * @return SegnalazioneBean contenente le informazioni della segnalazione.
+     * @throws NessunaSegnalazioneException se la segnalazione non è stata trovata.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
     public SegnalazioneBean getSegnalazione(String idSegnalazione) {
         Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         if (segnalazione == null) {
@@ -80,7 +93,12 @@ public class TecnicoController {
         return bean;
     }
 
-
+    /**
+     * Chiude una segnalazione specifica.
+     * @param idSegnalazione L'ID della segnalazione da chiudere.
+     * @throws InvalidStateTransitionException se lo stato della segnalazione non consente la chiusura.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
     public void chiudiSegnalazione(String idSegnalazione) throws InvalidStateTransitionException {
         Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         if (segnalazione == null) {
@@ -107,6 +125,12 @@ public class TecnicoController {
 
     }
 
+    /**
+     * Imposta una segnalazione in lavorazione.
+     * @param idSegnalazione L'ID della segnalazione da impostare in lavorazione.
+     * @throws InvalidStateTransitionException se lo stato della segnalazione non consente la transizione.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
     public void inLavorazioneSegnalazione(String idSegnalazione) throws InvalidStateTransitionException{
         Segnalazione segnalazione = segnalazioneDao.load(idSegnalazione);
         if (segnalazione == null) {

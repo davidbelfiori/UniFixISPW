@@ -3,6 +3,8 @@ package org.ing.ispw.unifix.cli;
 import org.ing.ispw.unifix.bean.AulaBean;
 import org.ing.ispw.unifix.bean.SegnalazioneBean;
 import org.ing.ispw.unifix.controllerapplicativo.InviaSegnalazioneController;
+import org.ing.ispw.unifix.exception.BusinessException;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
 import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.utils.Printer;
 
@@ -203,7 +205,12 @@ public class SegnalazioneCli {
             }
         } catch (PersistenceException e) {
             Printer.error("Errore di persistenza: " + e.getMessage());
-        }
+        }catch (EntityAlreadyExistsException e){
+            Printer.error("Errore: la segnalazione esiste già. " + e.getMessage());
+        } catch (BusinessException e) {
+            Printer.error("Errore di business: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            Printer.error("Errore: nessun utente loggato. " + e.getMessage());}
     }
 
     private void resetForm() {

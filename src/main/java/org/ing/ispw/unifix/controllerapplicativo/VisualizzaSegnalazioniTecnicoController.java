@@ -26,8 +26,14 @@ public class VisualizzaSegnalazioniTecnicoController {
         this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
     }
 
-    //visualizza le segnalazioni assegnate al tecnico
-    public List<SegnalazioneBean> visualizzaSegnalazioniTecnico() throws NessunaSegnalazioneException, NessunaSegnalazioneTecnicoException {
+    /**
+     * Recupera tutte le segnalazioni assegnate al tecnico loggato e le converte in oggetti SegnalazioneBean.
+     * @return Lista di SegnalazioneBean rappresentanti le segnalazioni assegnate al tecnico.
+     * @throws NessunaSegnalazioneException se non ci sono segnalazioni nel sistema.
+     * @throws NessunaSegnalazioneTecnicoException se il tecnico loggato non ha segnalazioni assegnate.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
+    public List<SegnalazioneBean> visualizzaSegnalazioniTecnico()  {
         List<Segnalazione> segnalazioniAll;
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
         if (loggedUser == null) {

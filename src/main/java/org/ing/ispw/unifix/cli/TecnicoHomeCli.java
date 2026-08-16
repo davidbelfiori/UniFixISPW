@@ -74,9 +74,11 @@ public class TecnicoHomeCli {
             for (SegnalazioneBean segnalazioneBean: segnalazioni){
                  stampaDettagliSegnalazione(segnalazioneBean);
             }
-        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException | IllegalStateException | PersistenceException ex) {
+        } catch (NessunaSegnalazioneException | NessunaSegnalazioneTecnicoException | IllegalStateException  ex) {
             Printer.print(ex.getMessage());
             return;
+        }catch (PersistenceException e){
+            Printer.error("Errore nello strato persistenza: " + e.getMessage());
         }
 
 

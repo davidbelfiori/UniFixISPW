@@ -16,12 +16,14 @@ public class DocenteController {
         this.userDao = DaoFactory.getInstance().getUserDao();
     }
 
-    /*
+    /**
         Reupero informazione del docente
         @return InfoDocenteBean con le sue informazioni
+        @throws IllegalStateException se non c'è un docente loggato
     * */
 
     public InfoDocenteBean getDocenteInformation() {
+        // Recupero le informazioni dell'utente loggato dalla sessione e verifico che non sia null
         UserBean loggedUser = SessionManager.getInstance().getCurrentUser();
         if (loggedUser == null) {
             throw new IllegalStateException("Nessun docente loggato");

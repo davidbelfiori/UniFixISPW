@@ -77,8 +77,10 @@ public class DocenteHomeCli {
             for (SegnalazioneBean segnalazione : segnalazioniDocente) {
                 Printer.print(segnalazione.toString());
             }
-        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException | IllegalStateException | PersistenceException e) {
+        } catch (NessunSegnalazioneDocenteException | NessunaSegnalazioneException | IllegalStateException  e) {
             Printer.error(e.getMessage());
+        }catch (PersistenceException e){
+            Printer.error("Errore di persistenza: " + e.getMessage());
         }
     }
 

@@ -6,6 +6,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.exception.AulaGiaPresenteException;
 import org.ing.ispw.unifix.exception.AuleNonTrovateException;
 import org.ing.ispw.unifix.exception.CsvInvalidException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.model.Aula;
 import org.ing.ispw.unifix.model.AulaId;
 import org.ing.ispw.unifix.utils.CSVParserService;
@@ -22,12 +23,24 @@ public class GestioneAuleController extends Subject{
 
     private final AulaDao aulaDao;
 
+
+
+    /*
+    * Istanziazione di aula dao , la corretta istaziazione rispetto al metodo di persistenza è fornita dalla Factory
+    * */
     public GestioneAuleController(){
         this.aulaDao = DaoFactory.getInstance().getAulaDao();
     }
 
 
 
+    /**
+     * Inserisce aule da un file CSV. Il file deve avere intestazione e le colonne devono essere:
+     * Edificio, IdAula, Piano, Oggetti (separati da punto e virgola).
+     * @param filePath percorso del file CSV
+     * @return true se almeno un'aula è stata inserita, false altrimenti
+     * @throws CsvInvalidException se il file CSV non è valido
+     */
     public boolean inserisciAuleFromCsv(String filePath) throws CsvInvalidException {
         boolean auleInserite = false;
         CSVParserService.validateCSV(filePath);
@@ -57,6 +70,13 @@ public class GestioneAuleController extends Subject{
         return auleInserite;
     }
 
+
+
+    /**
+     * Processa una riga del file CSV e inserisce l'aula se non esiste.
+     * @param line riga del file CSV
+     * @return true se l'aula è stata inserita, false altrimenti
+     */
     private boolean processaRigaCsv(String line) {
         String[] fields = line.split(",");
         if (fields.length < 4) {
@@ -82,6 +102,14 @@ public class GestioneAuleController extends Subject{
         return oggetti;
     }
 
+    /**
+     * Inserisce un'aula se non esiste già.
+     * @param edificio edificio dell'aula
+     * @param idAula identificatore dell'aula
+     * @param piano piano dell'aula
+     * @param oggetti lista degli oggetti nell'aula
+     * @return true se l'aula è stata inserita, false altrimenti
+     */
     private boolean inserisciAulaSeNonEsiste(String edificio, String idAula, int piano, List<String> oggetti) {
         AulaId aulaId = new AulaId(idAula, edificio);
         if (aulaDao.exists(aulaId)) {
@@ -104,6 +132,13 @@ public class GestioneAuleController extends Subject{
     }
 
 
+    /**
+    * Ritorna una lista di aule presenti nel sistema, se non ci sono aule lancia un'eccezione
+    * @return List<AulaBean> lista di aule presenti nel sistema
+    * @throws AuleNonTrovateException se non ci sono aule nel sistema , la view catturerà l'errore mostrerà a video che non sono presenti aule
+    * @throws IllegalArgumentException se l'input non è valido
+     * @throws PersistenceException se c'è un errore di persistenza dei dati
+    * */
     public List<AulaBean> visualizzaAule()  {
         List<Aula> aule = aulaDao.loadAll();
         List<AulaBean> auleToBean = new ArrayList<>();
@@ -119,14 +154,19 @@ public class GestioneAuleController extends Subject{
                 auleToBean.add(aulaBean);
             }
         }
-
-
         //converti le aule in bean per la view (paradigma MVC)
         return auleToBean;
     }
 
 
 
+    /**
+     * Inserisce un'aula se non esiste già. se l'aula inserita esiste gia , quindi la coppia idAula e edificio , viene lanciata un eccezzione
+     * @param aulaBean bean contenente le informazioni dell'aula
+     * @throws IllegalArgumentException se l'input non è valido
+     * @throws PersistenceException se c'è un errore di persistenza dei dati
+     * @throws AulaGiaPresenteException se l'aula è già presente, quindi la coppia idAula e edificio è gia presente nella persistenza
+     */
     public void inserisciAula(AulaBean aulaBean){
         // Controllo basato su Edificio + IdAula
         if (!aulaDao.exists(new AulaId(aulaBean.getIdAula(), aulaBean.getEdificio()))) {

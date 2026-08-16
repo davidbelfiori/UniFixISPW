@@ -19,8 +19,13 @@ public class GestisciSegnalazioniAdminController {
         this.segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
     }
 
+    /**
+     * Recupera tutte le segnalazioni presenti nel sistema e le converte in oggetti SegnalazioneBean.
+     * @return Lista di SegnalazioneBean rappresentanti tutte le segnalazioni.
+     * @throws PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
 
-    public List<SegnalazioneBean> getAllSegnalazioni() throws PersistenceException {
+    public List<SegnalazioneBean> getAllSegnalazioni() {
         List<Segnalazione> segnalazioni = segnalazioneDao.loadAll();
         List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
 

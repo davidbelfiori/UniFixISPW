@@ -24,8 +24,14 @@ public class VisualizzaSegnalazioniDocenteController {
         userDao = DaoFactory.getInstance().getUserDao();
     }
 
-    //visualizza le segnalazioni inviate dal docente
-    public List<SegnalazioneBean> visualizzaSegnalazioniDocente() throws NessunaSegnalazioneException, NessunSegnalazioneDocenteException {
+    /**
+     * Recupera tutte le segnalazioni inviate dal docente loggato e le converte in oggetti SegnalazioneBean.
+     * @return Lista di SegnalazioneBean rappresentanti le segnalazioni inviate dal docente.
+     * @throws NessunaSegnalazioneException se non ci sono segnalazioni nel sistema.
+     * @throws NessunSegnalazioneDocenteException se il docente loggato non ha inviato alcuna segnalazione.
+     * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     */
+    public List<SegnalazioneBean> visualizzaSegnalazioniDocente() {
         SegnalazioneDao segnalazioneDao = DaoFactory.getInstance().getSegnalazioneDao();
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
         if (loggetUser == null) {

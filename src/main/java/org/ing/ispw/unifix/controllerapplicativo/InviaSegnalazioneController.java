@@ -8,6 +8,7 @@ import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.NonCiSonoTecniciException;
+import org.ing.ispw.unifix.exception.PersistenceException;
 import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.sessionmanager.SessionManager;
@@ -25,6 +26,7 @@ public class InviaSegnalazioneController {
     private final UserDao userDao;
     private final AulaDao aulaDao;
 
+
     public InviaSegnalazioneController() {
         this.userDao = DaoFactory.getInstance().getUserDao();
         this.aulaDao = DaoFactory.getInstance().getAulaDao();
@@ -35,6 +37,13 @@ public class InviaSegnalazioneController {
         return aulaDao.getAllEdifici();
     }
 
+    /**
+     * Recupera tutte le aule di un determinato edificio.
+     * @param edificio l'edificio di cui recuperare le aule
+     * @return lista di AulaBean rappresentanti le aule dell'edificio
+     * @throws IllegalArgumentException se i dati sono errati
+     * @throws PersistenceException se si verifica un errore durante l'accesso ai dati
+     */
     public List<AulaBean> getAuleByEdificio(String edificio){
         // 1. Recupero la lista delle entità di Dominio dal DAO
         List<Aula> aule = aulaDao.loadAll();
@@ -61,10 +70,24 @@ public class InviaSegnalazioneController {
         return auleBeanList;
     }
 
+    /**
+     * Ritorno una lista di stringhe contenenti gli oggetti presenti in una aula , individuata mediante la sua chiave ovvero il suo id e il suo edificio
+     * @return List<String> lista di oggetti presenti in un aula
+     * @throws PersistenceException
+     * */
     public List<String> getOggettiAula(String edificio, String idAula) {
         return aulaDao.getAulaOggetti(new AulaId(idAula,edificio));
     }
 
+    /**
+     * Metodo privato della classe che ritorna un oggetto Tecnico con meno segnalazioni assegnate, se non ci sono tecnici lancia un'eccezione .
+     * Questo metodo è utilizzato internamente per assegnare automaticamente un tecnico a una nuova segnalazione.
+     * Si carica tutti i tecnici presenti da UserDao e li inserisce in una lista di oggetti di tipo tecnico , se la lista è vuota viene lanciata un eccezzione che verrà catturata dalla view
+     * @throws NonCiSonoTecniciException se non ci sono tecnici disponibili
+     * @throws PersistenceException se si verifica un errore durante l'accesso ai dati
+     * @return Tecnico con meno segnalazioni assegnate
+     *
+     * */
     private Tecnico getTecnicoConMenoSegnalazioni() throws NonCiSonoTecniciException {
         List<Tecnico> tecnici = userDao.getAllTecnici();
         if (tecnici.isEmpty()) throw new NonCiSonoTecniciException("Non ci sono tecnici disponibili");
@@ -77,7 +100,17 @@ public class InviaSegnalazioneController {
         return tecnicoScelto;
     }
 
-    public  boolean creaSegnalazione(SegnalazioneBean sb) throws SegnalazioneGiaEsistenteException, NonCiSonoTecniciException {
+
+    /**
+     * Crea una nuova segnalazione richiede in input un oggetto di tipo SegnalazioneBean , se la segnalazione esiste già lancia un'eccezione che verrà catturata dalla view
+     * @throws IllegalStateException se al recupero dell'utente loggato (di colui che ha richiesto questa operazione) non è presente alcun utente loggato
+     * @throws SegnalazioneGiaEsistenteException se la segnalazione esiste già
+     * @throws NonCiSonoTecniciException se non ci sono tecnici disponibili
+     * @throws PersistenceException se si verifica un errore durante l'accesso ai dati
+     * @param sb oggetto di tipo SegnalazioneBean contenente le informazioni della segnalazione da creare
+     * @return true se la segnalazione è stata creata con successo, false altrimenti
+     * */
+    public  boolean creaSegnalazione(SegnalazioneBean sb)  {
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
 
         if (loggetUser == null) {
