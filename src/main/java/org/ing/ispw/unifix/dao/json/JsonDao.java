@@ -46,6 +46,7 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
         ensureDataDirectoryExists();
     }
 
+
     private void ensureDataDirectoryExists() {
         try {
             Path dataPath = Paths.get(DATA_DIR);
@@ -77,9 +78,7 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
     @Override
     public V load(K id) {
         if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'identificatore non può essere nullo"
-            );
+            throw new IllegalArgumentException("L'identificatore non può essere nullo");
         }
 
         for (V entity : loadAll()) {
@@ -121,9 +120,8 @@ public abstract class JsonDao<K, V> implements Dao<K, V> {
     @Override
     public void delete(K id) {
         if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'identificatore non può essere nullo"
-            );
+            throw new IllegalArgumentException("L'identificatore non può essere nullo");
+
         }
 
         List<V> entities = loadAll();

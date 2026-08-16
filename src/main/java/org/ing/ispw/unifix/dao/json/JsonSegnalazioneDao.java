@@ -1,14 +1,11 @@
 package org.ing.ispw.unifix.dao.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.SegnalazioneDao;
-import org.ing.ispw.unifix.exception.EntityNotFoundException;
+import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
 import org.ing.ispw.unifix.exception.JsonFileException;
-import org.ing.ispw.unifix.exception.SegnalazioneGiaEsistenteException;
 import org.ing.ispw.unifix.model.Docente;
 import org.ing.ispw.unifix.model.Segnalazione;
 import org.ing.ispw.unifix.model.Tecnico;
@@ -17,9 +14,6 @@ import org.ing.ispw.unifix.utils.StatoSegnalazione;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +23,9 @@ import java.util.List;
  * Serializza i dati della segnalazione e gli identificatori delle entità collegate;
  * gli errori di accesso al file sono esposti come {@code JsonFileException}.
  */
-public class JsonSegnalazioneDao implements SegnalazioneDao {
+public class JsonSegnalazioneDao extends JsonDao<String, Segnalazione> implements SegnalazioneDao {
 
-    private static final String DATA_DIR = "data/json";
+
     private static final String FILE_NAME = "segnalazioni.json";
     private static final String FIELD_ID_SEGNALAZIONE = "idSegnalazione";
     private static final String FIELD_DATA_CREAZIONE = "dataCreazione";
@@ -43,28 +37,16 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
     private static final String FIELD_DOCENTE_EMAIL = "docenteEmail";
     private static final String FIELD_TECNICO_EMAIL = "tecnicoEmail";
 
-    private final ObjectMapper objectMapper;
+
 
     public JsonSegnalazioneDao() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        ensureDataDirectoryExists();
+        super(FILE_NAME, Segnalazione.class);
+
     }
 
-
-    private void ensureDataDirectoryExists() {
-        try {
-            Path dataPath = Paths.get(DATA_DIR);
-            if (!Files.exists(dataPath)) {
-                Files.createDirectories(dataPath);
-            }
-        } catch (IOException e) {
-            throw new JsonFileException("Impossibile creare la directory per i dati JSON"+ e);
-        }
-    }
-
-    private File getFile() {
-        return new File(DATA_DIR, FILE_NAME);
+    @Override
+    protected String getKey(Segnalazione segnalazione) {
+        return segnalazione.getIdSegnalazione();
     }
 
     @Override
@@ -113,7 +95,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
                 );
 
         if (alreadyExists) {
-            throw new SegnalazioneGiaEsistenteException(
+            throw new EntityAlreadyExistsException(
                     "Esiste già una segnalazione con ID " + id
             );
         }
@@ -122,30 +104,8 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
         saveAll(segnalazioni);
     }
 
-    @Override
-    public void delete(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'ID della segnalazione non può essere nullo"
-            );
-        }
 
-        List<Segnalazione> segnalazioni = loadAll();
 
-        boolean removed = segnalazioni.removeIf(
-                segnalazione ->
-                        id.equals(segnalazione.getIdSegnalazione())
-        );
-
-        if (removed) {
-            saveAll(segnalazioni);
-        }
-    }
-
-    @Override
-    public boolean exists(String id) {
-        return load(id) != null;
-    }
 
     @Override
     public List<Segnalazione> loadAll() {
@@ -168,38 +128,7 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
         }
     }
 
-    @Override
-    public void update(Segnalazione entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException(
-                    "La segnalazione non può essere nulla"
-            );
-        }
 
-        String id = entity.getIdSegnalazione();
-
-        if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'ID della segnalazione non può essere nullo"
-            );
-        }
-
-        List<Segnalazione> segnalazioni = loadAll();
-
-        for (int i = 0; i < segnalazioni.size(); i++) {
-            if (id.equals(
-                    segnalazioni.get(i).getIdSegnalazione()
-            )) {
-                segnalazioni.set(i, entity);
-                saveAll(segnalazioni);
-                return;
-            }
-        }
-
-        throw new EntityNotFoundException(
-                "Nessuna segnalazione trovata con ID " + id
-        );
-    }
 
     @Override
     public List<Segnalazione> getSegnalazioniByDocente(String docenteEmail) {
@@ -249,8 +178,8 @@ public class JsonSegnalazioneDao implements SegnalazioneDao {
         return count;
     }
 
-
-    private void saveAll(List<Segnalazione> segnalazioni) {
+    @Override
+    public void saveAll(List<Segnalazione> segnalazioni) {
         try {
             ArrayNode arrayNode = objectMapper.createArrayNode();
 

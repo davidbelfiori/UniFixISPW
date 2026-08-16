@@ -1,21 +1,15 @@
 package org.ing.ispw.unifix.dao.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.UserDao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
-import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.*;
 import org.ing.ispw.unifix.utils.UserType;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +18,9 @@ import java.util.List;
  * Conserva nel JSON il tipo concreto dell'utente e segnala problemi di lettura,
  * scrittura o creazione della directory tramite {@code JsonFileException}.
  */
-public class JsonUserDao implements UserDao {
+public class JsonUserDao extends JsonDao<String, User> implements UserDao {
 
-    private static final String DATA_DIR = "data/json";
+
     private static final String FILE_NAME = "users.json";
     private static final String FIELD_TYPE = "_type";
     private static final String FIELD_EMAIL = "email";
@@ -41,29 +35,16 @@ public class JsonUserDao implements UserDao {
     private static final String TYPE_TECNICO = "Tecnico";
     private static final String TYPE_SYSADMIN = "Sysadmin";
 
-    private final ObjectMapper objectMapper;
 
     public JsonUserDao() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        ensureDataDirectoryExists();
+        super(FILE_NAME, User.class);
     }
 
-
-    private void ensureDataDirectoryExists() {
-        try {
-            Path dataPath = Paths.get(DATA_DIR);
-            if (!Files.exists(dataPath)) {
-                Files.createDirectories(dataPath);
-            }
-        } catch (IOException e) {
-            throw new JsonFileException("Impossibile creare la directory per i dati JSON" + e);
-        }
+    @Override
+    protected String getKey(User user) {
+        return user.getEmail();
     }
 
-    private File getFile() {
-        return new File(DATA_DIR, FILE_NAME);
-    }
 
 
     @Override
@@ -112,29 +93,6 @@ public class JsonUserDao implements UserDao {
         saveAll(users);
     }
 
-    @Override
-    public void delete(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'email dell'utente non può essere nulla"
-            );
-        }
-
-        List<User> users = loadAll();
-
-        boolean removed = users.removeIf(
-                user -> id.equals(user.getEmail())
-        );
-
-        if (removed) {
-            saveAll(users);
-        }
-    }
-
-    @Override
-    public boolean exists(String id) {
-        return load(id) != null;
-    }
 
     @Override
     public List<User> loadAll() {
@@ -157,36 +115,7 @@ public class JsonUserDao implements UserDao {
         }
     }
 
-    @Override
-    public void update(User entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException(
-                    "L'utente non può essere nullo"
-            );
-        }
 
-        String email = entity.getEmail();
-
-        if (email == null) {
-            throw new IllegalArgumentException(
-                    "L'email dell'utente non può essere nulla"
-            );
-        }
-
-        List<User> users = loadAll();
-
-        for (int i = 0; i < users.size(); i++) {
-            if (email.equals(users.get(i).getEmail())) {
-                users.set(i, entity);
-                saveAll(users);
-                return;
-            }
-        }
-
-        throw new EntityNotFoundException(
-                "Nessun utente trovato con email " + email
-        );
-    }
 
     @Override
     public List<Tecnico> getAllTecnici() {
@@ -201,7 +130,8 @@ public class JsonUserDao implements UserDao {
         update((User) tecnico);
     }
 
-    private void saveAll(List<User> users) {
+    @Override
+    public void saveAll(List<User> users) {
         try {
             ArrayNode arrayNode = objectMapper.createArrayNode();
 

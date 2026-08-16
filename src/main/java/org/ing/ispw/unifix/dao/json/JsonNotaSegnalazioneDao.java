@@ -1,13 +1,10 @@
 package org.ing.ispw.unifix.dao.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.ing.ispw.unifix.dao.DaoFactory;
 import org.ing.ispw.unifix.dao.NotaSegnalazioneDao;
 import org.ing.ispw.unifix.exception.EntityAlreadyExistsException;
-import org.ing.ispw.unifix.exception.EntityNotFoundException;
 import org.ing.ispw.unifix.exception.JsonFileException;
 import org.ing.ispw.unifix.model.NotaSegnalazione;
 import org.ing.ispw.unifix.model.Segnalazione;
@@ -16,9 +13,6 @@ import org.ing.ispw.unifix.model.User;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,37 +22,26 @@ import java.util.List;
  * Persistendo una nota conserva anche i riferimenti necessari a ricostruirne autore
  * e segnalazione; gli errori I/O sono tradotti in {@code JsonFileException}.
  */
-public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
+public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> implements NotaSegnalazioneDao {
 
-    private static final String DATA_DIR = "data/json";
+
     private static final String FILE_NAME = "note_segnalazioni.json";
     private static final String FIELD_TESTO = "testo";
     private static final String FIELD_ID_SEGNALAZIONE = "idSegnalazione";
     private static final String FIELD_TECNICO_EMAIL = "tecnicoEmail";
     private static final String FIELD_DATA_CREAZIONE = "dataCreazione";
 
-    private final ObjectMapper objectMapper;
+
 
     public JsonNotaSegnalazioneDao() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        ensureDataDirectoryExists();
+        super(FILE_NAME, NotaSegnalazione.class);
     }
 
 
-    private void ensureDataDirectoryExists() {
-        try {
-            Path dataPath = Paths.get(DATA_DIR);
-            if (!Files.exists(dataPath)) {
-                Files.createDirectories(dataPath);
-            }
-        } catch (IOException e) {
-            throw new JsonFileException("Impossibile creare la directory per i dati JSON"+ e);
-        }
-    }
 
-    private File getFile() {
-        return new File(DATA_DIR, FILE_NAME);
+    @Override
+    protected String getKey(NotaSegnalazione entity) {
+        return entity.getUuid();
     }
 
     @Override
@@ -66,22 +49,6 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         return new NotaSegnalazione(uuid);
     }
 
-    @Override
-    public NotaSegnalazione load(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'UUID della nota non può essere nullo"
-            );
-        }
-
-        for (NotaSegnalazione nota : loadAll()) {
-            if (id.equals(nota.getUuid())) {
-                return nota;
-            }
-        }
-
-        return null;
-    }
 
     @Override
     public void store(NotaSegnalazione entity) {
@@ -114,28 +81,6 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         saveAll(note);
     }
 
-    @Override
-    public void delete(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException(
-                    "L'UUID della nota non può essere nullo"
-            );
-        }
-
-        List<NotaSegnalazione> note = loadAll();
-
-        boolean removed = note.removeIf(
-                nota -> id.equals(nota.getUuid())
-        );
-
-        if (removed) {
-            saveAll(note);
-        }
-    }
-    @Override
-    public boolean exists(String id) {
-        return load(id) != null;
-    }
 
     @Override
     public List<NotaSegnalazione> loadAll() {
@@ -158,36 +103,6 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         }
     }
 
-    @Override
-    public void update(NotaSegnalazione entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException(
-                    "La nota non può essere nulla"
-            );
-        }
-
-        String uuid = entity.getUuid();
-
-        if (uuid == null) {
-            throw new IllegalArgumentException(
-                    "L'UUID della nota non può essere nullo"
-            );
-        }
-
-        List<NotaSegnalazione> note = loadAll();
-
-        for (int i = 0; i < note.size(); i++) {
-            if (uuid.equals(note.get(i).getUuid())) {
-                note.set(i, entity);
-                saveAll(note);
-                return;
-            }
-        }
-
-        throw new EntityNotFoundException(
-                "Nessuna nota trovata con UUID " + uuid
-        );
-    }
 
     @Override
     public List<NotaSegnalazione> getAllNotaSegnalazioneById(String idSegnalazione) {
@@ -201,7 +116,8 @@ public class JsonNotaSegnalazioneDao implements NotaSegnalazioneDao {
         return result;
     }
 
-    private void saveAll(List<NotaSegnalazione> note) {
+    @Override
+    public void saveAll(List<NotaSegnalazione> note) {
         try {
             ArrayNode arrayNode = objectMapper.createArrayNode();
 

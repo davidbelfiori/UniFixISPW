@@ -26,7 +26,7 @@
   "nome" : "Luigi",
   "cognome" : "Bianchi",
   "ruolo" : "TECNICO",
-  "numeroSegnalazioni" : 3
+  "numeroSegnalazioni" : 4
 }, {
   "_type" : "Tecnico",
   "email" : "cavo.dragone@tec.uniroma2.eu",
