@@ -20,6 +20,10 @@ public class InfoDocenteBean {
     }
 
     public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("nome cannot be null or empty");
+        }
+
         this.nome = nome;
     }
 
@@ -28,6 +32,9 @@ public class InfoDocenteBean {
     }
 
     public void setCognome(String cognome) {
+        if (cognome == null || cognome.trim().isEmpty()) {
+            throw new IllegalArgumentException("cognome cannot be null or empty");
+        }
         this.cognome = cognome;
     }
 
@@ -36,6 +43,9 @@ public class InfoDocenteBean {
     }
 
     public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("email cannot be null or empty");
+        }
         this.email = email;
     }
 }

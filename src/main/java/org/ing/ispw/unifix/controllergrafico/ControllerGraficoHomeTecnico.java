@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 import org.ing.ispw.unifix.Driver;
@@ -66,6 +68,8 @@ public class ControllerGraficoHomeTecnico {
             popUp.showErrorPopup(POPUPMESSAGGI_1, POPUPMESSAGGI_4, e.getMessage());
         }catch (IllegalStateException _){
             popUp.showErrorPopup(POPUPMESSAGGI_1, "Nessun tecnico loggato", POPUPMESSAGGI_3);
+        }catch (IllegalArgumentException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1, "Dati tecnico non validi", e.getMessage());
         }
 
     }
@@ -200,6 +204,22 @@ public class ControllerGraficoHomeTecnico {
         grid.setHgap(15);
         grid.setVgap(10);
         grid.setPadding(new Insets(5, 0, 5, 0));
+        grid.setMaxWidth(Double.MAX_VALUE);
+
+        // Mantiene leggibili le etichette anche quando un valore, come la
+        // descrizione, occupa più righe. La seconda colonna usa tutto lo
+        // spazio disponibile e gestisce il wrapping del testo.
+        ColumnConstraints keyColumn = new ColumnConstraints();
+        keyColumn.setMinWidth(95);
+        keyColumn.setPrefWidth(95);
+        keyColumn.setMaxWidth(95);
+        keyColumn.setHgrow(Priority.NEVER);
+
+        ColumnConstraints valueColumn = new ColumnConstraints();
+        valueColumn.setMinWidth(0);
+        valueColumn.setHgrow(Priority.ALWAYS);
+        valueColumn.setFillWidth(true);
+        grid.getColumnConstraints().addAll(keyColumn, valueColumn);
 
         grid.add(creaLabelChiave("Edificio:"), 0, 0);
         grid.add(creaLabelValore(segnalazione.getEdificio()), 1, 0);
@@ -251,6 +271,9 @@ public class ControllerGraficoHomeTecnico {
         Label label = new Label(text != null ? text : "-");
         label.getStyleClass().add("summary-val");
         label.setWrapText(true);
+        label.setMinWidth(0);
+        label.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(label, Priority.ALWAYS);
         label.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         return label;
     }
@@ -409,42 +432,44 @@ public class ControllerGraficoHomeTecnico {
 
     @FXML
     void mostraInfoTecnico(MouseEvent event) {
-        // 1. Recupera i dati dal controller applicativo
-        InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
+        try {
+            // 1. Recupera i dati dal controller applicativo
+            InfoTecnicoBean infoTecnico = tc.getTecnicoInformation();
 
-        if (infoTecnico == null) {popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore", POPUPMESSAGGI_3);
-            return;}
+            // 2. Crea il layout della Card
+            VBox card = getVBox();
 
-        // 2. Crea il layout della Card
-        VBox card = getVBox();
+            // 3. Popola la card con i dati
+            Label lbNome = new Label(infoTecnico.getNome() + " " + infoTecnico.getCognome());
+            lbNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
 
-        // 3. Popola la card con i dati
-        Label lbNome = new Label(infoTecnico.getNome() + " " + infoTecnico.getCognome());
-        lbNome.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+            Label lbEmail = new Label(infoTecnico.getEmail());
+            lbEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
-        Label lbEmail = new Label(infoTecnico.getEmail());
-        lbEmail.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+            Label lbRuolo = new Label(infoTecnico.getRuolo().toString());
+            lbRuolo.setStyle("-fx-text-fill: #0056b4; -fx-font-weight: bold;");
 
-        Label lbRuolo = new Label(infoTecnico.getRuolo().toString());
-        lbRuolo.setStyle("-fx-text-fill: #0056b4; -fx-font-weight: bold;");
+            // Aggiungi tutto al contenitore
+            card.getChildren().addAll(lbNome, lbEmail, new Separator(), lbRuolo);
 
-        // Aggiungi tutto al contenitore
-        card.getChildren().addAll(lbNome, lbEmail, new Separator(), lbRuolo);
+            // 4. Crea il Popup e mostralo
+            Popup popup = new Popup();
+            popup.getContent().add(card);
+            popup.setAutoHide(true); // Si chiude se clicchi fuori
 
-        // 4. Crea il Popup e mostralo
-        Popup popup = new Popup();
-        popup.getContent().add(card);
-        popup.setAutoHide(true); // Si chiude se clicchi fuori
+            // Posiziona il popup sotto l'icona cliccata
+            Node source = (Node) event.getSource();
+            Window stage = source.getScene().getWindow();
 
-        // Posiziona il popup sotto l'icona cliccata
-        Node source = (Node) event.getSource();
-        Window stage = source.getScene().getWindow();
+            // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
+            double anchorX = event.getScreenX() - 200;
+            double anchorY = event.getScreenY() + 20;
 
-        // Calcolo posizione: x leggermente spostato a sinistra per allinearlo, y sotto l'icona
-        double anchorX = event.getScreenX() - 200;
-        double anchorY = event.getScreenY() + 20;
+            popup.show(stage, anchorX, anchorY);
+        }catch (IllegalArgumentException | IllegalStateException e){
+            popUp.showErrorPopup(POPUPMESSAGGI_1,"Si è verificato un errore", e.getMessage());
+        }
 
-        popup.show(stage, anchorX, anchorY);
     }
 
     @NotNull

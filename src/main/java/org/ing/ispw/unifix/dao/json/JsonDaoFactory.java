@@ -15,14 +15,20 @@ public class JsonDaoFactory extends DaoFactory {
 
     @Override
     public UserDao getUserDao() {
+        // Lazy initialization: il DAO viene creato soltanto al primo utilizzo,
+        // evitando di inizializzare componenti che potrebbero non servire.
         if (userDao == null) {
             userDao = new JsonUserDao();
         }
+
+        // Le chiamate successive riutilizzano la stessa istanza; questo evita
+        // configurazioni ripetute dell'ObjectMapper e della directory dati.
         return userDao;
     }
 
     @Override
     public AulaDao getAulaDao() {
+        // Ogni tipo di entità ha una propria istanza DAO, creata pigramente.
         if (aulaDao == null) {
             aulaDao = new JsonAulaDao();
         }
@@ -31,6 +37,8 @@ public class JsonDaoFactory extends DaoFactory {
 
     @Override
     public SegnalazioneDao getSegnalazioneDao() {
+        // La factory restituisce l'interfaccia SegnalazioneDao: i controller non
+        // devono conoscere la classe concreta che usa la persistenza JSON.
         if (segnalazioneDao == null) {
             segnalazioneDao = new JsonSegnalazioneDao();
         }
@@ -39,6 +47,8 @@ public class JsonDaoFactory extends DaoFactory {
 
     @Override
     public NotaSegnalazioneDao getNotaSegnalazioneDao() {
+        // Anche il DAO delle note viene conservato dopo la prima creazione. Viene
+        // memorizzata l'istanza, non il contenuto dei file JSON.
         if (notaSegnalazioneDao == null) {
             notaSegnalazioneDao = new JsonNotaSegnalazioneDao();
         }

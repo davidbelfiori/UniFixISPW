@@ -42,14 +42,24 @@ public class InfoTecnicoBean {
     }
 
     public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("nome cannot be null or empty");
+        }
+
         this.nome = nome;
     }
 
     public void setCognome(String cognome) {
+        if (cognome == null || cognome.trim().isEmpty()) {
+            throw new IllegalArgumentException("cognome cannot be null or empty");
+        }
         this.cognome = cognome;
     }
 
     public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("email cannot be null or empty");
+        }
         this.email = email;
     }
 
@@ -58,6 +68,9 @@ public class InfoTecnicoBean {
     }
 
     public void setNumeroSegnalazioni(int numeroSegnalazioni) {
+        if(numeroSegnalazioni < 0) {
+            throw new IllegalArgumentException("numeroSegnalazioni cannot be negative");
+        }
         this.numeroSegnalazioni = numeroSegnalazioni;
     }
 }

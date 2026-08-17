@@ -34,6 +34,8 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
 
 
     public JsonNotaSegnalazioneDao() {
+        // La classe base configura Jackson e associa il DAO al file dedicato alle
+        // note, indicando anche il tipo generale degli oggetti persistiti.
         super(FILE_NAME, NotaSegnalazione.class);
     }
 
@@ -41,17 +43,22 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
 
     @Override
     protected String getKey(NotaSegnalazione entity) {
+        // L'UUID è la chiave univoca usata dai metodi CRUD per distinguere le note.
         return entity.getUuid();
     }
 
     @Override
     public NotaSegnalazione create(String uuid) {
+        // create prepara l'entità in memoria ma non scrive il file: per persisterla
+        // il chiamante dovrà invocare successivamente store.
         return new NotaSegnalazione(uuid);
     }
 
 
     @Override
     public void store(NotaSegnalazione entity) {
+        // Gli input non validi vengono rifiutati prima di leggere il file, evitando
+        // operazioni di I/O che non potrebbero produrre un salvataggio valido.
         if (entity == null) {
             throw new IllegalArgumentException(
                     "La nota non può essere nulla"
@@ -66,8 +73,12 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
             );
         }
 
+        // La strategia read-modify-write carica tutte le note e le relative entità
+        // collegate prima di aggiungere il nuovo elemento.
         List<NotaSegnalazione> note = loadAll();
 
+        // La scansione impedisce la presenza di due note con lo stesso UUID;
+        // anyMatch termina non appena trova la prima corrispondenza.
         boolean alreadyExists = note.stream()
                 .anyMatch(nota -> uuid.equals(nota.getUuid()));
 
@@ -77,6 +88,8 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
             );
         }
 
+        // La nuova nota viene aggiunta alla lista in memoria, poi saveAll riscrive
+        // l'intero array JSON per conservarne la struttura valida.
         note.add(entity);
         saveAll(note);
     }
@@ -85,13 +98,19 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
     @Override
     public List<NotaSegnalazione> loadAll() {
         File file = getFile();
+
+        // L'assenza del file indica che non è stata ancora persistita alcuna nota.
         if (!file.exists()) {
             return new ArrayList<>();
         }
         try {
+            // readTree conserva la struttura a nodi perché segnalazione e tecnico
+            // sono memorizzati tramite le loro chiavi, non come oggetti annidati.
             ArrayNode arrayNode = (ArrayNode) objectMapper.readTree(file);
             List<NotaSegnalazione> note = new ArrayList<>();
 
+            // Ogni ObjectNode dell'array viene trasformato in una nota completa,
+            // risolvendo anche i riferimenti alle altre entità.
             for (var node : arrayNode) {
                 NotaSegnalazione nota = deserializeNotaSegnalazione((ObjectNode) node);
                 note.add(nota);
@@ -99,6 +118,8 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
 
             return note;
         } catch (IOException e) {
+            // Gli errori tecnici di lettura o parsing vengono tradotti in un errore
+            // uniforme del livello di persistenza.
             throw new JsonFileException("Errore durante la lettura del file JSON: " + FILE_NAME + e);
         }
     }
@@ -107,7 +128,12 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
     @Override
     public List<NotaSegnalazione> getAllNotaSegnalazioneById(String idSegnalazione) {
         List<NotaSegnalazione> result = new ArrayList<>();
+
+        // Non esiste un indice per segnalazione: si caricano tutte le note e si
+        // selezionano quelle il cui riferimento possiede l'ID richiesto.
         for (NotaSegnalazione nota : loadAll()) {
+            // Il controllo su null gestisce note prive di riferimento ed evita una
+            // NullPointerException durante l'accesso all'ID della segnalazione.
             if (nota.getSegnalazione() != null &&
                 nota.getSegnalazione().getIdSegnalazione().equals(idSegnalazione)) {
                 result.add(nota);
@@ -117,8 +143,10 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
     }
 
     @Override
-    public void saveAll(List<NotaSegnalazione> note) {
+    protected void saveAll(List<NotaSegnalazione> note) {
         try {
+            // L'array viene costruito manualmente per decidere esattamente quali
+            // dati della nota e quali sole chiavi delle relazioni salvare.
             ArrayNode arrayNode = objectMapper.createArrayNode();
 
             for (NotaSegnalazione n : note) {
@@ -126,6 +154,8 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
                 arrayNode.add(node);
             }
 
+            // writeValue sostituisce il contenuto del file con lo stato completo
+            // della lista; non effettua un append della sola nuova nota.
             objectMapper.writeValue(getFile(), arrayNode);
         } catch (IOException e) {
             throw new JsonFileException("Errore durante la scrittura del file JSON: " + FILE_NAME, e);
@@ -133,14 +163,19 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
     }
 
     private ObjectNode serializeNotaSegnalazione(NotaSegnalazione n) {
+        // ObjectNode rappresenta una singola nota come oggetto JSON { ... }.
         ObjectNode node = objectMapper.createObjectNode();
 
+        // UUID, data e testo sono dati propri della nota e vengono copiati nel nodo;
+        // la data è trasformata in millisecondi per avere un valore JSON numerico.
         node.put("uuid", n.getUuid());
         if (n.getDataCreazione() != null) {
             node.put(FIELD_DATA_CREAZIONE, n.getDataCreazione().getTime());
         }
         node.put(FIELD_TESTO, n.getTesto());
 
+        // Delle entità collegate si memorizzano soltanto le chiavi, evitando di
+        // duplicare nel file della nota tutti i dati di segnalazione e tecnico.
         if (n.getSegnalazione() != null) {
             node.put(FIELD_ID_SEGNALAZIONE, n.getSegnalazione().getIdSegnalazione());
         }
@@ -153,9 +188,13 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
     }
 
     private NotaSegnalazione deserializeNotaSegnalazione(ObjectNode node) {
+        // L'UUID obbligatorio consente di creare l'entità prima di valorizzare gli
+        // altri campi opzionali presenti nel nodo.
         String uuid = node.get("uuid").asText();
         NotaSegnalazione nota = new NotaSegnalazione(uuid);
 
+        // Ogni campo opzionale viene controllato prima della conversione, così un
+        // valore assente o null non provoca errori durante la lettura.
         if (node.has(FIELD_DATA_CREAZIONE) && !node.get(FIELD_DATA_CREAZIONE).isNull()) {
             nota.setDataCreazione(new Timestamp(node.get(FIELD_DATA_CREAZIONE).asLong()));
         }
@@ -163,14 +202,17 @@ public class JsonNotaSegnalazioneDao extends JsonDao<String, NotaSegnalazione> i
             nota.setTesto(node.get(FIELD_TESTO).asText());
         }
 
-        // Carica riferimento alla segnalazione
+        // Nel file è presente solo l'ID: SegnalazioneDao viene quindi interrogato
+        // per ricostruire l'oggetto completo da assegnare alla nota. Questa scelta
+        // mantiene il JSON normalizzato, ma aggiunge ulteriori letture durante loadAll.
         if (node.has(FIELD_ID_SEGNALAZIONE) && !node.get(FIELD_ID_SEGNALAZIONE).isNull()) {
             String idSegnalazione = node.get(FIELD_ID_SEGNALAZIONE).asText();
             Segnalazione segnalazione = DaoFactory.getInstance().getSegnalazioneDao().load(idSegnalazione);
             nota.setSegnalazione(segnalazione);
         }
 
-        // Carica riferimento al tecnico
+        // Anche il tecnico viene risolto dalla sola email; instanceof impedisce di
+        // assegnare per errore un User che non appartiene al sottotipo Tecnico.
         if (node.has(FIELD_TECNICO_EMAIL) && !node.get(FIELD_TECNICO_EMAIL).isNull()) {
             String tecnicoEmail = node.get(FIELD_TECNICO_EMAIL).asText();
             User user = DaoFactory.getInstance().getUserDao().load(tecnicoEmail);

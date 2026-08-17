@@ -202,7 +202,7 @@ public class TecnicoHomeCli {
                     Printer.print("Email: " + info.getEmail());
                     Printer.print("Numero di segnalazioni assegnate: " + info.getNumeroSegnalazioni());
                     Printer.print("--------------------");
-                } catch (IllegalStateException | PersistenceException e) {
+                } catch (IllegalStateException |IllegalArgumentException| PersistenceException e) {
                     Printer.error(e.getMessage());
 
                 }

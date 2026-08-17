@@ -20,6 +20,7 @@ public class DocenteController {
         Reupero informazione del docente
         @return InfoDocenteBean con le sue informazioni
         @throws IllegalStateException se non c'è un docente loggato
+        @throws IllegalArgumentException se i dati inseriti nella bean sono errati
     * */
 
     public InfoDocenteBean getDocenteInformation() {

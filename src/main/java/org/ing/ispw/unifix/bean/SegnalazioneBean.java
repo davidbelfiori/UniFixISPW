@@ -29,6 +29,9 @@ public class SegnalazioneBean {
     }
 
     public void setTecnico(InfoTecnicoBean tecnico) {
+        if (tecnico == null) {
+            throw new IllegalArgumentException("Il tecnico non può essere nullo.");
+        }
         this.tecnico = tecnico;
     }
 

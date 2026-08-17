@@ -19,16 +19,6 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
 
     private final Map<K, V> memory = new HashMap<>();
 
-    /**
-     * Inserisce direttamente una coppia chiave-valore nella mappa.
-     * È destinato alle sottoclassi che devono precaricare dati controllati.
-     *
-     * @param key chiave con cui indicizzare il valore
-     * @param value valore da memorizzare
-     */
-    protected void store(K key, V value) {
-        memory.put(key, value);
-    }
 
     @Override
     public void delete(K id) {
@@ -72,7 +62,7 @@ public abstract class InMemoryDao<K, V> implements Dao<K, V>  {
         if (memory.containsKey(key)) {
             throw new IllegalArgumentException("Impossibile memorizzare: entità con ID " + key + " già esistente.");
         }
-        store(key, entity);
+      memory.put(key, entity);
     }
 
 

@@ -33,6 +33,7 @@ public class TecnicoController {
      * @return InfoTecnicoBean contenente le informazioni del tecnico loggato.
      * @throws IllegalStateException se non c'è un tecnico loggato.
      * @throws org.ing.ispw.unifix.exception.PersistenceException se si verifica un errore durante l'accesso ai dati.
+     * @throws IllegalArgumentException
      * */
     public InfoTecnicoBean getTecnicoInformation(){
         UserBean loggetUser = SessionManager.getInstance().getCurrentUser();
