@@ -45,29 +45,19 @@ public class InviaSegnalazioneController {
      * @throws PersistenceException se si verifica un errore durante l'accesso ai dati
      */
     public List<AulaBean> getAuleByEdificio(String edificio){
-        // 1. Recupero la lista delle entità di Dominio dal DAO
-        List<Aula> aule = aulaDao.loadAll();
 
-        // 2. Creo una nuova lista vuota che conterrà i Bean per la View
-        List<AulaBean> auleBeanList = new ArrayList<>();
-        // 3. Scorro tutte le aule trovate
+        // recupero dal dao tutte le aule dell'edificio specificato e le converto in oggetti AulaBean
+        List<Aula> aule = aulaDao.getAuleByEdificio(edificio);
+        List<AulaBean> aulaBeans = new ArrayList<>();
         for (Aula aula : aule) {
-            // Controllo se l'edificio dell'aula corrisponde a quello cercato
-            if (aula.getEdificio() != null && aula.getEdificio().equals(edificio)) {
-
-                // Creo un nuovo oggetto AulaBean
-                AulaBean bean = new AulaBean();
-                bean.setIdAula(aula.getIdAula());
-                bean.setEdificio(aula.getEdificio());
-                bean.setPiano(aula.getPiano());
-                bean.setOggetti(aula.getOggetti());
-
-                // Aggiungo il Bean convertito alla lista
-                auleBeanList.add(bean);
-            }
+            AulaBean bean = new AulaBean();
+            bean.setEdificio(aula.getEdificio());
+            bean.setIdAula(aula.getIdAula());
+            bean.setPiano(aula.getPiano());
+            bean.setOggetti(aula.getOggetti());
+            aulaBeans.add(bean);
         }
-        // 4. Restituisco la lista dei Bean pronti per la View
-        return auleBeanList;
+        return aulaBeans;
     }
 
     /**

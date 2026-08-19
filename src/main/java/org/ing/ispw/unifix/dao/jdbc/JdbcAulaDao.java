@@ -21,8 +21,10 @@ public class JdbcAulaDao  implements AulaDao {
 
 
 
-    private static  final String ACTION_1 ="Oggetto";
-    private static  final String ACTION_2 ="Edificio";
+    private static  final String OGGETTO ="Oggetto";
+    private static  final String EDIFICIO ="Edificio";
+    private static final String PIANO ="Piano";
+    private static final String IDAULA ="IdAula";
 
      private Connection getConnection() { return SingletonConnessione.getInstance(); }
 
@@ -57,12 +59,12 @@ public class JdbcAulaDao  implements AulaDao {
 
                 while (rs.next()) {
                     if (aula == null) {
-                        aula = new Aula(rs.getString("IdAula"));
-                        aula.setEdificio(rs.getString(ACTION_2));
-                        aula.setPiano(rs.getInt("Piano"));
+                        aula = new Aula(rs.getString(IDAULA));
+                        aula.setEdificio(rs.getString(EDIFICIO));
+                        aula.setPiano(rs.getInt(PIANO));
                     }
 
-                    String oggetto = rs.getString(ACTION_1);
+                    String oggetto = rs.getString(OGGETTO);
 
                     if (oggetto != null) {
                         oggetti.add(oggetto);
@@ -210,10 +212,10 @@ public class JdbcAulaDao  implements AulaDao {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                String idAula = rs.getString("IdAula");
-                String edificio = rs.getString(ACTION_2);
-                int piano = rs.getInt("Piano");
-                String oggetto = rs.getString(ACTION_1);
+                String idAula = rs.getString(IDAULA);
+                String edificio = rs.getString(EDIFICIO);
+                int piano = rs.getInt(PIANO);
+                String oggetto = rs.getString(OGGETTO);
 
                 String key = (edificio + "_" + idAula).toLowerCase();
                 Aula aula = aulaMap.get(key);
@@ -332,7 +334,7 @@ public class JdbcAulaDao  implements AulaDao {
         try (PreparedStatement stmt = getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                String edificio = rs.getString(ACTION_2);
+                String edificio = rs.getString(EDIFICIO);
                 edifici.add(edificio);
             }
             return edifici;
@@ -358,7 +360,7 @@ public class JdbcAulaDao  implements AulaDao {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    oggetti.add(rs.getString(ACTION_1));
+                    oggetti.add(rs.getString(OGGETTO));
                 }
             }
 
@@ -372,6 +374,51 @@ public class JdbcAulaDao  implements AulaDao {
     }
 
 
+    @Override
+    public List<Aula> getAuleByEdificio(String edificio) {
+        if (edificio == null || edificio.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'edificio non può essere nullo o vuoto.");
+        }
+
+        String query = """
+            SELECT a.IdAula, a.Edificio, a.Piano, o.Oggetto
+            FROM aule a
+            LEFT JOIN oggettiaula o ON a.IdAula = o.IdAula AND a.Edificio = o.Edificio
+            WHERE LOWER(a.Edificio) = ?
+            """;
+
+        Map<String, Aula> aulaMap = new HashMap<>();
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+            stmt.setString(1, edificio.toLowerCase());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String idAula = rs.getString(IDAULA);
+                    int piano = rs.getInt(PIANO);
+                    String oggetto = rs.getString(OGGETTO);
+
+                    String key = (edificio + "_" + idAula).toLowerCase();
+                    // se mi arriva ingegneria_aula2  dalla chiave e io chiedo alla hashmap ingegneria_aula2 mi ritorna null, allora devo crearne una nuova
+                    Aula aula = aulaMap.get(key);
+                    if (aula == null) {
+                        aula = new Aula(idAula, piano, edificio, new ArrayList<>());
+                        aulaMap.put(key, aula);
+                    }
+
+                    if (oggetto != null) {
+                        aula.getOggetti().add(oggetto);
+                    }
+                }
+            }
+
+            return new ArrayList<>(aulaMap.values());
+        } catch (SQLException e) {
+            throw new PersistenceException(
+                    "Errore nel recupero delle aule per l'edificio " + edificio + ": " + e.getMessage()
+            );
+        }
+    }
 
 
     @Override

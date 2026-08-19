@@ -39,6 +39,17 @@ public interface AulaDao extends Dao<AulaId, Aula> {
      */
     List<String> getAulaOggetti(AulaId aulaId);
 
+
+    /**
+     * Recupera tutte le aule appartenenti a un determinato edificio.
+     *
+     * @param edificio nome dell'edificio
+     * @return lista delle aule; vuota se l'edificio non ha aule
+     * @throws IllegalArgumentException se il nome dell'edificio è {@code null} o vuoto
+     * @throws PersistenceException se il recupero dalla sorgente dati fallisce
+     */
+    List<Aula> getAuleByEdificio(String edificio);
+
     /**
      * Conta tutte le aule persistite.
      *

@@ -27,6 +27,21 @@ public class InMemoryAulaDao extends InMemoryDao<AulaId, Aula> implements AulaDa
     }
 
 
+    @Override
+    public List<Aula> getAuleByEdificio(String edificio) {
+        if(edificio.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'edificio non può essere vuoto");
+        }
+        List<Aula> aule = new ArrayList<>();
+
+        for (Aula aula : loadAll()) {
+            if (edificio.equals(aula.getEdificio())) {
+                aule.add(aula);
+            }
+        }
+
+        return aule;
+    }
 
     @Override
     public List<String> getAllEdifici() {
