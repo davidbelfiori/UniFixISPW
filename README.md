@@ -1,3 +1,7 @@
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=davidbelfiori_UniFixISPW)
+
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=davidbelfiori_UniFixISPW&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=davidbelfiori_UniFixISPW)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=davidbelfiori_UniFixISPW&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=davidbelfiori_UniFixISPW)
 # Documentazione Progetto UniFix
 
 ## Panoramica generale del progetto
