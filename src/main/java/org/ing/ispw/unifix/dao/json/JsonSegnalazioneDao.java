@@ -324,6 +324,21 @@ public class JsonSegnalazioneDao extends JsonDao<String, Segnalazione> implement
         }
     }
 
+
+
+    @Override
+    public boolean exists(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'identificatore non può essere nullo.");}
+        Segnalazione segnalazione;
+        segnalazione = load(id);
+        if (segnalazione.getStato() == StatoSegnalazione.CHIUSA) {
+            return false;
+        }
+        return super.exists(id);
+
+    }
+
     private boolean hasValidField(ObjectNode node, String fieldName) {
         // Un campo è utilizzabile soltanto se esiste e non contiene il valore JSON
         // null; centralizzare il controllo evita condizioni duplicate.

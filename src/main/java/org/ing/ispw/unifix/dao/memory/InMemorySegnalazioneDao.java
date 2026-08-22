@@ -22,14 +22,6 @@ public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> i
         return new Segnalazione(idSegnalazione);
    }
 
-   public List<Segnalazione> getAllSegnalazioni(){
-        return loadAll();
-   }
-
-   public Segnalazione getSegnalazione(String idSegnalazione){
-        return load(idSegnalazione);
-   }
-
    public List<Segnalazione> getSegnalazioniByDocente(String docenteEmail) {
         List<Segnalazione> result = new java.util.ArrayList<>();
         for (Segnalazione s : loadAll()) {
@@ -73,5 +65,16 @@ public class InMemorySegnalazioneDao extends InMemoryDao<String, Segnalazione> i
         return count;
     }
 
+    @Override
+    public boolean exists(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'identificatore non può essere nullo.");}
+            Segnalazione segnalazione;
+            segnalazione = load(id);
+            if (segnalazione.getStato() == StatoSegnalazione.CHIUSA) {
+                return false;
+            }
+            return super.exists(id);
 
+    }
 }
