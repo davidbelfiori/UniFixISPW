@@ -9,15 +9,17 @@ import org.ing.ispw.unifix.exception.PasswordErrataExecption;
 import org.ing.ispw.unifix.exception.RuoloNonTrovatoException;
 import org.ing.ispw.unifix.exception.UtenteNonTrovatoException;
 import org.ing.ispw.unifix.utils.DemoData;
+import org.ing.ispw.unifix.utils.EmailParserService;
 import org.ing.ispw.unifix.utils.UserType;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- class LoginControllerTest {
+ class TestLoginController {
 
     private static LoginController loginController;
 
@@ -32,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     // ---- TEST LOGIN ---- //
 
+     @DisplayName("Test login con utente non esistente")
     @Test
     void testLoginUtenteNonEsistente() {
 
@@ -43,6 +46,7 @@ import static org.junit.jupiter.api.Assertions.*;
         });
     }
 
+    @DisplayName("Test login con password errata")
     @Test
     void testLoginPasswordErrata() {
         CredentialBean credentialBean = new CredentialBean();
@@ -55,6 +59,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
     
 
+    @DisplayName("Test login con ruolo utente SysAdmin")
     @Test
     void testLoginRuoloUtenteSys() throws UtenteNonTrovatoException {
         CredentialBean credentialBean = new CredentialBean();
@@ -63,6 +68,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(UserType.SYSADMIN,loginController.validate(credentialBean).getRuolo());
     }
 
+    @DisplayName("Test login con ruolo utente Docente")
     @Test
     void testLoginRuoloUtenteDocente() throws UtenteNonTrovatoException {
         CredentialBean credentialBean = new CredentialBean();
@@ -71,6 +77,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(UserType.DOCENTE,loginController.validate(credentialBean).getRuolo());
     }
 
+    @DisplayName("Test login con ruolo utente Tecnico")
     @Test
     void testLoginRuoloUtenteTecnico() throws UtenteNonTrovatoException {
         CredentialBean credentialBean = new CredentialBean();
@@ -81,16 +88,19 @@ import static org.junit.jupiter.api.Assertions.*;
     
     // ---- TEST REGISTRAZIONE ---- //
 
+    @DisplayName("Test registrazione con successo")
     @ParameterizedTest(name = "Registrazione {0} con email {1}")
     @CsvSource({
-            "Docente, mario.rossi@uniroma2.eu, password",
-            "Tecnico, luigi.verdi@tec.uniroma2.eu, password",
-            "Sysadmin, anna.bianchi@sys.uniroma2.eu, password"
+            "DOCENTE, mario.rossi@uniroma2.eu, password",
+            "TECNICO, luigi.verdi@tec.uniroma2.eu, password",
+            "SYSADMIN, anna.bianchi@sys.uniroma2.eu, password"
     })
     void testRegistrazioneSuccesso(String ruolo, String email, String password) throws RuoloNonTrovatoException {
         RegistrazioneBean rb = new RegistrazioneBean();
         rb.setEmail(email);
         rb.setPassword(password);
+        EmailParserService emailParserService = new EmailParserService();
+        assertEquals(UserType.valueOf(ruolo), emailParserService.extractRuolo(email));
         assertTrue(loginController.register(rb));
     }
 
@@ -127,6 +137,13 @@ import static org.junit.jupiter.api.Assertions.*;
         rb.setPassword("password");
         rb.setConfirmPassword("password");
         assertTrue(loginController.register(rb));
+    }
+
+    @Test
+    void testEmailNull() {
+        RegistrazioneBean rb = new RegistrazioneBean();
+        rb.setPassword("password");
+        assertThrows(IllegalArgumentException.class, () ->  rb.setEmail(null));
     }
 
      @Test

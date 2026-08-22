@@ -28,7 +28,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InviaSegnalazioneTest {
+class TestInviaSegnalazione {
 
     private InviaSegnalazioneController controller;
     private SegnalazioneDao segnalazioneDao;

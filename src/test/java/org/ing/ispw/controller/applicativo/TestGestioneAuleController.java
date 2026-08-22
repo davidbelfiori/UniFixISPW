@@ -21,7 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GestioneAuleControllerTest {
+class TestGestioneAuleController {
 
     private GestioneAuleController controller;
     private AulaDao aulaDao;

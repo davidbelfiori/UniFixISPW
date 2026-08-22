@@ -41,11 +41,9 @@ public abstract class DaoFactory {
             instance = switch (type.toUpperCase().trim()) {
                 case "JSON" -> new JsonDaoFactory();
                 case "MEMORY", "IN MEMORY" -> {
-                    InMemoryDaoFactory memoryDaoFactory = new InMemoryDaoFactory();
-                    instance = memoryDaoFactory; //assegno l'istanza
+                    instance = new InMemoryDaoFactory(); //assegno l'istanza
                     DemoData.load(); //carico i dati fantoccio
-                    yield memoryDaoFactory;
-
+                    yield instance;
                 }
                 case "JDBC", "PERSISTENCE" -> new JdbcDaoFactory();
                 default -> {

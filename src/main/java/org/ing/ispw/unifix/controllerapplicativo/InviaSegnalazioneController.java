@@ -109,8 +109,7 @@ public class InviaSegnalazioneController {
         User docenteSegnalatore = userDao.load(loggetUser.getEmail());
 
 
-        String chiave = "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
-
+        String chiave = makeReportKey(sb);
         if (segnalazioneDao.exists(chiave)) throw new SegnalazioneGiaEsistenteException("Segnalazione già esistente");
 
         Tecnico tecnicoAssegnato = getTecnicoConMenoSegnalazioni();
@@ -136,5 +135,9 @@ public class InviaSegnalazioneController {
         return true;
 
 
+    }
+
+    private String makeReportKey(SegnalazioneBean sb) {
+        return "Edificio"+sb.getEdificio()+"_Aula"+sb.getAula()+"_OggettoGuasto"+sb.getOggettoGuasto();
     }
 }
